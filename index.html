@@ -70,21 +70,21 @@
 
         .move-text {
             font-family: 'Inter', sans-serif;
-            font-size: clamp(4px, 1vw, 6px);  /* Half the previous size */
-            font-weight: 300;
+            font-size: clamp(4px, 1vw, 6px);
+            font-weight: 700;  /* Changed from 300 to 700 for bold */
             color: rgba(255, 255, 255, 0.4);
             letter-spacing: clamp(1px, 0.5vw, 2px);
             text-transform: uppercase;
             margin-top: clamp(2px, 0.5vw, 3px);
-            text-align: center;  /* Ensure center alignment */
-            width: 100%;  /* Full width for centering */
+            text-align: center;
+            width: 100%;
         }
 
         /* Material selector */
         .material-select {
             position: fixed;
-            right: clamp(20px, 5vw, 40px);  /* Responsive positioning */
-            top: clamp(20px, 5vw, 40px);
+            right: clamp(20px, 5vw, 40px);
+            top: calc(clamp(20px, 5vw, 40px) - 21px);  /* Subtract 21px from top position */
             z-index: 1000;
         }
 
@@ -136,12 +136,6 @@
             direction: ltr;  /* Text aligns left */
         }
         
-        /* Force dropdown to open downward */
-        .material-select {
-            transform-origin: top right;
-            transform: translateY(0);
-        }
-
         /* Add media queries for very small screens */
         @media (max-width: 360px) {
             .title-container {
@@ -283,20 +277,31 @@
                     const scale = (5 * 1.33) / maxDim;
                     model.scale.set(scale, scale, scale);
                     
+                    // Center the model
+                    model.position.set(0, 0, 0);  // Reset position
+                    pivot.position.set(0, 0, 0);  // Center pivot
+                    scene.position.set(0, 0, 0);  // Center scene
+                    
                     // Store pivot reference
                     model.pivot = pivot;
                     
-                    // Initial rotation - flip 180° on X and 90° on Z
-                    pivot.rotation.x = Math.PI;  // 180° flip
-                    pivot.rotation.z = Math.PI / 2;  // 90° Z rotation
+                    // SUPER COOL initial pose - dramatic but precise
+                    const coolPose = new THREE.Euler(
+                        Math.PI * 1.35,  // Extreme back tilt (243 degrees)
+                        Math.PI * 0.5,   // Sharp quarter turn (90 degrees)
+                        Math.PI * 0.0    // No side tilt for clean lines
+                    );
+                    
+                    // Apply the dramatic pose
+                    model.pivot.setRotationFromEuler(coolPose);
                     
                     // Update tracking variables
-                    rotationX = Math.PI;
-                    rotationY = 0;
-                    rotationZ = Math.PI / 2;
-                    currentX = Math.PI;
-                    currentY = 0;
-                    currentZ = Math.PI / 2;
+                    rotationX = coolPose.x;
+                    rotationY = coolPose.y;
+                    rotationZ = coolPose.z;
+                    currentX = coolPose.x;
+                    currentY = coolPose.y;
+                    currentZ = coolPose.z;
 
                     // Store pieces
                     walletPieces = [];
@@ -826,6 +831,7 @@
             }
         });
 
+        // Update touch handler for mobile
         document.addEventListener('touchmove', (e) => {
             if (!isMouseDown || !model) return;
             e.preventDefault();
@@ -834,25 +840,22 @@
             const deltaX = touch.clientX - startX;
             const deltaY = touch.clientY - startY;
 
-            // Convert to spherical coordinates
-            const radius = 1;
-            const phi = (deltaY * Math.PI / 180) * 0.5;
-            const theta = (deltaX * Math.PI / 180) * 0.5;
-
-            // Create rotation matrix
-            const matrix = new THREE.Matrix4();
-            matrix.makeRotationFromEuler(new THREE.Euler(currentX, currentY, currentZ));
-            matrix.multiply(new THREE.Matrix4().makeRotationX(phi));
-            matrix.multiply(new THREE.Matrix4().makeRotationY(theta));
-
-            const euler = new THREE.Euler();
-            euler.setFromRotationMatrix(matrix);
+            // Convert to rotation angles with higher sensitivity for mobile
+            const angleX = deltaY * 0.01;
+            const angleY = deltaX * 0.01;
 
             if (model.pivot) {
-                model.pivot.rotation.x = euler.x;
-                model.pivot.rotation.y = euler.y;
-                model.pivot.rotation.z = euler.z;
+                // Update all rotations
+                const newRotation = new THREE.Euler(
+                    currentX + angleX,
+                    currentY + angleY,
+                    currentZ,
+                    'XYZ'
+                );
                 
+                model.pivot.setRotationFromEuler(newRotation);
+                
+                // Keep pieces synchronized
                 walletPieces.forEach(piece => {
                     piece.rotation.copy(model.pivot.rotation);
                 });
