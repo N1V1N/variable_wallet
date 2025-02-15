@@ -32,7 +32,11 @@
             z-index: 1000;
             pointer-events: none;
             left: 50%;
-            transform: translateX(-50%);  /* Perfect centering */
+            transform: translateX(-50%);
+            display: flex;
+            flex-direction: column;
+            gap: 15px;  /* Even spacing between all elements */
+            align-items: center;  /* Center all flex items horizontally */
         }
 
         .title {
@@ -45,8 +49,8 @@
             text-transform: uppercase;
             opacity: 0.8;
             transition: opacity 0.3s ease;
-            margin: 0 auto;  /* Center horizontally */
-            width: fit-content;  /* Contain width */
+            margin: 0;
+            display: inline-block;  /* Allow text to determine width */
         }
 
         .fancy-letter {
@@ -65,7 +69,7 @@
             color: rgba(255, 255, 255, 0.6);
             letter-spacing: clamp(3px, 1.5vw, 8px);  /* Smaller spacing on mobile */
             text-transform: uppercase;
-            margin-top: clamp(6px, 2vw, 10px);
+            margin-top: 0;  /* Remove margin since we're using gap */
         }
 
         .move-text {
@@ -75,7 +79,7 @@
             color: rgba(255, 255, 255, 0.4);
             letter-spacing: clamp(1px, 0.5vw, 2px);
             text-transform: uppercase;
-            margin-top: clamp(2px, 0.5vw, 3px);
+            margin-top: 0;  /* Remove margin since we're using gap */
             text-align: center;
             width: 100%;
         }
@@ -84,7 +88,7 @@
         .material-select {
             position: fixed;
             right: clamp(20px, 5vw, 40px);
-            top: calc(clamp(20px, 5vw, 40px) - 21px);  /* Subtract 21px from top position */
+            top: calc(clamp(20px, 5vw, 40px) - 12px);  /* Subtract 12px from top position */
             z-index: 1000;
         }
 
@@ -636,30 +640,30 @@
                 if (child instanceof THREE.Mesh) {
                     switch(finish) {
                         case 'aluminum':
-                            // Brushed aluminum look
+                            // Bright silvery aluminum
                             child.material = new THREE.MeshPhysicalMaterial({
-                                color: 0xE8E8E8,        // Bright aluminum color
+                                color: 0xF0F0F0,        // Even brighter silver color
                                 metalness: 0.95,        // Very metallic
-                                roughness: 0.5,         // Semi-rough for brushed look
-                                clearcoat: 0.8,         // Strong clearcoat
-                                clearcoatRoughness: 0.2, // Smooth clearcoat
-                                envMapIntensity: 1.5,   // Strong reflections
-                                reflectivity: 0.9,      // High reflectivity
-                                anisotropy: 0.5,        // Directional reflectance for brushed look
+                                roughness: 0.2,         // Much smoother for high shine
+                                clearcoat: 1.0,         // Maximum clearcoat
+                                clearcoatRoughness: 0.1, // Smoother clearcoat
+                                envMapIntensity: 2.0,   // Stronger reflections
+                                reflectivity: 1.0,      // Maximum reflectivity
+                                anisotropy: 0.3,        // Subtle directional reflectance
                                 anisotropyRotation: Math.PI / 2 // Brush direction
                             });
                             break;
                             
                         case 'titanium':
-                            // Ultra-dark, mirror-like titanium
+                            // Premium dark titanium with silver undertones
                             child.material = new THREE.MeshPhysicalMaterial({
-                                color: 0x2A2D30,        // Much darker titanium color
-                                metalness: 1.0,         // Maximum metallic
-                                roughness: 0.1,         // Very smooth for maximum shine
-                                clearcoat: 1.0,         // Maximum clearcoat
-                                clearcoatRoughness: 0.05, // Ultra-smooth clearcoat
-                                envMapIntensity: 2.0,   // Much stronger reflections
-                                reflectivity: 1.0,      // Maximum reflectivity
+                                color: 0x6A7073,        // Darker but more silvery titanium
+                                metalness: 0.95,        // Increased metallic
+                                roughness: 0.15,        // Smooth but not mirror-like
+                                clearcoat: 0.9,         // Stronger clearcoat
+                                clearcoatRoughness: 0.1, // Smooth clearcoat
+                                envMapIntensity: 1.8,   // More reflections
+                                reflectivity: 0.95,     // Higher reflectivity
                                 appearance: 'physical'   // Standard appearance
                             });
                             break;
@@ -677,7 +681,7 @@
         function updateDamascusTexture(mesh) {
             const textureLoader = new THREE.TextureLoader();
             textureLoader.load('TXTR.jpg', function(texture) {
-                const scale = 0.25;  // Keep the larger pattern size
+                const scale = 0.15;  // Reduced scale for larger pattern (was 0.25)
                 
                 const canvas = document.createElement('canvas');
                 canvas.width = texture.image.width * scale;
@@ -692,7 +696,7 @@
                 const imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
                 const data = imageData.data;
                 
-                // Improved contrast and smoothing
+                // Improved contrast and smoothing with darker base
                 for (let y = 0; y < canvas.height; y++) {
                     for (let x = 0; x < canvas.width; x++) {
                         const idx = (y * canvas.width + x) * 4;
@@ -713,9 +717,12 @@
                         const medianValue = neighbors[4];
                         
                         // Apply contrast while maintaining smooth transitions
-                        const contrast = 1.8;  // Slightly reduced contrast
+                        const contrast = 1.8;
                         const factor = (259 * (contrast + 255)) / (255 * (259 - contrast));
-                        const newValue = factor * (medianValue - 128) + 128;
+                        let newValue = factor * (medianValue - 128) + 128;
+                        
+                        // Darken the overall image
+                        newValue = Math.max(0, newValue * 0.7);  // Reduce brightness by 30%
                         
                         // Apply smoothed value
                         data[idx] = newValue;
@@ -731,25 +738,25 @@
                 shineTexture.minFilter = THREE.LinearFilter;
                 shineTexture.magFilter = THREE.LinearFilter;
                 
-                // Update material with improved settings
+                // Update material with darker settings
                 mesh.material = new THREE.MeshPhysicalMaterial({
                     map: texture,
                     normalMap: texture,
                     roughnessMap: shineTexture,
                     aoMap: texture,
-                    metalness: 0.85,
-                    roughness: 0.35,
-                    clearcoat: 0.6,
-                    clearcoatRoughness: 0.2,
-                    envMapIntensity: 1.2,
-                    normalScale: new THREE.Vector2(1.5, 1.5),  // Adjusted normal mapping
+                    metalness: 0.9,
+                    roughness: 0.2,        // Smoother for more contrast
+                    clearcoat: 0.8,
+                    clearcoatRoughness: 0.1,
+                    envMapIntensity: 1.5,
+                    normalScale: new THREE.Vector2(1.5, 1.5),
                     appearance: 'physical'
                 });
 
                 // Improve texture settings
                 texture.minFilter = THREE.LinearMipmapLinearFilter;
                 texture.magFilter = THREE.LinearFilter;
-                texture.repeat.set(0.25, 0.25);
+                texture.repeat.set(0.15, 0.15);  // Reduced repeat for larger pattern (was 0.25)
                 texture.wrapS = THREE.RepeatWrapping;
                 texture.wrapT = THREE.RepeatWrapping;
                 texture.needsUpdate = true;
