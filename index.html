@@ -31,23 +31,27 @@
             text-align: center;
             z-index: 1000;
             pointer-events: none;
+            left: 50%;
+            transform: translateX(-50%);  /* Perfect centering */
         }
 
         .title {
             font-family: 'Inter', sans-serif;
-            font-size: clamp(24px, 5vw, 32px);  /* Responsive font size */
+            font-size: clamp(16px, 5vw, 32px);
             font-weight: 300;
             color: rgba(255, 255, 255, 0.9);
             text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
-            letter-spacing: clamp(8px, 2vw, 12px);  /* Responsive spacing */
+            letter-spacing: clamp(4px, 2vw, 12px);
             text-transform: uppercase;
             opacity: 0.8;
             transition: opacity 0.3s ease;
+            margin: 0 auto;  /* Center horizontally */
+            width: fit-content;  /* Contain width */
         }
 
         .fancy-letter {
             font-family: 'Pinyon Script', cursive;
-            font-size: clamp(36px, 7vw, 48px);  /* Responsive font size */
+            font-size: clamp(24px, 7vw, 48px);  /* Smaller on mobile */
             text-transform: none;
             letter-spacing: 0;
             display: inline-block;
@@ -56,64 +60,24 @@
 
         .subtitle {
             font-family: 'Inter', sans-serif;
-            font-size: clamp(12px, 3vw, 14px);  /* Responsive font size */
+            font-size: clamp(10px, 3vw, 14px);  /* Smaller on mobile */
             font-weight: 300;
             color: rgba(255, 255, 255, 0.6);
-            letter-spacing: clamp(6px, 1.5vw, 8px);  /* Responsive spacing */
+            letter-spacing: clamp(3px, 1.5vw, 8px);  /* Smaller spacing on mobile */
             text-transform: uppercase;
-            margin-top: clamp(8px, 2vw, 10px);  /* Responsive margin */
+            margin-top: clamp(6px, 2vw, 10px);
         }
 
-        /* Control panel styles */
-        .control-panel {
-            position: fixed;
-            bottom: 20px;
-            left: 20px;
-            right: 20px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            z-index: 1000;
-        }
-
-        /* Brightness slider */
-        .brightness-control {
-            display: flex;
-            align-items: center;
-            gap: clamp(8px, 2vw, 12px);  /* Responsive gap */
-            background: rgba(17, 17, 17, 0.1);
-            padding: clamp(8px, 2vw, 10px) clamp(12px, 3vw, 16px);  /* Responsive padding */
-            border-radius: 8px;
-            border: 1px solid rgba(255, 255, 255, 0.15);
-            backdrop-filter: blur(1.5px);
-        }
-
-        .brightness-control span {
-            color: rgba(255, 255, 255, 0.9);
+        .move-text {
             font-family: 'Inter', sans-serif;
-            font-size: clamp(11px, 2.5vw, 13px);  /* Responsive font size */
-            letter-spacing: 1.5px;
-            user-select: none;
-        }
-
-        .brightness-control input[type="range"] {
-            width: clamp(80px, 20vw, 120px);  /* Responsive width */
-            height: 4px;
-            -webkit-appearance: none;
-            background: rgba(255, 255, 255, 0.2);
-            border-radius: 2px;
-            outline: none;
-        }
-
-        .brightness-control input[type="range"]::-webkit-slider-thumb {
-            -webkit-appearance: none;
-            width: 12px;
-            height: 12px;
-            border-radius: 50%;
-            background: white;
-            cursor: pointer;
-            border: none;
-            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+            font-size: clamp(4px, 1vw, 6px);  /* Half the previous size */
+            font-weight: 300;
+            color: rgba(255, 255, 255, 0.4);
+            letter-spacing: clamp(1px, 0.5vw, 2px);
+            text-transform: uppercase;
+            margin-top: clamp(2px, 0.5vw, 3px);
+            text-align: center;  /* Ensure center alignment */
+            width: 100%;  /* Full width for centering */
         }
 
         /* Material selector */
@@ -150,18 +114,20 @@
         /* Footer styles */
         .footer {
             position: fixed;
-            bottom: clamp(15px, 4vw, 20px);  /* Responsive positioning */
+            bottom: clamp(15px, 4vw, 20px);
             width: 100%;
             text-align: center;
             z-index: 1000;
             pointer-events: none;
             font-family: 'Inter', sans-serif;
-            font-size: clamp(10px, 2.5vw, 12px);  /* Responsive font size */
+            font-size: clamp(10px, 2.5vw, 12px);
             font-weight: 300;
             color: rgba(255, 255, 255, 0.5);
-            letter-spacing: clamp(3px, 1vw, 4px);  /* Responsive spacing */
+            letter-spacing: clamp(3px, 1vw, 4px);
             text-transform: uppercase;
             opacity: 0.8;
+            left: 50%;
+            transform: translateX(-50%);  /* Perfect centering */
         }
 
         /* Add to your existing styles */
@@ -179,18 +145,12 @@
         /* Add media queries for very small screens */
         @media (max-width: 360px) {
             .title-container {
-                top: 20px;
+                top: 15px;  /* Move title up slightly */
             }
 
             .material-select {
                 right: 15px;
                 top: 15px;
-            }
-
-            .control-panel {
-                bottom: 15px;
-                left: 15px;
-                right: 15px;
             }
         }
     </style>
@@ -203,6 +163,7 @@
             <span class="fancy-letter">W</span>&#8202;allet
         </div>
         <div class="subtitle">Coming 2025</div>
+        <div class="move-text">Move the model!</div>
     </div>
 
     <div class="material-select">
@@ -214,13 +175,6 @@
     </div>
 
     <div class="container" id="canvas-container"></div>
-
-    <div class="control-panel">
-        <div class="brightness-control">
-            <span>Light</span>
-            <input type="range" id="brightnessSlider" min="1" max="200" value="20">
-        </div>
-    </div>
 
     <div class="footer">Made With Love in the USA</div>
 
@@ -285,24 +239,13 @@
             camera.position.set(0, 0, 20);
             camera.lookAt(0, 0, 0);
 
-            // Add single adjustable spotlight
-            const spotLight = new THREE.SpotLight(0xffffff, 2.0);
-            spotLight.position.set(0, 10, 10);
-            spotLight.target.position.set(0, 0, 0);
-            spotLight.angle = Math.PI / 3;
-            spotLight.penumbra = 0.2;
-            spotLight.decay = 1.5;
-            spotLight.distance = 100;
-            scene.add(spotLight);
-            scene.add(spotLight.target);
+            // Add fixed lighting
+            const light = new THREE.DirectionalLight(0xffffff, 2.0);
+            light.position.set(0, 10, 10);
+            scene.add(light);
 
-            // Connect brightness slider with adjusted range
-            const brightnessSlider = document.getElementById('brightnessSlider');
-            brightnessSlider.value = 20;  // Set default to 20 (2.0 intensity)
-            brightnessSlider.addEventListener('input', (e) => {
-                const intensity = e.target.value / 10;  // Convert 0-200 to 0-20 range
-                spotLight.intensity = intensity;
-            });
+            const ambientLight = new THREE.AmbientLight(0xffffff, 0.5);
+            scene.add(ambientLight);
 
             // Create renderer first
             try {
@@ -315,11 +258,6 @@
             } catch (e) {
                 console.error("Error creating renderer:", e);
             }
-
-            // At the start of init()
-            const initialRotationX = Math.PI;  // 180 degrees = π radians
-            const initialRotationY = 0;
-            const initialRotationZ = 0;
 
             // Load model
             const loader = new THREE.OBJLoader();
@@ -348,14 +286,17 @@
                     // Store pivot reference
                     model.pivot = pivot;
                     
-                    // Initial rotation
-                    pivot.rotation.x = Math.PI;
+                    // Initial rotation - flip 180° on X and 90° on Z
+                    pivot.rotation.x = Math.PI;  // 180° flip
+                    pivot.rotation.z = Math.PI / 2;  // 90° Z rotation
                     
                     // Update tracking variables
                     rotationX = Math.PI;
                     rotationY = 0;
+                    rotationZ = Math.PI / 2;
                     currentX = Math.PI;
                     currentY = 0;
+                    currentZ = Math.PI / 2;
 
                     // Store pieces
                     walletPieces = [];
@@ -369,7 +310,20 @@
                     // Update materials
                     updateFinish('aluminum');
                     
-                    // Force a render
+                    // Force initial render
+                    renderer.render(scene, camera);
+
+                    // Immediate 90-degree rotation
+                    model.pivot.rotation.y = Math.PI / 2;  // 90 degrees
+                    currentY = Math.PI / 2;
+                    rotationY = Math.PI / 2;
+
+                    // Keep pieces synchronized
+                    walletPieces.forEach(piece => {
+                        piece.rotation.copy(model.pivot.rotation);
+                    });
+
+                    // Force render update
                     renderer.render(scene, camera);
 
                     // Run diagnostic after setup
@@ -392,11 +346,11 @@
             requestAnimationFrame(animate);
             
             if (model && model.pivot) {
-                // Smooth pivot rotation
-                model.pivot.rotation.x += (rotationX - model.pivot.rotation.x) * 0.1;
-                model.pivot.rotation.y += (rotationY - model.pivot.rotation.y) * 0.1;
+                // Remove the automatic rotation reset
+                // model.pivot.rotation.x += (rotationX - model.pivot.rotation.x) * 0.1;
+                // model.pivot.rotation.y += (rotationY - model.pivot.rotation.y) * 0.1;
                 
-                // Keep all pieces synchronized
+                // Keep pieces synchronized without auto-reset
                 walletPieces.forEach(piece => {
                     piece.rotation.copy(model.pivot.rotation);
                 });
@@ -607,37 +561,27 @@
             renderer.setSize(window.innerWidth, window.innerHeight);
         }
 
-        // Update mousemove handler for Fusion 360-like rotation
+        // Update mousemove handler for true free rotation
         document.addEventListener('mousemove', (e) => {
             if (!isMouseDown || !model) return;
 
             const deltaX = e.clientX - startX;
             const deltaY = e.clientY - startY;
 
-            // Convert to spherical coordinates for orbital rotation
-            const radius = 1;
-            const phi = (deltaY * Math.PI / 180) * 0.5;  // Vertical orbit
-            const theta = (deltaX * Math.PI / 180) * 0.5;  // Horizontal orbit
-
-            // Create rotation matrix
-            const matrix = new THREE.Matrix4();
-            
-            // Start from current rotation
-            matrix.makeRotationFromEuler(new THREE.Euler(currentX, currentY, currentZ));
-            
-            // Apply orbital rotations
-            matrix.multiply(new THREE.Matrix4().makeRotationX(phi));
-            matrix.multiply(new THREE.Matrix4().makeRotationY(theta));
-
-            // Extract new rotation
-            const euler = new THREE.Euler();
-            euler.setFromRotationMatrix(matrix);
+            // Convert to rotation angles with higher sensitivity
+            const angleX = deltaY * 0.01;
+            const angleY = deltaX * 0.01;
 
             if (model.pivot) {
-                // Apply smooth rotation
-                model.pivot.rotation.x = euler.x;
-                model.pivot.rotation.y = euler.y;
-                model.pivot.rotation.z = euler.z;
+                // Update all rotations
+                const newRotation = new THREE.Euler(
+                    currentX + angleX,
+                    currentY + angleY,
+                    currentZ,
+                    'XYZ'
+                );
+                
+                model.pivot.setRotationFromEuler(newRotation);
                 
                 // Keep pieces synchronized
                 walletPieces.forEach(piece => {
