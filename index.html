@@ -35,11 +35,11 @@
 
         .title {
             font-family: 'Inter', sans-serif;
-            font-size: 32px;
+            font-size: clamp(24px, 5vw, 32px);  /* Responsive font size */
             font-weight: 300;
             color: rgba(255, 255, 255, 0.9);
             text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
-            letter-spacing: 12px;
+            letter-spacing: clamp(8px, 2vw, 12px);  /* Responsive spacing */
             text-transform: uppercase;
             opacity: 0.8;
             transition: opacity 0.3s ease;
@@ -47,7 +47,7 @@
 
         .fancy-letter {
             font-family: 'Pinyon Script', cursive;
-            font-size: 48px;
+            font-size: clamp(36px, 7vw, 48px);  /* Responsive font size */
             text-transform: none;
             letter-spacing: 0;
             display: inline-block;
@@ -56,12 +56,12 @@
 
         .subtitle {
             font-family: 'Inter', sans-serif;
-            font-size: 14px;
+            font-size: clamp(12px, 3vw, 14px);  /* Responsive font size */
             font-weight: 300;
             color: rgba(255, 255, 255, 0.6);
-            letter-spacing: 8px;
+            letter-spacing: clamp(6px, 1.5vw, 8px);  /* Responsive spacing */
             text-transform: uppercase;
-            margin-top: 10px;
+            margin-top: clamp(8px, 2vw, 10px);  /* Responsive margin */
         }
 
         /* Control panel styles */
@@ -80,9 +80,9 @@
         .brightness-control {
             display: flex;
             align-items: center;
-            gap: 12px;
+            gap: clamp(8px, 2vw, 12px);  /* Responsive gap */
             background: rgba(17, 17, 17, 0.1);
-            padding: 10px 16px;
+            padding: clamp(8px, 2vw, 10px) clamp(12px, 3vw, 16px);  /* Responsive padding */
             border-radius: 8px;
             border: 1px solid rgba(255, 255, 255, 0.15);
             backdrop-filter: blur(1.5px);
@@ -91,13 +91,13 @@
         .brightness-control span {
             color: rgba(255, 255, 255, 0.9);
             font-family: 'Inter', sans-serif;
-            font-size: 13px;
+            font-size: clamp(11px, 2.5vw, 13px);  /* Responsive font size */
             letter-spacing: 1.5px;
             user-select: none;
         }
 
         .brightness-control input[type="range"] {
-            width: 120px;
+            width: clamp(80px, 20vw, 120px);  /* Responsive width */
             height: 4px;
             -webkit-appearance: none;
             background: rgba(255, 255, 255, 0.2);
@@ -119,8 +119,8 @@
         /* Material selector */
         .material-select {
             position: fixed;
-            right: 40px;
-            top: 40px;
+            right: clamp(20px, 5vw, 40px);  /* Responsive positioning */
+            top: clamp(20px, 5vw, 40px);
             z-index: 1000;
         }
 
@@ -128,9 +128,9 @@
             background: rgba(17, 17, 17, 0.1);
             border: 1px solid rgba(255, 255, 255, 0.15);
             color: rgba(255, 255, 255, 0.9);
-            padding: 8px 12px;
+            padding: clamp(6px, 2vw, 8px) clamp(8px, 3vw, 12px);  /* Responsive padding */
             font-family: 'Inter', sans-serif;
-            font-size: 13px;
+            font-size: clamp(11px, 2.5vw, 13px);  /* Responsive font size */
             border-radius: 8px;
             cursor: pointer;
             backdrop-filter: blur(1.5px);
@@ -150,16 +150,16 @@
         /* Footer styles */
         .footer {
             position: fixed;
-            bottom: 20px;
+            bottom: clamp(15px, 4vw, 20px);  /* Responsive positioning */
             width: 100%;
             text-align: center;
             z-index: 1000;
             pointer-events: none;
             font-family: 'Inter', sans-serif;
-            font-size: 12px;
+            font-size: clamp(10px, 2.5vw, 12px);  /* Responsive font size */
             font-weight: 300;
             color: rgba(255, 255, 255, 0.5);
-            letter-spacing: 4px;
+            letter-spacing: clamp(3px, 1vw, 4px);  /* Responsive spacing */
             text-transform: uppercase;
             opacity: 0.8;
         }
@@ -174,6 +174,24 @@
         .material-select {
             transform-origin: top right;
             transform: translateY(0);
+        }
+
+        /* Add media queries for very small screens */
+        @media (max-width: 360px) {
+            .title-container {
+                top: 20px;
+            }
+
+            .material-select {
+                right: 15px;
+                top: 15px;
+            }
+
+            .control-panel {
+                bottom: 15px;
+                left: 15px;
+                right: 15px;
+            }
         }
     </style>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300&family=Pinyon+Script&display=swap" rel="stylesheet">
@@ -589,23 +607,37 @@
             renderer.setSize(window.innerWidth, window.innerHeight);
         }
 
-        // Update mousemove handler for rotation
+        // Update mousemove handler for Fusion 360-like rotation
         document.addEventListener('mousemove', (e) => {
             if (!isMouseDown || !model) return;
 
             const deltaX = e.clientX - startX;
             const deltaY = e.clientY - startY;
 
-            // Convert mouse movement to rotation
-            // Left/right = Y axis rotation (twist)
-            rotationY = currentY + (deltaX * Math.PI / 180);
-            // Up/down = X axis rotation (tilt)
-            rotationX = currentX + (deltaY * Math.PI / 180);
+            // Convert to spherical coordinates for orbital rotation
+            const radius = 1;
+            const phi = (deltaY * Math.PI / 180) * 0.5;  // Vertical orbit
+            const theta = (deltaX * Math.PI / 180) * 0.5;  // Horizontal orbit
+
+            // Create rotation matrix
+            const matrix = new THREE.Matrix4();
+            
+            // Start from current rotation
+            matrix.makeRotationFromEuler(new THREE.Euler(currentX, currentY, currentZ));
+            
+            // Apply orbital rotations
+            matrix.multiply(new THREE.Matrix4().makeRotationX(phi));
+            matrix.multiply(new THREE.Matrix4().makeRotationY(theta));
+
+            // Extract new rotation
+            const euler = new THREE.Euler();
+            euler.setFromRotationMatrix(matrix);
 
             if (model.pivot) {
-                // Apply rotations in Y-X order for more natural movement
-                model.pivot.rotation.order = 'YXZ';  // Change rotation order
-                model.pivot.rotation.set(rotationX, rotationY, 0);
+                // Apply smooth rotation
+                model.pivot.rotation.x = euler.x;
+                model.pivot.rotation.y = euler.y;
+                model.pivot.rotation.z = euler.z;
                 
                 // Keep pieces synchronized
                 walletPieces.forEach(piece => {
@@ -852,19 +884,30 @@
 
         document.addEventListener('touchmove', (e) => {
             if (!isMouseDown || !model) return;
-            e.preventDefault(); // Prevent scrolling
+            e.preventDefault();
 
             const touch = e.touches[0];
             const deltaX = touch.clientX - startX;
             const deltaY = touch.clientY - startY;
 
-            // Convert touch movement to rotation
-            rotationY = currentY + (deltaX * Math.PI / 180);
-            rotationX = currentX + (deltaY * Math.PI / 180);
+            // Convert to spherical coordinates
+            const radius = 1;
+            const phi = (deltaY * Math.PI / 180) * 0.5;
+            const theta = (deltaX * Math.PI / 180) * 0.5;
+
+            // Create rotation matrix
+            const matrix = new THREE.Matrix4();
+            matrix.makeRotationFromEuler(new THREE.Euler(currentX, currentY, currentZ));
+            matrix.multiply(new THREE.Matrix4().makeRotationX(phi));
+            matrix.multiply(new THREE.Matrix4().makeRotationY(theta));
+
+            const euler = new THREE.Euler();
+            euler.setFromRotationMatrix(matrix);
 
             if (model.pivot) {
-                model.pivot.rotation.order = 'YXZ';
-                model.pivot.rotation.set(rotationX, rotationY, 0);
+                model.pivot.rotation.x = euler.x;
+                model.pivot.rotation.y = euler.y;
+                model.pivot.rotation.z = euler.z;
                 
                 walletPieces.forEach(piece => {
                     piece.rotation.copy(model.pivot.rotation);
