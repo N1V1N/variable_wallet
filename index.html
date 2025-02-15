@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>Variable Wallet</title>
     <style>
         /* Base styles */
@@ -603,7 +603,9 @@
             rotationX = currentX + (deltaY * Math.PI / 180);
 
             if (model.pivot) {
-                model.pivot.rotation.set(rotationX, rotationY, rotationZ);
+                // Apply rotations in Y-X order for more natural movement
+                model.pivot.rotation.order = 'YXZ';  // Change rotation order
+                model.pivot.rotation.set(rotationX, rotationY, 0);
                 
                 // Keep pieces synchronized
                 walletPieces.forEach(piece => {
@@ -668,15 +670,16 @@
                             break;
                             
                         case 'titanium':
-                            // Titanium with subtle color variations
+                            // Ultra-dark, mirror-like titanium
                             child.material = new THREE.MeshPhysicalMaterial({
-                                color: 0x9DA3A4,        // Titanium base color
-                                metalness: 0.9,         // Very metallic
-                                roughness: 0.45,        // Slightly smoother than aluminum
-                                clearcoat: 0.9,         // Strong clearcoat
-                                clearcoatRoughness: 0.1, // Very smooth clearcoat
-                                envMapIntensity: 1.2,   // Good reflections
-                                reflectivity: 0.85,     // High reflectivity
+                                color: 0x2A2D30,        // Much darker titanium color
+                                metalness: 1.0,         // Maximum metallic
+                                roughness: 0.1,         // Very smooth for maximum shine
+                                clearcoat: 1.0,         // Maximum clearcoat
+                                clearcoatRoughness: 0.05, // Ultra-smooth clearcoat
+                                envMapIntensity: 2.0,   // Much stronger reflections
+                                reflectivity: 1.0,      // Maximum reflectivity
+                                appearance: 'physical'   // Standard appearance
                             });
                             break;
                             
@@ -825,6 +828,58 @@
         document.addEventListener('DOMContentLoaded', function() {
             console.log("DOM loaded, initializing...");
             init();
+        });
+
+        // Add touch event handlers
+        document.addEventListener('touchstart', (e) => {
+            if (!model || !walletPieces.length) return;
+            e.preventDefault(); // Prevent scrolling
+
+            const touch = e.touches[0];
+            mouse.x = (touch.clientX / window.innerWidth) * 2 - 1;
+            mouse.y = -(touch.clientY / window.innerHeight) * 2 + 1;
+            raycaster.setFromCamera(mouse, camera);
+            const intersects = raycaster.intersectObjects(walletPieces);
+
+            if (intersects.length > 0) {
+                isMouseDown = true;
+                startX = touch.clientX;
+                startY = touch.clientY;
+                currentX = model.pivot.rotation.x;
+                currentY = model.pivot.rotation.y;
+            }
+        });
+
+        document.addEventListener('touchmove', (e) => {
+            if (!isMouseDown || !model) return;
+            e.preventDefault(); // Prevent scrolling
+
+            const touch = e.touches[0];
+            const deltaX = touch.clientX - startX;
+            const deltaY = touch.clientY - startY;
+
+            // Convert touch movement to rotation
+            rotationY = currentY + (deltaX * Math.PI / 180);
+            rotationX = currentX + (deltaY * Math.PI / 180);
+
+            if (model.pivot) {
+                model.pivot.rotation.order = 'YXZ';
+                model.pivot.rotation.set(rotationX, rotationY, 0);
+                
+                walletPieces.forEach(piece => {
+                    piece.rotation.copy(model.pivot.rotation);
+                });
+            }
+
+            renderer.render(scene, camera);
+        });
+
+        document.addEventListener('touchend', () => {
+            isMouseDown = false;
+        });
+
+        document.addEventListener('touchcancel', () => {
+            isMouseDown = false;
         });
     </script>
 </body>
