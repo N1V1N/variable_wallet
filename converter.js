@@ -180,7 +180,7 @@ async function convertModelOnce(material) {
         console.log('Created OBJConverter instance');
         
         // Verify the file exists first
-        const response = await fetch('../assets/VW.obj');  // Go up one directory, then into assets
+        const response = await fetch('VW.obj');  // Remove '../assets/' directory
         if (!response.ok) {
             console.error('Failed to fetch OBJ file:', {
                 status: response.status,
@@ -191,7 +191,7 @@ async function convertModelOnce(material) {
         }
         console.log('OBJ file exists and is accessible');
         
-        const url = await converter.convertToGLB('../assets/VW.obj', material);
+        const url = await converter.convertToGLB('VW.obj', material);
         if (!url) {
             console.error('GLB conversion failed - no URL returned');
             throw new Error('GLB conversion failed');
