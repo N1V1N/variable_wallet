@@ -275,6 +275,19 @@ async function createModelSlide(config) {
     viewer.setAttribute('camera-orbit', '0deg 75deg 105%');
     viewer.setAttribute('min-field-of-view', '45deg');
     viewer.setAttribute('max-field-of-view', '45deg');
+    viewer.setAttribute('exposure', '1');
+    viewer.setAttribute('shadow-intensity', '0');
+    viewer.setAttribute('shadow-softness', '0');
+    viewer.setAttribute('environment-image', 'neutral');
+    viewer.setAttribute('environment-intensity', '1');
+    viewer.setAttribute('interaction-prompt', 'none');
+    viewer.setAttribute('max-pixels', '1024');
+    viewer.setAttribute('render-scale', '0.75');
+    viewer.setAttribute('camera-target', '0 0 0');
+    viewer.setAttribute('min-camera-orbit', 'auto auto 50%');
+    viewer.setAttribute('max-camera-orbit', 'auto auto 150%');
+    viewer.setAttribute('interaction-policy', 'allow-when-focused');
+    viewer.setAttribute('tone-mapping', 'reinhard');
     viewer.style.cssText = `
         width: 100%;
         height: 100%;
@@ -286,6 +299,7 @@ async function createModelSlide(config) {
     
     try {
         console.log(`Starting material setup for ${config.name}`);
+        // Create a single material for the entire model
         const material = new THREE.MeshStandardMaterial({
             ...config.materials.sides,
             side: THREE.DoubleSide,
@@ -323,6 +337,10 @@ async function createModelSlide(config) {
         });
 
         viewer.src = url;
+
+        // Add GPU optimization
+        scene.matrixAutoUpdate = false;
+        scene.autoUpdate = false;
 
         return { slide, loadPromise };
     } catch (error) {
@@ -363,10 +381,13 @@ export async function initializeModels() {
         // Create navigation markers
         console.log('Creating navigation markers...');
         const navContainer = document.querySelector('.carousel-navigation');
-        navContainer.innerHTML = '';
+        navContainer.innerHTML = '';  // Clear existing markers
         modelConfigs.forEach((_, index) => {
             const marker = document.createElement('div');
             marker.className = 'nav-marker';
+            // Add initial styles
+            marker.style.background = index === 0 ? 'rgba(255, 255, 255, 0.4)' : 'rgba(255, 255, 255, 0.15)';
+            marker.style.transform = index === 0 ? 'rotate(180deg) scale(1.2)' : 'rotate(180deg)';
             navContainer.appendChild(marker);
         });
         

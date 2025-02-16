@@ -48,11 +48,13 @@ export function initializeCarousel(startIndex = 0) {
         const markers = document.querySelectorAll('.nav-marker');
         markers.forEach((marker, index) => {
             if (index === currentIndex) {
-                marker.style.transform = 'scale(1.2)';
-                marker.style.borderBottomColor = 'rgba(0, 0, 0, 0.8)';
+                marker.classList.add('active');
+                marker.style.background = 'rgba(255, 255, 255, 0.4)';
+                marker.style.transform = 'rotate(180deg) scale(1.2)';
             } else {
-                marker.style.transform = 'scale(1)';
-                marker.style.borderBottomColor = 'rgba(0, 0, 0, 0.5)';
+                marker.classList.remove('active');
+                marker.style.background = 'rgba(255, 255, 255, 0.15)';
+                marker.style.transform = 'rotate(180deg)';
             }
         });
     }

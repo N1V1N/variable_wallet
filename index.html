@@ -8,6 +8,7 @@
     <meta name="apple-mobile-web-app-capable" content="yes">
     <title>Variable Wallet - 2025</title>
     <link rel="stylesheet" href="main.css">
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant:wght@400;500;600&display=swap" rel="stylesheet">
     <script type="importmap">
     {
         "imports": {
@@ -36,7 +37,6 @@
         <div class="logo">
             <span>V</span>ariable 
             <span>W</span>allet
-            <span>C</span>o.
         </div>
         <div class="est-date">EST. 2024</div>
     </nav>
@@ -135,5 +135,23 @@
             document.documentElement.style.setProperty('--logo-font', `'${randomFont}', sans-serif`);
         });
     </script>
+
+    <model-viewer 
+        id="${config.id}" 
+        alt="${config.name}"
+        camera-controls="true"
+        auto-rotate="true"
+        disable-tap=""
+        camera-target="0 0 0"
+        exposure="0.5"
+        shadow-intensity="0"
+        environment-image="neutral"
+        camera-orbit="-30deg 75deg 105%"
+        min-camera-orbit="auto auto 50%"
+        max-camera-orbit="auto auto 150%"
+        interaction-prompt="none"
+        interpolation-decay="50"
+        rotation-per-second="30deg">
+    </model-viewer>
 </body>
 </html>

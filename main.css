@@ -79,9 +79,9 @@ body {
 }
 
 .carousel-wrapper {
-    width: 100%;
-    max-width: min(1200px, 90vw);  /* Larger on big screens, but not too large */
-    height: min(80vh, 800px);      /* Taller on big screens, max 800px */
+    width: 55vw;  /* 55% of viewport width */
+    max-width: 55vw;
+    aspect-ratio: 1;  /* Keep it square */
     margin: 0 auto;
     display: flex;
     flex-direction: column;
@@ -93,7 +93,7 @@ body {
     height: 100%;
     overflow: hidden;
     position: relative;
-    padding: 0 20px;
+    padding: 0;  /* Remove padding to maintain exact 33% width */
 }
 
 .carousel-track {
@@ -173,20 +173,21 @@ body {
 
 /* Navigation Markers */
 .nav-marker {
-    width: 8px;    /* Base size */
-    height: 13px;   /* Golden ratio height */
+    width: 12px;    /* Slightly larger */
+    height: 20px;   /* Golden ratio height */
     background: rgba(255, 255, 255, 0.15);
     cursor: pointer;
     transition: all 0.3s ease;
-    margin: 0 8px;  /* Fibonacci spacing */
+    margin: 0 8px;
     clip-path: polygon(
         50% 0,      /* Top point */
         100% 100%,  /* Bottom right */
         0 100%      /* Bottom left */
     );
-    backdrop-filter: blur(2px);
     transform-origin: center;
     transform: rotate(180deg);  /* Point downward */
+    display: block;
+    opacity: 1;
 }
 
 .nav-marker:hover {
@@ -194,7 +195,6 @@ body {
     transform: rotate(180deg) scale(1.1);
 }
 
-/* Active marker */
 .nav-marker.active {
     background: rgba(255, 255, 255, 0.4);
     transform: rotate(180deg) scale(1.2);
@@ -202,13 +202,17 @@ body {
 
 /* Navigation container */
 .carousel-navigation {
-    position: relative;
+    position: absolute;  /* Changed to absolute */
+    bottom: 20px;       /* Position from bottom */
+    left: 0;
+    right: 0;
     display: flex;
     justify-content: center;
     align-items: center;
     padding: 20px 0;
-    gap: 13px;  /* Fibonacci number */
-    height: 13px;  /* Fixed height to ensure alignment */
+    gap: 13px;
+    height: 20px;
+    z-index: 1000;
 }
 
 /* Light Effects */
@@ -234,17 +238,16 @@ body {
     transform: translateX(-50%);
     text-align: center;
     text-shadow: 0 0 30px rgba(255, 255, 255, 0.3);
-    font-family: var(--logo-font);
-    font-size: clamp(1.4em, 3vw, 2.2em);  /* Min 1.4em, Max 2.2em, scales with viewport */
+    font-family: 'Cormorant', serif;
+    font-size: clamp(1.4em, 3vw, 2.2em);
     letter-spacing: 0.2em;
-    font-weight: 400;
-    text-transform: lowercase;
-    white-space: nowrap;  /* Prevent text wrapping */
+    font-weight: 500;
+    text-transform: uppercase;
+    white-space: nowrap;
 }
 
 .logo span {
     color: rgba(255, 255, 255, 0.95);
-    text-transform: uppercase;
     font-weight: 600;
 }
 
@@ -256,6 +259,8 @@ body {
     color: rgba(255, 255, 255, 0.7);
     letter-spacing: 0.4em;
     font-size: clamp(0.5em, 1vw, 0.8em);  /* Scale with viewport */
+    font-family: 'Cormorant', serif;
+    font-weight: 400;
 }
 
 /* Model Viewer Additional Styles */
@@ -264,10 +269,18 @@ model-viewer {
     height: 100%;
     transform-style: preserve-3d;
     --poster-color: transparent;
-    --progress-bar-color: transparent;  /* This hides the loading line */
-    --progress-bar-height: 0px;        /* Removes the space taken by the loading bar */
-    background: transparent;
-    max-height: 80vh;  /* Prevent too tall on large screens */
+    --progress-bar-color: transparent;
+    --progress-bar-height: 0px;
+    --model-shadow-intensity: 0;
+    --model-shadow-softness: 0;
+    --exposure: 5;
+    --environment-intensity: 8;
+    --interaction-prompt-threshold: 0;
+    --camera-orbit-sensitivity: 0.5;
+    will-change: transform;
+    transform: translateZ(0);
+    backface-visibility: hidden;
+    -webkit-transform: translate3d(0, 0, 0);
 }
 
 /* Remove old loading styles */
@@ -308,5 +321,13 @@ model-viewer {
     
     .nav-button.next {
         right: max(30px, 5vw);
+    }
+}
+
+/* Add mobile breakpoint for smaller screens */
+@media (max-width: 768px) {
+    .carousel-wrapper {
+        width: 90vw;
+        max-width: 90vw;
     }
 }
