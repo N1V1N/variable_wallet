@@ -278,7 +278,8 @@ model-viewer {
     --interaction-prompt-threshold: 0;
     --camera-orbit-sensitivity: 0.5;
     will-change: transform;
-    transform: translateZ(0);
+    transform: scale(1);  /* Base scale */
+    transform-origin: center center;
     backface-visibility: hidden;
     -webkit-transform: translate3d(0, 0, 0);
 }
@@ -338,3 +339,16 @@ model-viewer {
     auto-rotate: false;
     pointer-events: none;
 } */
+
+/* Scale up for larger screens */
+@media (min-width: 1920px) {
+    model-viewer {
+        transform: scale(1.5);  /* Scale up 50% for 1920p+ */
+    }
+}
+
+@media (min-width: 2560px) {
+    model-viewer {
+        transform: scale(2);  /* Scale up 100% for 1440p+ */
+    }
+}
