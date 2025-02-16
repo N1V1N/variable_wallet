@@ -1,7 +1,10 @@
-import * as THREE from 'https://cdn.jsdelivr.net/npm/three@0.121.1/build/three.module.js';
-import { OBJLoader } from 'https://cdn.jsdelivr.net/npm/three@0.121.1/examples/jsm/loaders/OBJLoader.js';
-import { GLTFExporter } from 'https://cdn.jsdelivr.net/npm/three@0.121.1/examples/jsm/exporters/GLTFExporter.js';
+import * as THREE from 'https://unpkg.com/three@0.157.0/build/three.module.js';
+import { OBJLoader } from 'https://unpkg.com/three@0.157.0/examples/jsm/loaders/OBJLoader.js';
+import { GLTFExporter } from 'https://unpkg.com/three@0.157.0/examples/jsm/exporters/GLTFExporter.js';
 import { initializeCarousel } from './carousel.js';
+
+// Make sure THREE is available globally
+window.THREE = THREE;
 
 // Define model configurations
 const modelConfigs = [
@@ -161,6 +164,21 @@ const modelConfigs = [
 ];
 
 async function convertOBJtoGLB(objPath) {
+    console.log('Starting OBJ to GLB conversion...');
+    
+    // Wait a moment for DOM to be fully ready
+    await new Promise(resolve => setTimeout(resolve, 100));
+    
+    const track = document.querySelector('.carousel-track');
+    const navContainer = document.querySelector('.carousel-navigation');
+    
+    if (!track || !navContainer) {
+        console.error('Required elements not found:');
+        console.log('Track:', track);
+        console.log('Navigation:', navContainer);
+        return false;
+    }
+    
     const scene = new THREE.Scene();
     const loader = new OBJLoader();
     
@@ -172,12 +190,13 @@ async function convertOBJtoGLB(objPath) {
         scene.add(ambientLight);
         scene.add(directionalLight);
 
-        // Load model
+        console.log('Loading OBJ file:', objPath);
         const obj = await new Promise((resolve, reject) => {
             loader.load(objPath, resolve, undefined, reject);
         });
+        console.log('OBJ loaded successfully');
 
-        // Process each variant
+        console.log('Processing model variants...');
         const models = await Promise.all(modelConfigs.map(async config => {
             const modelCopy = obj.clone();
             let meshIndex = 0;
@@ -202,28 +221,68 @@ async function convertOBJtoGLB(objPath) {
 
             return { id: config.id, name: config.name, description: config.description, glbData };
         }));
+        console.log(`Processed ${models.length} model variants`);
 
-        // Update carousel
-        const container = document.querySelector('.carousel-container');
-        container.innerHTML = '';
+        console.log('Updating carousel track...');
+        track.innerHTML = '';
         models.forEach(model => {
-            container.appendChild(createModelSlide(model));
+            const slide = createModelSlide(model);
+            track.appendChild(slide);
+            console.log(`Added slide for model: ${model.id}`);
         });
 
-        // Update dots
-        const dotsContainer = document.querySelector('.carousel-dots');
-        dotsContainer.innerHTML = '';
+        console.log('Creating navigation markers...');
+        navContainer.innerHTML = '';
         models.forEach((_, index) => {
-            const dot = document.createElement('span');
-            dot.className = `dot${index === 4 ? ' active' : ''}`;
-            dotsContainer.appendChild(dot);
+            const marker = document.createElement('div');
+            marker.className = 'nav-marker';
+            
+            // Golden ratio-based dimensions
+            const baseSize = 21; // Fibonacci number
+            const goldenRatio = 1.618;
+            
+            marker.style.cssText = `
+                width: ${baseSize}px;
+                height: ${baseSize / goldenRatio}px;
+                position: relative;
+                cursor: pointer;
+                transition: all 0.3s ease;
+            `;
+
+            // Create inner elements for layered effect
+            const inner1 = document.createElement('div');
+            const inner2 = document.createElement('div');
+            
+            inner1.style.cssText = `
+                position: absolute;
+                width: 100%;
+                height: 100%;
+                background: rgba(255, 255, 255, 0.1);
+                transform: rotate(45deg);
+                transition: all 0.3s ease;
+            `;
+            
+            inner2.style.cssText = `
+                position: absolute;
+                width: ${baseSize / goldenRatio}px;
+                height: ${baseSize / (goldenRatio * goldenRatio)}px;
+                background: rgba(255, 255, 255, 0.2);
+                transform: rotate(45deg);
+                top: ${(baseSize - baseSize / goldenRatio) / 2}px;
+                left: ${(baseSize - baseSize / goldenRatio) / 2}px;
+                transition: all 0.3s ease;
+            `;
+
+            marker.appendChild(inner1);
+            marker.appendChild(inner2);
+            navContainer.appendChild(marker);
         });
 
         // Initialize carousel immediately
         initializeCarousel(4);
         return true;
     } catch (error) {
-        console.error('Error:', error);
+        console.error('Error in convertOBJtoGLB:', error);
         return false;
     }
 }
@@ -231,36 +290,42 @@ async function convertOBJtoGLB(objPath) {
 function createModelSlide(model) {
     const slide = document.createElement('div');
     slide.className = 'carousel-slide';
+    slide.style.cssText = `
+        min-width: 100%;
+        height: 100%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        position: relative;
+        perspective: 1000px;
+    `;
     
-    const container = document.createElement('div');
-    container.className = 'vw-model-container';
+    const portalFrame = document.createElement('div');
+    portalFrame.style.cssText = `
+        width: 90%;
+        height: 90%;
+        position: relative;
+        border-radius: 8px;
+        background: radial-gradient(circle at center, rgba(255, 255, 255, 0.15), transparent);
+        box-shadow: 0 0 30px rgba(255, 255, 255, 0.1);
+        overflow: hidden;
+        transform-style: preserve-3d;
+    `;
     
     const viewer = document.createElement('model-viewer');
     viewer.id = model.id;
     viewer.alt = model.name;
     viewer.setAttribute('auto-rotate', '');
-    viewer.setAttribute('camera-controls', '');
+    viewer.setAttribute('camera-controls', 'false');
     viewer.setAttribute('rotation-per-second', '30deg');
-    viewer.setAttribute('environment-image', 'neutral');
-    viewer.setAttribute('exposure', '1.0');
-    viewer.setAttribute('environment-intensity', '1.8');
-    viewer.setAttribute('shadow-intensity', '1');
-    viewer.setAttribute('shadow-softness', '1');
-
+    viewer.style.cssText = 'width: 100%; height: 100%; transform-style: preserve-3d;';
+    
     // Set source from blob
     const blob = new Blob([model.glbData], { type: 'model/gltf-binary' });
     viewer.src = URL.createObjectURL(blob);
 
-    const info = document.createElement('div');
-    info.className = 'model-info';
-    info.innerHTML = `
-        <h2>${model.name}</h2>
-        <p>${model.description}</p>
-    `;
-
-    container.appendChild(viewer);
-    container.appendChild(info);
-    slide.appendChild(container);
+    portalFrame.appendChild(viewer);
+    slide.appendChild(portalFrame);
 
     return slide;
 }
@@ -268,17 +333,31 @@ function createModelSlide(model) {
 export async function initializeModels() {
     console.log('Starting model initialization...');
     try {
+        console.log('Converting OBJ to GLB...');
         const success = await convertOBJtoGLB('VW.obj');
         console.log('Conversion result:', success);
+        
         if (success) {
-            console.log('Setting up carousel...');
-            const container = document.querySelector('.carousel-container');
+            console.log('Checking carousel elements...');
+            const track = document.querySelector('.carousel-track');
+            console.log('Track element:', track);
+            
             const slides = document.querySelectorAll('.carousel-slide');
-            console.log(`Found ${slides.length} slides`);
-            initializeCarousel(4); // Start at index 4 (Q3Al)
-            console.log('Carousel initialized');
+            console.log('Found slides:', slides.length);
+            
+            if (!track || !slides.length) {
+                console.error('Carousel structure not found');
+                console.log('Track:', track);
+                console.log('Slides:', slides);
+                return;
+            }
+            
+            console.log('Initializing carousel with slides...');
+            initializeCarousel(4);
+            console.log('Carousel initialization complete');
         }
     } catch (error) {
         console.error('Error in initialization:', error);
+        console.log('Error details:', error.stack);
     }
 } 

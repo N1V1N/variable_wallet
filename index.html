@@ -13,42 +13,50 @@
     <link href="https://fonts.googleapis.com/css2?family=Crimson+Text:ital,wght@0,400;0,600;1,400;1,600&display=swap" rel="stylesheet">
 </head>
 <body>
-    <!-- Floating CONNOR names -->
-    <div class="floating-names" style="font-size: 24px; position: fixed; width: 100vw; height: 100vh; display: flex; justify-content: center; align-items: center; left: 0; top: 0; margin: 0; padding: 0; pointer-events: none; z-index: 1000;"></div>
-
     <!-- Navigation -->
-    <nav>
-        <div class="nav-spacer"></div>
-        <div class="logo-container">
-            <div class="logo">
+    <nav style="display: flex; flex-direction: column; align-items: center; justify-content: center; width: 100%; text-align: center; padding: 20px 0; background: rgba(255, 255, 255, 0.05);">
+        <div class="logo-container" style="width: 100%; display: flex; flex-direction: column; align-items: center;">
+            <div class="logo" style="width: 100%; text-align: center; text-shadow: 0 0 20px rgba(255, 255, 255, 0.2);">
                 <span>V</span>ariable <span>W</span>allet<span>C</span>o.
             </div>
-            <div class="est-date">EST. 2024</div>
-        </div>
-        <div class="nav-links">
-            <a href="#shop" class="cta-button">Pre-Order</a>
+            <div class="est-date" style="width: 100%; text-align: center; color: rgba(255, 255, 255, 0.9);">EST. 2024</div>
         </div>
     </nav>
 
-    <!-- Model Carousel Section -->
-    <section id="model-carousel">
-        <button class="carousel-button prev-button">❮</button>
-        <div class="carousel-container">
-            <!-- Slides will be generated here -->
+    <!-- New Carousel Structure -->
+    <section id="model-carousel" style="position: relative; width: 100%; height: 800px; padding-top: 60px; background: radial-gradient(circle at center, rgba(255, 255, 255, 0.1) 0%, rgba(255, 255, 255, 0.05) 50%, transparent 100%);">
+        <!-- Fixed position navigation buttons -->
+        <button class="nav-button prev" style="position: fixed; left: 30px; top: 50%; transform: translateY(-50%); width: 160px; height: 99px; background: rgba(255, 255, 255, 0.1); clip-path: polygon(100% 0, 0 50%, 100% 100%, 100% 61.8%, 38.2% 50%, 100% 38.2%); border: none; cursor: pointer; z-index: 10; transition: all 0.3s ease;" onmouseover="this.style.transform='translateY(-50%) scale(1.1)'; this.style.background='rgba(255, 255, 255, 0.15)';" onmouseout="this.style.transform='translateY(-50%)'; this.style.background='rgba(255, 255, 255, 0.1)';"></button>
+        
+        <button class="nav-button next" style="position: fixed; right: 30px; top: 50%; transform: translateY(-50%); width: 160px; height: 99px; background: rgba(255, 255, 255, 0.1); clip-path: polygon(0 0, 100% 50%, 0 100%, 0 61.8%, 61.8% 50%, 0 38.2%); border: none; cursor: pointer; z-index: 10; transition: all 0.3s ease;" onmouseover="this.style.transform='translateY(-50%) scale(1.1)'; this.style.background='rgba(255, 255, 255, 0.15)';" onmouseout="this.style.transform='translateY(-50%)'; this.style.background='rgba(255, 255, 255, 0.1)';"></button>
+
+        <!-- Main carousel content -->
+        <div class="carousel-wrapper" style="width: 100%; max-width: 1200px; height: 700px; margin: 0 auto; padding: 0 200px;">
+            <div class="carousel-viewport" style="width: 100%; height: 100%; overflow: hidden; position: relative;">
+                <div class="carousel-track" style="display: flex; height: 100%; transition: transform 0.5s ease-out; width: 100%;">
+                    <!-- Slides will be generated here -->
+                </div>
+            </div>
         </div>
-        <button class="carousel-button next-button">❯</button>
-        <div class="carousel-dots">
-            <!-- Dots will be generated here -->
+
+        <!-- Golden Ratio Navigation -->
+        <div class="carousel-navigation" style="position: relative; width: 100%; display: flex; justify-content: center; align-items: center; gap: 34px; margin-top: 30px;">
+            <!-- Navigation markers will be generated here -->
         </div>
     </section>
 
     <script type="module">
         import { initializeModels } from './converter.js';
-        import { createFloatingNames } from './floating-names.js?v=2';
-
-        document.addEventListener('DOMContentLoaded', async () => {
-            createFloatingNames();
-            await initializeModels();
+        
+        // Wait for both DOM and model-viewer to be ready
+        window.addEventListener('load', async () => {
+            // Make sure model-viewer is defined
+            if (customElements.get('model-viewer')) {
+                console.log('model-viewer is ready');
+                await initializeModels();
+            } else {
+                console.error('model-viewer element not defined');
+            }
         });
     </script>
 </body>
