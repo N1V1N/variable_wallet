@@ -19,24 +19,136 @@
     <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;1,400;1,500&display=swap" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Cinzel+Decorative:wght@400;700&display=swap" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Crimson+Text:ital,wght@0,400;0,600;1,400;1,600&display=swap" rel="stylesheet">
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            min-height: 100vh;
+            font-family: 'Cinzel Decorative', serif;
+            color: rgba(255, 255, 255, 0.9);
+            overflow-x: hidden;
+        }
+
+        .light-beams {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            pointer-events: none;
+            background: 
+                radial-gradient(circle at 20% 20%, rgba(255, 255, 255, 0.025) 0%, transparent 50%),
+                radial-gradient(circle at 80% 80%, rgba(255, 255, 255, 0.025) 0%, transparent 50%),
+                radial-gradient(circle at 50% 50%, rgba(255, 255, 255, 0.01) 0%, transparent 100%);
+            animation: beam-movement 20s infinite alternate ease-in-out;
+        }
+
+        @keyframes beam-movement {
+            0% { transform: scale(1); opacity: 0.5; }
+            50% { transform: scale(1.2); opacity: 0.7; }
+            100% { transform: scale(1); opacity: 0.5; }
+        }
+
+        .carousel-slide {
+            position: relative;
+            overflow: hidden;
+        }
+
+        .carousel-slide::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: radial-gradient(circle at center, transparent 30%, rgba(0, 0, 0, 0.2) 100%);
+            pointer-events: none;
+        }
+
+        .nav-marker {
+            position: relative;
+            overflow: hidden;
+        }
+
+        .nav-marker::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle at center, rgba(255, 255, 255, 0.1) 0%, transparent 70%);
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .nav-marker:hover::before {
+            opacity: 1;
+        }
+    </style>
 </head>
-<body>
+<body style="background: radial-gradient(circle at center, #121216 0%, #000000 100%);">
     <!-- Navigation -->
-    <nav style="display: flex; flex-direction: column; align-items: center; justify-content: center; width: 100%; text-align: center; padding: 20px 0; background: rgba(255, 255, 255, 0.05);">
+    <nav style="display: flex; flex-direction: column; align-items: center; justify-content: center; width: 100%; text-align: center; padding: 20px 0; background: rgba(255, 255, 255, 0.02); backdrop-filter: blur(10px);">
         <div class="logo-container" style="width: 100%; display: flex; flex-direction: column; align-items: center;">
-            <div class="logo" style="width: 100%; text-align: center; text-shadow: 0 0 20px rgba(255, 255, 255, 0.2);">
-                <span>V</span>ariable <span>W</span>allet<span>C</span>o.
+            <div class="logo" style="width: 100%; text-align: center; text-shadow: 0 0 30px rgba(255, 255, 255, 0.3);">
+                <span style="color: rgba(255, 255, 255, 0.95);">V</span>ariable 
+                <span style="color: rgba(255, 255, 255, 0.95);">W</span>allet
+                <span style="color: rgba(255, 255, 255, 0.95);">C</span>o.
             </div>
-            <div class="est-date" style="width: 100%; text-align: center; color: rgba(255, 255, 255, 0.9);">EST. 2024</div>
+            <div class="est-date" style="width: 100%; text-align: center; color: rgba(255, 255, 255, 0.7); letter-spacing: 0.2em;">EST. 2024</div>
         </div>
     </nav>
 
     <!-- New Carousel Structure -->
-    <section id="model-carousel" style="position: relative; width: 100%; height: 100vh; display: flex; flex-direction: column; align-items: center; justify-content: center; background: radial-gradient(circle at center, rgba(255, 255, 255, 0.1) 0%, rgba(255, 255, 255, 0.05) 50%, transparent 100%);">
+    <section id="model-carousel" style="
+        position: relative; 
+        width: 100%; 
+        height: 100vh; 
+        display: flex; 
+        flex-direction: column; 
+        align-items: center; 
+        justify-content: center; 
+        background: radial-gradient(circle at center, rgba(255, 255, 255, 0.03) 0%, transparent 70%);">
+        <!-- Add ethereal light beams -->
+        <div class="light-beams"></div>
+
         <!-- Fixed position navigation buttons -->
-        <button class="nav-button prev" style="position: fixed; left: 30px; top: 50%; transform: translateY(-50%); width: 160px; height: 99px; background: rgba(255, 255, 255, 0.1); clip-path: polygon(100% 0, 0 50%, 100% 100%, 100% 61.8%, 38.2% 50%, 100% 38.2%); border: none; cursor: pointer; z-index: 10; transition: all 0.3s ease;" onmouseover="this.style.transform='translateY(-50%) scale(1.1)'; this.style.background='rgba(255, 255, 255, 0.15)';" onmouseout="this.style.transform='translateY(-50%)'; this.style.background='rgba(255, 255, 255, 0.1)';"></button>
+        <button class="nav-button prev" style="
+            position: fixed; 
+            left: 30px; 
+            top: 50%; 
+            transform: translateY(-50%); 
+            width: 160px; 
+            height: 99px; 
+            background: rgba(0, 0, 0, 0.7);
+            filter: drop-shadow(0 0 10px rgba(255, 255, 255, 0.2));
+            clip-path: polygon(100% 0, 0 50%, 100% 100%, 100% 61.8%, 38.2% 50%, 100% 38.2%); 
+            border: none; 
+            cursor: pointer; 
+            z-index: 10; 
+            transition: all 0.3s ease;" 
+            onmouseover="this.style.transform='translateY(-50%) scale(1.1)'; this.style.filter='drop-shadow(0 0 15px rgba(255, 255, 255, 0.3))';" 
+            onmouseout="this.style.transform='translateY(-50%)'; this.style.filter='drop-shadow(0 0 10px rgba(255, 255, 255, 0.2))';">
+        </button>
         
-        <button class="nav-button next" style="position: fixed; right: 30px; top: 50%; transform: translateY(-50%); width: 160px; height: 99px; background: rgba(255, 255, 255, 0.1); clip-path: polygon(0 0, 100% 50%, 0 100%, 0 61.8%, 61.8% 50%, 0 38.2%); border: none; cursor: pointer; z-index: 10; transition: all 0.3s ease;" onmouseover="this.style.transform='translateY(-50%) scale(1.1)'; this.style.background='rgba(255, 255, 255, 0.15)';" onmouseout="this.style.transform='translateY(-50%)'; this.style.background='rgba(255, 255, 255, 0.1)';"></button>
+        <button class="nav-button next" style="
+            position: fixed; 
+            right: 30px; 
+            top: 50%; 
+            transform: translateY(-50%); 
+            width: 160px; 
+            height: 99px; 
+            background: rgba(0, 0, 0, 0.7);
+            filter: drop-shadow(0 0 10px rgba(255, 255, 255, 0.2));
+            clip-path: polygon(0 0, 100% 50%, 0 100%, 0 61.8%, 61.8% 50%, 0 38.2%); 
+            border: none; 
+            cursor: pointer; 
+            z-index: 10; 
+            transition: all 0.3s ease;" 
+            onmouseover="this.style.transform='translateY(-50%) scale(1.1)'; this.style.filter='drop-shadow(0 0 15px rgba(255, 255, 255, 0.3))';" 
+            onmouseout="this.style.transform='translateY(-50%)'; this.style.filter='drop-shadow(0 0 10px rgba(255, 255, 255, 0.2))';">
+        </button>
 
         <!-- Main carousel content -->
         <div class="carousel-wrapper" style="width: 100%; max-width: 800px; height: 600px; margin: 0 auto; display: flex; flex-direction: column; align-items: center;">

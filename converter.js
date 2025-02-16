@@ -227,9 +227,15 @@ async function convertOBJtoGLB(objPath, config) {
         obj.traverse(child => {
             if (child instanceof THREE.Mesh) {
                 console.log(`Applying material to mesh ${meshIndex}:`, child);
-                const material = new THREE.MeshStandardMaterial(
-                    meshIndex === 0 ? config.materials.center : config.materials.sides
-                );
+                const material = new THREE.MeshStandardMaterial({
+                    ...config.materials.sides,
+                    side: THREE.DoubleSide,
+                    flatShading: false,
+                    vertexColors: false,
+                    transparent: false,
+                    metalness: config.materials.sides.metalness || 0.5,
+                    roughness: config.materials.sides.roughness || 0.5,
+                });
                 child.material = material;
                 meshIndex++;
             }
@@ -280,9 +286,6 @@ async function createModelSlide(config) {
         width: 90%;
         height: 90%;
         position: relative;
-        border-radius: 8px;
-        background: radial-gradient(circle at center, rgba(255, 255, 255, 0.15), transparent);
-        box-shadow: 0 0 30px rgba(255, 255, 255, 0.1);
         overflow: hidden;
         transform-style: preserve-3d;
     `;
@@ -290,10 +293,16 @@ async function createModelSlide(config) {
     const viewer = document.createElement('model-viewer');
     viewer.id = config.id;
     viewer.alt = config.name;
+    viewer.setAttribute('camera-controls', '');
     viewer.setAttribute('auto-rotate', '');
-    viewer.setAttribute('camera-controls', 'true');
+    viewer.setAttribute('disable-tap', '');
     viewer.setAttribute('rotation-per-second', '30deg');
     viewer.setAttribute('camera-orbit', '0deg 75deg 105%');
+    viewer.setAttribute('min-field-of-view', '45deg');
+    viewer.setAttribute('max-field-of-view', '45deg');
+    viewer.setAttribute('interaction-prompt', 'none');
+    viewer.setAttribute('disable-zoom', '');
+    viewer.setAttribute('disable-pan', '');
     viewer.setAttribute('exposure', '1');
     viewer.setAttribute('shadow-intensity', '1');
     viewer.setAttribute('environment-image', 'neutral');
@@ -305,13 +314,88 @@ async function createModelSlide(config) {
         background: transparent;
     `;
 
+    const loadingOverlay = document.createElement('div');
+    loadingOverlay.style.cssText = `
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: rgba(0, 0, 0, 0.7);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        z-index: 10;
+        opacity: 0;
+        transition: opacity 0.3s ease;
+    `;
+
+    const loadingSpinner = document.createElement('div');
+    loadingSpinner.style.cssText = `
+        width: 40px;
+        height: 40px;
+        position: relative;
+        transform: rotateZ(45deg);
+        animation: loadingFade 1.2s infinite ease-in-out;
+    `;
+
+    const loadingText = document.createElement('div');
+    loadingText.style.cssText = `
+        position: absolute;
+        bottom: 20px;
+        color: rgba(255, 255, 255, 0.7);
+        font-family: 'Cinzel Decorative', serif;
+        font-size: 12px;
+        letter-spacing: 0.2em;
+    `;
+
+    const style = document.createElement('style');
+    style.textContent = `
+        @keyframes loadingFade {
+            0%, 10%, 100% { transform: scale(0.3) rotateZ(45deg); opacity: 0.3; }
+            50% { transform: scale(1.0) rotateZ(45deg); opacity: 0.8; }
+        }
+    `;
+    document.head.appendChild(style);
+
+    loadingOverlay.appendChild(loadingSpinner);
+    loadingOverlay.appendChild(loadingText);
+    portalFrame.appendChild(loadingOverlay);
+
     try {
-        const converter = new OBJConverter();
-        const material = new THREE.MeshStandardMaterial(config.materials.sides);
-        const glbData = await converter.convertToGLB('VW.obj', material);
-        viewer.src = converter.createURL(glbData);
+        loadingOverlay.style.opacity = '1';
+        const converter = new OBJConverter((progress) => {
+            loadingText.textContent = `Loading: ${(progress * 100).toFixed(1)}%`;
+        });
+        const material = new THREE.MeshStandardMaterial({
+            ...config.materials.sides,
+            side: THREE.DoubleSide,
+            flatShading: false,
+            vertexColors: false,
+            transparent: false,
+            metalness: config.materials.sides.metalness || 0.5,
+            roughness: config.materials.sides.roughness || 0.5,
+        });
+        const url = await converter.convertToGLB('VW.obj', material);
+        viewer.src = url;
+
+        // Add load event listener to hide loading overlay
+        viewer.addEventListener('load', () => {
+            loadingOverlay.style.opacity = '0';
+            setTimeout(() => loadingOverlay.remove(), 300);
+        });
+
+        // Add error event listener
+        viewer.addEventListener('error', (error) => {
+            console.error(`Model loading error for ${config.name}:`, error);
+            loadingOverlay.style.opacity = '0';
+            setTimeout(() => loadingOverlay.remove(), 300);
+        });
+
     } catch (error) {
         console.error(`Error creating model for ${config.name}:`, error);
+        loadingOverlay.style.opacity = '0';
+        setTimeout(() => loadingOverlay.remove(), 300);
         viewer.src = 'https://modelviewer.dev/shared-assets/models/Astronaut.glb';
     }
 
@@ -345,44 +429,28 @@ export async function initializeModels() {
             const marker = document.createElement('div');
             marker.className = 'nav-marker';
             
-            // Golden ratio-based dimensions
-            const baseSize = 21;
-            const goldenRatio = 1.618;
-            
             marker.style.cssText = `
-                width: ${baseSize}px;
-                height: ${baseSize / goldenRatio}px;
-                position: relative;
+                width: 0;
+                height: 0;
+                border-left: 8px solid transparent;
+                border-right: 8px solid transparent;
+                border-bottom: 12px solid rgba(0, 0, 0, 0.5);
                 cursor: pointer;
-                transition: all 0.3s ease;
+                transition: transform 0.3s ease;
+                margin: 0 10px;
             `;
 
-            // Create inner elements for layered effect
-            const inner1 = document.createElement('div');
-            const inner2 = document.createElement('div');
-            
-            inner1.style.cssText = `
-                position: absolute;
-                width: 100%;
-                height: 100%;
-                background: rgba(255, 255, 255, 0.1);
-                transform: rotate(45deg);
-                transition: all 0.3s ease;
-            `;
-            
-            inner2.style.cssText = `
-                position: absolute;
-                width: ${baseSize / goldenRatio}px;
-                height: ${baseSize / (goldenRatio * goldenRatio)}px;
-                background: rgba(255, 255, 255, 0.2);
-                transform: rotate(45deg);
-                top: ${(baseSize - baseSize / goldenRatio) / 2}px;
-                left: ${(baseSize - baseSize / goldenRatio) / 2}px;
-                transition: all 0.3s ease;
-            `;
+            // Add hover effect
+            marker.addEventListener('mouseover', () => {
+                marker.style.transform = 'scale(1.2)';
+                marker.style.borderBottomColor = 'rgba(0, 0, 0, 0.8)';
+            });
 
-            marker.appendChild(inner1);
-            marker.appendChild(inner2);
+            marker.addEventListener('mouseout', () => {
+                marker.style.transform = 'scale(1)';
+                marker.style.borderBottomColor = 'rgba(0, 0, 0, 0.5)';
+            });
+
             navContainer.appendChild(marker);
         });
 
