@@ -1,47 +1,32 @@
-import * as THREE from 'three';
-import { OBJLoader } from 'three/addons/loaders/OBJLoader.js';
-import { GLTFExporter } from 'three/addons/exporters/GLTFExporter.js';
+import { THREE, objLoader, gltfExporter, scene } from './three-instance.js';
 
 export class OBJConverter {
     constructor() {
-        this.scene = new THREE.Scene();
-        this.loader = new OBJLoader();
-
-        // Create lights with proper targets
-        const lights = [
-            { pos: [1, 1, 1], intensity: 1.0 },
-            { pos: [-1, -1, -1], intensity: 0.8 },
-            { pos: [0, 1, 0], intensity: 0.6 }
-        ].map(({ pos, intensity }) => {
-            const light = new THREE.DirectionalLight(0xffffff, intensity);
-            light.position.set(...pos);
-            
-            // Add target for each light
-            const target = new THREE.Object3D();
-            target.position.set(0, 0, -1);
-            light.target = target;
-            this.scene.add(target);
-            
-            return light;
-        });
-
-        // Add all lights at once
-        this.scene.add(...lights);
+        this.scene = scene;
+        this.loader = objLoader;
     }
 
     async convertToGLB(objPath, material) {
         try {
-            // Load OBJ
+            console.log('Starting OBJ load from path:', objPath);
             const obj = await new Promise((resolve, reject) => {
                 this.loader.load(
                     objPath,
-                    resolve,
-                    undefined,
-                    reject
+                    (loadedObj) => {
+                        console.log('OBJ loaded successfully:', loadedObj);
+                        resolve(loadedObj);
+                    },
+                    (progress) => {
+                        console.log('Loading progress:', (progress.loaded / progress.total * 100).toFixed(2) + '%');
+                    },
+                    (error) => {
+                        console.error('OBJ loading error:', error);
+                        reject(error);
+                    }
                 );
             });
 
-            // Apply material and optimize geometry
+            console.log('Applying materials...');
             obj.traverse(child => {
                 if (child instanceof THREE.Mesh) {
                     child.material = material;
@@ -51,24 +36,19 @@ export class OBJConverter {
 
             this.scene.add(obj);
 
-            // Convert to GLB
+            console.log('Converting to GLB...');
             const glbData = await new Promise((resolve, reject) => {
-                const exporter = new GLTFExporter();
-                exporter.parse(
+                gltfExporter.parse(
                     this.scene,
                     (result) => {
-                        if (!(result instanceof ArrayBuffer)) {
-                            reject(new Error('Invalid GLB format'));
-                            return;
-                        }
+                        console.log('GLB conversion successful');
                         resolve(result);
                     },
-                    (error) => reject(error),
-                    { 
-                        binary: true,
-                        onlyVisible: true,
-                        includeCustomExtensions: true
-                    }
+                    (error) => {
+                        console.error('GLB conversion error:', error);
+                        reject(error);
+                    },
+                    { binary: true }
                 );
             });
 
@@ -79,7 +59,6 @@ export class OBJConverter {
             console.error('Conversion error:', error);
             throw error;
         } finally {
-            // Clean up meshes but keep lights
             this.scene.remove(...this.scene.children.filter(child => child instanceof THREE.Mesh));
         }
     }
@@ -87,4 +66,4 @@ export class OBJConverter {
     dispose() {
         this.scene.clear();
     }
-} 
+}

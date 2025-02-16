@@ -1,12 +1,28 @@
+console.log('Carousel module loaded');
+
 export function initializeCarousel(startIndex = 0) {
+    console.log('Starting carousel initialization...');
+    
     const track = document.querySelector('.carousel-track');
     const slides = document.querySelectorAll('.carousel-slide');
     const navContainer = document.querySelector('.carousel-navigation');
     const prevButton = document.querySelector('.nav-button.prev');
     const nextButton = document.querySelector('.nav-button.next');
     
+    console.log('Found elements:', {
+        track: track?.className,
+        slides: slides?.length,
+        navContainer: navContainer?.className,
+        prevButton: prevButton?.className,
+        nextButton: nextButton?.className,
+        markers: document.querySelectorAll('.nav-marker')?.length
+    });
+
     if (!track || !slides.length) {
-        console.error('Carousel elements not found');
+        console.error('Carousel elements not found:', {
+            trackFound: !!track,
+            slidesLength: slides.length
+        });
         return;
     }
 
@@ -31,23 +47,16 @@ export function initializeCarousel(startIndex = 0) {
         // Update navigation markers
         const markers = document.querySelectorAll('.nav-marker');
         markers.forEach((marker, index) => {
-            const inner1 = marker.children[0];
-            const inner2 = marker.children[1];
             if (index === currentIndex) {
-                inner1.style.transform = 'rotate(45deg) scale(1.2)';
-                inner2.style.transform = 'rotate(45deg) scale(1.3)';
-                inner1.style.background = 'rgba(255, 255, 255, 0.2)';
-                inner2.style.background = 'rgba(255, 255, 255, 0.3)';
+                marker.style.transform = 'scale(1.2)';
+                marker.style.borderBottomColor = 'rgba(0, 0, 0, 0.8)';
             } else {
-                inner1.style.transform = 'rotate(45deg) scale(1)';
-                inner2.style.transform = 'rotate(45deg) scale(1)';
-                inner1.style.background = 'rgba(255, 255, 255, 0.1)';
-                inner2.style.background = 'rgba(255, 255, 255, 0.2)';
+                marker.style.transform = 'scale(1)';
+                marker.style.borderBottomColor = 'rgba(0, 0, 0, 0.5)';
             }
         });
     }
 
-    // Navigation functions
     function goToSlide(index) {
         currentIndex = index;
         updateSlidePosition();
@@ -67,10 +76,22 @@ export function initializeCarousel(startIndex = 0) {
         }
     }
 
-    // Event listeners
-    prevButton?.addEventListener('click', prevSlide);
-    nextButton?.addEventListener('click', nextSlide);
+    // Event listeners for navigation buttons
+    if (prevButton) prevButton.addEventListener('click', prevSlide);
+    if (nextButton) nextButton.addEventListener('click', nextSlide);
+
+    // Add click listeners to markers
+    const markers = document.querySelectorAll('.nav-marker');
+    markers.forEach((marker, index) => {
+        marker.addEventListener('click', () => goToSlide(index));
+    });
+
+    // Add keyboard navigation
+    document.addEventListener('keydown', (e) => {
+        if (e.key === 'ArrowLeft') prevSlide();
+        if (e.key === 'ArrowRight') nextSlide();
+    });
 
     // Initialize position
     updateSlidePosition();
-} 
+}

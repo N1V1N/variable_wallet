@@ -3,8 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Variable Wallet - The Last Wallet You'll Ever Need</title>
-    <link rel="stylesheet" href="styles.css">
+    <title>Variable Wallet - 2025</title>
+    <link rel="stylesheet" href="styles/main.css">
     <script type="importmap">
     {
         "imports": {
@@ -14,171 +14,48 @@
     }
     </script>
     <script type="module" src="https://ajax.googleapis.com/ajax/libs/model-viewer/3.3.0/model-viewer.min.js"></script>
-    <script type="module" src="./converter.js"></script>
-    <script type="module" src="./carousel.js"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;1,400;1,500&display=swap" rel="stylesheet">
+    <script type="module" src="scripts/three-instance.js"></script>
+    <script type="module" src="scripts/objConverter.js"></script>
+    <script type="module" src="scripts/carousel.js"></script>
+    <script type="module" src="scripts/converter.js"></script>
     <link href="https://fonts.googleapis.com/css2?family=Cinzel+Decorative:wght@400;700&display=swap" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Crimson+Text:ital,wght@0,400;0,600;1,400;1,600&display=swap" rel="stylesheet">
-    <style>
-        body {
-            margin: 0;
-            padding: 0;
-            min-height: 100vh;
-            font-family: 'Cinzel Decorative', serif;
-            color: rgba(255, 255, 255, 0.9);
-            overflow-x: hidden;
-        }
-
-        .light-beams {
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            pointer-events: none;
-            background: 
-                radial-gradient(circle at 20% 20%, rgba(255, 255, 255, 0.025) 0%, transparent 50%),
-                radial-gradient(circle at 80% 80%, rgba(255, 255, 255, 0.025) 0%, transparent 50%),
-                radial-gradient(circle at 50% 50%, rgba(255, 255, 255, 0.01) 0%, transparent 100%);
-            animation: beam-movement 20s infinite alternate ease-in-out;
-        }
-
-        @keyframes beam-movement {
-            0% { transform: scale(1); opacity: 0.5; }
-            50% { transform: scale(1.2); opacity: 0.7; }
-            100% { transform: scale(1); opacity: 0.5; }
-        }
-
-        .carousel-slide {
-            position: relative;
-            overflow: hidden;
-        }
-
-        .carousel-slide::after {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background: radial-gradient(circle at center, transparent 30%, rgba(0, 0, 0, 0.2) 100%);
-            pointer-events: none;
-        }
-
-        .nav-marker {
-            position: relative;
-            overflow: hidden;
-        }
-
-        .nav-marker::before {
-            content: '';
-            position: absolute;
-            top: -50%;
-            left: -50%;
-            width: 200%;
-            height: 200%;
-            background: radial-gradient(circle at center, rgba(255, 255, 255, 0.1) 0%, transparent 70%);
-            opacity: 0;
-            transition: opacity 0.3s ease;
-        }
-
-        .nav-marker:hover::before {
-            opacity: 1;
-        }
-    </style>
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;1,400;1,500&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Rajdhani:wght@400;500;600&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@600&family=Syncopate:wght@700&family=Audiowide&family=Chakra+Petch:wght@600&family=Oxanium:wght@600&family=Teko:wght@600&family=Exo+2:wght@600&family=Quantico:wght@700&family=Saira+Stencil+One&family=Wallpoet&family=Michroma&family=Bai+Jamjuree:wght@600&display=swap" rel="stylesheet">
 </head>
-<body style="background: radial-gradient(circle at center, #121216 0%, #000000 100%);">
-    <!-- Navigation -->
-    <nav style="display: flex; flex-direction: column; align-items: center; justify-content: center; width: 100%; text-align: center; padding: 20px 0; background: rgba(255, 255, 255, 0.02); backdrop-filter: blur(10px);">
-        <div class="logo-container" style="width: 100%; display: flex; flex-direction: column; align-items: center;">
-            <div class="logo" style="width: 100%; text-align: center; text-shadow: 0 0 30px rgba(255, 255, 255, 0.3);">
-                <span style="color: rgba(255, 255, 255, 0.95);">V</span>ariable 
-                <span style="color: rgba(255, 255, 255, 0.95);">W</span>allet
-                <span style="color: rgba(255, 255, 255, 0.95);">C</span>o.
-            </div>
-            <div class="est-date" style="width: 100%; text-align: center; color: rgba(255, 255, 255, 0.7); letter-spacing: 0.2em;">EST. 2024</div>
+<body>
+    <div id="loading-overlay">
+        <div class="loading-triangle"></div>
+    </div>
+
+    <nav class="main-nav">
+        <div class="logo">
+            <span>V</span>ariable 
+            <span>W</span>allet
+            <span>C</span>o.
         </div>
+        <div class="est-date">EST. 2024</div>
     </nav>
 
-    <!-- New Carousel Structure -->
-    <section id="model-carousel" style="
-        position: relative; 
-        width: 100%; 
-        height: 100vh; 
-        display: flex; 
-        flex-direction: column; 
-        align-items: center; 
-        justify-content: center; 
-        background: radial-gradient(circle at center, rgba(255, 255, 255, 0.03) 0%, transparent 70%);">
-        <!-- Add ethereal light beams -->
+    <section id="model-carousel">
         <div class="light-beams"></div>
 
-        <!-- Fixed position navigation buttons -->
-        <button class="nav-button prev" style="
-            position: fixed; 
-            left: 30px; 
-            top: 50%; 
-            transform: translateY(-50%); 
-            width: 160px; 
-            height: 99px; 
-            background: rgba(0, 0, 0, 0.7);
-            filter: drop-shadow(0 0 10px rgba(255, 255, 255, 0.2));
-            clip-path: polygon(100% 0, 0 50%, 100% 100%, 100% 61.8%, 38.2% 50%, 100% 38.2%); 
-            border: none; 
-            cursor: pointer; 
-            z-index: 10; 
-            transition: all 0.3s ease;" 
-            onmouseover="this.style.transform='translateY(-50%) scale(1.1)'; this.style.filter='drop-shadow(0 0 15px rgba(255, 255, 255, 0.3))';" 
-            onmouseout="this.style.transform='translateY(-50%)'; this.style.filter='drop-shadow(0 0 10px rgba(255, 255, 255, 0.2))';">
-        </button>
-        
-        <button class="nav-button next" style="
-            position: fixed; 
-            right: 30px; 
-            top: 50%; 
-            transform: translateY(-50%); 
-            width: 160px; 
-            height: 99px; 
-            background: rgba(0, 0, 0, 0.7);
-            filter: drop-shadow(0 0 10px rgba(255, 255, 255, 0.2));
-            clip-path: polygon(0 0, 100% 50%, 0 100%, 0 61.8%, 61.8% 50%, 0 38.2%); 
-            border: none; 
-            cursor: pointer; 
-            z-index: 10; 
-            transition: all 0.3s ease;" 
-            onmouseover="this.style.transform='translateY(-50%) scale(1.1)'; this.style.filter='drop-shadow(0 0 15px rgba(255, 255, 255, 0.3))';" 
-            onmouseout="this.style.transform='translateY(-50%)'; this.style.filter='drop-shadow(0 0 10px rgba(255, 255, 255, 0.2))';">
-        </button>
+        <button class="nav-button prev">◀</button>
+        <button class="nav-button next">▶</button>
 
-        <!-- Main carousel content -->
-        <div class="carousel-wrapper" style="width: 100%; max-width: 800px; height: 600px; margin: 0 auto; display: flex; flex-direction: column; align-items: center;">
-            <div class="carousel-viewport" style="width: 100%; height: 100%; overflow: hidden; position: relative; padding: 0 20px;">
-                <div class="carousel-track" style="display: flex; height: 100%; transition: transform 0.5s ease-out; width: 100%;">
+        <div class="carousel-wrapper">
+            <div class="carousel-viewport">
+                <div class="carousel-track">
                     <!-- Slides will be generated here -->
                 </div>
             </div>
         </div>
 
-        <!-- Golden Ratio Navigation -->
-        <div class="carousel-navigation" style="position: relative; width: 100%; display: flex; justify-content: center; align-items: center; gap: 34px; margin-top: 30px; padding: 0 20px; max-width: 800px;">
+        <div class="carousel-navigation">
             <!-- Navigation markers will be generated here -->
         </div>
     </section>
-
-    <script type="module">
-        import { initializeModels } from './converter.js';
-        
-        // Wait for both DOM and model-viewer to be ready
-        window.addEventListener('load', async () => {
-            // Make sure model-viewer is defined
-            if (customElements.get('model-viewer')) {
-                console.log('model-viewer is ready');
-                await initializeModels();
-            } else {
-                console.error('model-viewer element not defined');
-            }
-        });
-    </script>
 
     <script>
         fetch('VW.obj')
@@ -186,8 +63,74 @@
                 console.log('OBJ file status:', response.status);
                 return response.text();
             })
-            .then(text => console.log('OBJ file loaded, first 100 chars:', text.substring(0, 100)))
-            .catch(error => console.error('Error loading OBJ:', error));
+    </script>
+
+    <script>
+        console.log('Document loaded');
+        console.log('Checking file paths:', {
+            styleSheet: document.querySelector('link[href="styles/main.css"]'),
+            objFile: 'assets/VW.obj',
+            track: document.querySelector('.carousel-track'),
+            scripts: {
+                threeInstance: document.querySelector('script[src="scripts/three-instance.js"]'),
+                objConverter: document.querySelector('script[src="scripts/objConverter.js"]'),
+                carousel: document.querySelector('script[src="scripts/carousel.js"]'),
+                converter: document.querySelector('script[src="scripts/converter.js"]')
+            }
+        });
+    </script>
+
+    <script type="module">
+        import { initializeModels } from './scripts/converter.js';
+        
+        window.addEventListener('load', async () => {
+            console.log('Window loaded, starting initialization...');
+            try {
+                if (customElements.get('model-viewer')) {
+                    console.log('model-viewer element is defined');
+                    const success = await initializeModels();
+                    console.log('Initialization result:', success);
+                    
+                    if (success) {
+                        await new Promise(resolve => setTimeout(resolve, 1618));
+                        
+                        const loadingOverlay = document.getElementById('loading-overlay');
+                        if (loadingOverlay) {
+                            loadingOverlay.style.opacity = '0';
+                            setTimeout(() => {
+                                loadingOverlay.style.display = 'none';
+                            }, 500);
+                        }
+                    }
+                } else {
+                    console.error('model-viewer element not defined');
+                }
+            } catch (error) {
+                console.error('Initialization error:', error);
+            }
+        });
+    </script>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const fonts = [
+                'Orbitron',      // Futuristic, technical
+                'Syncopate',     // Sharp, geometric
+                'Audiowide',     // Bold, digital
+                'Chakra Petch',  // Technical, modern
+                'Oxanium',       // Sci-fi, strong
+                'Teko',          // Industrial, sturdy
+                'Exo 2',         // Space-age, clean
+                'Quantico',      // Military, precise
+                'Saira Stencil One', // Industrial, strong
+                'Wallpoet',      // Digital, unique
+                'Michroma',      // Geometric, futuristic
+                'Bai Jamjuree'   // Modern, technical
+            ];
+            
+            const randomFont = fonts[Math.floor(Math.random() * fonts.length)];
+            document.documentElement.style.setProperty('--logo-font', `'${randomFont}', sans-serif`);
+        });
     </script>
 </body>
-</html> 
+</html>

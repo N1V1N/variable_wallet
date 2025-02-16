@@ -1,16 +1,17 @@
-import * as THREE from 'three';
-import { OBJLoader } from 'three/addons/loaders/OBJLoader.js';
-import { MTLLoader } from 'three/addons/loaders/MTLLoader.js';
-import { GLTFExporter } from 'three/addons/exporters/GLTFExporter.js';
+console.log('Converter module loading...');
+
+import { THREE, objLoader, mtlLoader, gltfExporter, scene } from './three-instance.js';
 import { initializeCarousel } from './carousel.js';
 import { OBJConverter } from './objConverter.js';
+
+console.log('Imports completed in converter.js');
 
 // Define model configurations
 const modelConfigs = [
     {
         id: 'q1petg-model',
         name: 'Q1PETG',
-        description: 'Entry Level Performance',
+        description: "We'll find a good plastic someday!",
         materials: {
             sides: {
                 color: new THREE.Color(0.15, 0.22, 0.18),
@@ -27,7 +28,7 @@ const modelConfigs = [
     {
         id: 'q2al-model',
         name: 'Q2Al',
-        description: 'Aluminum Series 2',
+        description: 'Aluminum Quality 2',
         materials: {
             sides: {
                 color: new THREE.Color(0.3, 0.3, 0.3),
@@ -44,7 +45,7 @@ const modelConfigs = [
     {
         id: 'q2ti-model',
         name: 'Q2Ti',
-        description: 'Titanium Series 2',
+        description: 'Titanium Quality 2',
         materials: {
             sides: {
                 color: new THREE.Color(0.35, 0.37, 0.40),
@@ -61,7 +62,7 @@ const modelConfigs = [
     {
         id: 'q2da-model',
         name: 'Q2Da',
-        description: 'Damascus Series 2',
+        description: 'Damascus Quality 2',
         materials: {
             sides: {
                 color: new THREE.Color(0.08, 0.08, 0.08),
@@ -76,9 +77,9 @@ const modelConfigs = [
         }
     },
     {
-        id: 'q3al-model',  // Back to 5th position (index 4)
+        id: 'q3al-model',
         name: 'Q3Al',
-        description: 'Aluminum Series 3',
+        description: 'Aluminum Quality 3',
         materials: {
             sides: {
                 color: new THREE.Color(0.3, 0.3, 0.3),
@@ -95,7 +96,7 @@ const modelConfigs = [
     {
         id: 'q3ti-model',
         name: 'Q3Ti',
-        description: 'Titanium Series 3',
+        description: 'Titanium Quality 3',
         materials: {
             sides: {
                 color: new THREE.Color(0.35, 0.37, 0.40),
@@ -112,7 +113,7 @@ const modelConfigs = [
     {
         id: 'q3da-model',
         name: 'Q3Da',
-        description: 'Damascus Series 3',
+        description: 'Damascus Quality 3',
         materials: {
             sides: {
                 color: new THREE.Color(0.08, 0.08, 0.08),
@@ -129,7 +130,7 @@ const modelConfigs = [
     {
         id: 'q3t-model',
         name: 'Q3T',
-        description: 'Tungsten Series 3',
+        description: 'Tungsten Quality 3',
         materials: {
             sides: {
                 color: new THREE.Color(0.325, 0.396, 0.325),
@@ -146,7 +147,7 @@ const modelConfigs = [
     {
         id: 'q3g-model',
         name: 'Q3G',
-        description: 'Gold Series 3',
+        description: 'Gold Quality 3',
         materials: {
             sides: {
                 color: new THREE.Color(0.588, 0.294, 0.294),
@@ -164,302 +165,219 @@ const modelConfigs = [
 
 console.log('Three.js Version:', THREE.REVISION);
 
-async function loadGLBModel(glbPath) {
-    console.log('Loading GLB model:', glbPath);
-    const response = await fetch(glbPath);
-    const blob = await response.blob();
-    return blob;
-}
+// Cache GLB URL to prevent multiple conversions
+let cachedGLBUrl = null;
 
-async function convertOBJtoGLB(objPath, config) {
-    console.log('Starting conversion for', config.name);
-    const scene = new THREE.Scene();
-    const loader = new OBJLoader();
-    const mtlLoader = new MTLLoader();
+async function convertModelOnce(material) {
+    if (cachedGLBUrl) {
+        console.log('Using cached GLB URL');
+        return cachedGLBUrl;
+    }
 
+    console.log('Converting master OBJ to GLB...');
     try {
-        // First load the MTL file
-        console.log('Loading MTL file...');
-        const materials = await new Promise((resolve, reject) => {
-            mtlLoader.load(
-                'VW.mtl',
-                resolve,
-                undefined,
-                reject
-            );
-        });
-
-        // Set materials path and preload
-        materials.preload();
-        loader.setMaterials(materials);
-
-        console.log('Loading OBJ file...');
-        const obj = await new Promise((resolve, reject) => {
-            loader.load(
-                objPath,
-                (loadedObj) => {
-                    console.log('OBJ loaded successfully, object structure:', loadedObj);
-                    console.log('Number of children:', loadedObj.children.length);
-                    loadedObj.children.forEach((child, index) => {
-                        console.log(`Child ${index}:`, child);
-                    });
-                    resolve(loadedObj);
-                },
-                (progress) => {
-                    console.log('Loading progress:', (progress.loaded / progress.total * 100) + '%');
-                },
-                (error) => {
-                    console.error('OBJ loading error:', error);
-                    reject(error);
-                }
-            );
-        });
-
-        console.log('Setting up scene...');
-        const ambientLight = new THREE.AmbientLight(0xffffff, 0.5);
-        const directionalLight = new THREE.DirectionalLight(0xffffff, 0.8);
-        directionalLight.position.set(0, 10, 0);
-        scene.add(ambientLight);
-        scene.add(directionalLight);
-
-        console.log('Applying materials...');
-        let meshIndex = 0;
-        obj.traverse(child => {
-            if (child instanceof THREE.Mesh) {
-                console.log(`Applying material to mesh ${meshIndex}:`, child);
-                const material = new THREE.MeshStandardMaterial({
-                    ...config.materials.sides,
-                    side: THREE.DoubleSide,
-                    flatShading: false,
-                    vertexColors: false,
-                    transparent: false,
-                    metalness: config.materials.sides.metalness || 0.5,
-                    roughness: config.materials.sides.roughness || 0.5,
-                });
-                child.material = material;
-                meshIndex++;
-            }
-        });
-
-        scene.add(obj);
-
-        console.log('Converting to GLB...');
-        const glbData = await new Promise((resolve, reject) => {
-            const exporter = new THREE.GLTFExporter();
-            exporter.parse(
-                scene,
-                (result) => {
-                    console.log('GLB conversion successful, data size:', result.byteLength);
-                    resolve(result);
-                },
-                (error) => {
-                    console.error('GLB conversion failed:', error);
-                    reject(error);
-                },
-                { binary: true }
-            );
-        });
-
-        return glbData;
+        const converter = new OBJConverter();
+        console.log('Created OBJConverter instance');
+        
+        // Verify the file exists first
+        const response = await fetch('../assets/VW.obj');  // Go up one directory, then into assets
+        if (!response.ok) {
+            console.error('Failed to fetch OBJ file:', {
+                status: response.status,
+                statusText: response.statusText,
+                url: response.url
+            });
+            throw new Error(`Failed to fetch OBJ file: ${response.status} ${response.statusText}`);
+        }
+        console.log('OBJ file exists and is accessible');
+        
+        const url = await converter.convertToGLB('../assets/VW.obj', material);
+        if (!url) {
+            console.error('GLB conversion failed - no URL returned');
+            throw new Error('GLB conversion failed');
+        }
+        console.log('Got URL from converter:', url.substring(0, 100) + '...');  // Log first 100 chars of URL
+        cachedGLBUrl = url;
+        console.log('Master GLB conversion complete');
+        return url;
     } catch (error) {
-        console.error('Detailed conversion error:', error);
-        console.error('Error stack:', error.stack);
-        return null;
+        console.error('Detailed error in convertModelOnce:', {
+            message: error.message,
+            stack: error.stack,
+            name: error.name,
+            cause: error.cause
+        });
+        throw error;
     }
 }
 
 async function createModelSlide(config) {
+    // Create slide elements
     const slide = document.createElement('div');
     slide.className = 'carousel-slide';
     slide.style.cssText = `
         min-width: 100%;
         height: 100%;
         display: flex;
+        flex-direction: column;
         align-items: center;
         justify-content: center;
         position: relative;
         perspective: 1000px;
     `;
-    
-    const portalFrame = document.createElement('div');
-    portalFrame.style.cssText = `
-        width: 90%;
-        height: 90%;
-        position: relative;
-        overflow: hidden;
-        transform-style: preserve-3d;
+
+    // Add title and description container
+    const textContainer = document.createElement('div');
+    textContainer.style.cssText = `
+        position: absolute;
+        top: 20px;
+        left: 0;
+        width: 100%;
+        text-align: center;
+        z-index: 2;
     `;
+
+    const title = document.createElement('h2');
+    title.textContent = config.name;
+    title.style.cssText = `
+        font-family: 'Rajdhani', sans-serif;
+        font-size: 1.4em;
+        color: rgba(255, 255, 255, 0.95);
+        margin: 0;
+        text-shadow: 0 0 3px rgba(255, 255, 255, 0.3);
+        letter-spacing: 0.2em;
+        font-weight: 400;
+        text-transform: uppercase;
+        -webkit-font-smoothing: antialiased;
+    `;
+
+    const description = document.createElement('p');
+    description.textContent = config.description;
+    description.style.cssText = `
+        font-family: 'Crimson Text', serif;
+        font-size: 1.2em;
+        color: rgba(255, 255, 255, 0.7);
+        margin: 10px 0 0 0;
+        font-style: italic;
+    `;
+
+    textContainer.appendChild(title);
+    textContainer.appendChild(description);
+    slide.appendChild(textContainer);
     
     const viewer = document.createElement('model-viewer');
     viewer.id = config.id;
     viewer.alt = config.name;
-    viewer.setAttribute('camera-controls', '');
-    viewer.setAttribute('auto-rotate', '');
+    viewer.setAttribute('camera-controls', 'true');
+    viewer.setAttribute('auto-rotate', 'true');
     viewer.setAttribute('disable-tap', '');
     viewer.setAttribute('rotation-per-second', '30deg');
     viewer.setAttribute('camera-orbit', '0deg 75deg 105%');
     viewer.setAttribute('min-field-of-view', '45deg');
     viewer.setAttribute('max-field-of-view', '45deg');
-    viewer.setAttribute('interaction-prompt', 'none');
-    viewer.setAttribute('disable-zoom', '');
-    viewer.setAttribute('disable-pan', '');
-    viewer.setAttribute('exposure', '1');
-    viewer.setAttribute('shadow-intensity', '1');
-    viewer.setAttribute('environment-image', 'neutral');
     viewer.style.cssText = `
         width: 100%;
         height: 100%;
-        transform-style: preserve-3d;
         --poster-color: transparent;
         background: transparent;
     `;
 
-    const loadingOverlay = document.createElement('div');
-    loadingOverlay.style.cssText = `
-        position: absolute;
-        top: 0;
-        left: 0;
-        width: 100%;
-        height: 100%;
-        background: rgba(0, 0, 0, 0.7);
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        z-index: 10;
-        opacity: 0;
-        transition: opacity 0.3s ease;
-    `;
-
-    const loadingSpinner = document.createElement('div');
-    loadingSpinner.style.cssText = `
-        width: 40px;
-        height: 40px;
-        position: relative;
-        transform: rotateZ(45deg);
-        animation: loadingFade 1.2s infinite ease-in-out;
-    `;
-
-    const loadingText = document.createElement('div');
-    loadingText.style.cssText = `
-        position: absolute;
-        bottom: 20px;
-        color: rgba(255, 255, 255, 0.7);
-        font-family: 'Cinzel Decorative', serif;
-        font-size: 12px;
-        letter-spacing: 0.2em;
-    `;
-
-    const style = document.createElement('style');
-    style.textContent = `
-        @keyframes loadingFade {
-            0%, 10%, 100% { transform: scale(0.3) rotateZ(45deg); opacity: 0.3; }
-            50% { transform: scale(1.0) rotateZ(45deg); opacity: 0.8; }
-        }
-    `;
-    document.head.appendChild(style);
-
-    loadingOverlay.appendChild(loadingSpinner);
-    loadingOverlay.appendChild(loadingText);
-    portalFrame.appendChild(loadingOverlay);
-
+    slide.appendChild(viewer);
+    
     try {
-        loadingOverlay.style.opacity = '1';
-        const converter = new OBJConverter((progress) => {
-            loadingText.textContent = `Loading: ${(progress * 100).toFixed(1)}%`;
-        });
+        console.log(`Starting material setup for ${config.name}`);
         const material = new THREE.MeshStandardMaterial({
             ...config.materials.sides,
             side: THREE.DoubleSide,
             flatShading: false,
             vertexColors: false,
-            transparent: false,
-            metalness: config.materials.sides.metalness || 0.5,
-            roughness: config.materials.sides.roughness || 0.5,
+            transparent: false
         });
-        const url = await converter.convertToGLB('VW.obj', material);
+
+        console.log(`Getting GLB URL for ${config.name}`);
+        const url = await convertModelOnce(material);
+        console.log(`Setting src for ${config.name}`);
+
+        // Create a promise that resolves after a timeout or model load
+        const loadPromise = new Promise((resolve, reject) => {
+            console.log(`Setting up load listeners for ${config.name}`);
+            
+            // Set a timeout of 5 seconds
+            const timeoutId = setTimeout(() => {
+                console.log(`Timeout reached for ${config.name}, continuing anyway`);
+                resolve();
+            }, 5000);
+
+            viewer.addEventListener('load', () => {
+                console.log(`Model loaded for ${config.name}`);
+                clearTimeout(timeoutId);
+                resolve();
+            }, { once: true });
+
+            viewer.addEventListener('error', (error) => {
+                console.error(`Model load error for ${config.name}:`, error);
+                clearTimeout(timeoutId);
+                // Resolve instead of reject to continue loading
+                resolve();
+            }, { once: true });
+        });
+
         viewer.src = url;
 
-        // Add load event listener to hide loading overlay
-        viewer.addEventListener('load', () => {
-            loadingOverlay.style.opacity = '0';
-            setTimeout(() => loadingOverlay.remove(), 300);
-        });
-
-        // Add error event listener
-        viewer.addEventListener('error', (error) => {
-            console.error(`Model loading error for ${config.name}:`, error);
-            loadingOverlay.style.opacity = '0';
-            setTimeout(() => loadingOverlay.remove(), 300);
-        });
-
+        return { slide, loadPromise };
     } catch (error) {
         console.error(`Error creating model for ${config.name}:`, error);
-        loadingOverlay.style.opacity = '0';
-        setTimeout(() => loadingOverlay.remove(), 300);
         viewer.src = 'https://modelviewer.dev/shared-assets/models/Astronaut.glb';
+        return { slide, loadPromise: Promise.resolve() };
     }
-
-    portalFrame.appendChild(viewer);
-    slide.appendChild(portalFrame);
-    return slide;
 }
 
 export async function initializeModels() {
     console.log('Starting model initialization...');
     try {
-        console.log('Creating carousel slides...');
         const track = document.querySelector('.carousel-track');
         
         if (!track) {
             console.error('Carousel track not found');
-            return;
+            return false;
         }
 
-        // Create slides for each model config
-        for (const config of modelConfigs) {
-            const slide = await createModelSlide(config);
+        // Create all slides first and add them to DOM
+        const slidePromises = modelConfigs.map(async (config, index) => {
+            console.log(`Creating slide ${index + 1}/${modelConfigs.length} for ${config.name}...`);
+            const { slide, loadPromise } = await createModelSlide(config);
+            console.log(`Slide created for ${config.name}, adding to track...`);
             track.appendChild(slide);
-            console.log(`Added slide for ${config.name}`);
-        }
+            return loadPromise;
+        });
 
+        try {
+            console.log('Starting Promise.all for slide loading');
+            await Promise.all(slidePromises);
+            console.log('All slides loaded successfully');
+        } catch (error) {
+            console.error('Error during slide loading:', error);
+            throw error;
+        }
+        
         // Create navigation markers
+        console.log('Creating navigation markers...');
         const navContainer = document.querySelector('.carousel-navigation');
         navContainer.innerHTML = '';
         modelConfigs.forEach((_, index) => {
             const marker = document.createElement('div');
             marker.className = 'nav-marker';
-            
-            marker.style.cssText = `
-                width: 0;
-                height: 0;
-                border-left: 8px solid transparent;
-                border-right: 8px solid transparent;
-                border-bottom: 12px solid rgba(0, 0, 0, 0.5);
-                cursor: pointer;
-                transition: transform 0.3s ease;
-                margin: 0 10px;
-            `;
-
-            // Add hover effect
-            marker.addEventListener('mouseover', () => {
-                marker.style.transform = 'scale(1.2)';
-                marker.style.borderBottomColor = 'rgba(0, 0, 0, 0.8)';
-            });
-
-            marker.addEventListener('mouseout', () => {
-                marker.style.transform = 'scale(1)';
-                marker.style.borderBottomColor = 'rgba(0, 0, 0, 0.5)';
-            });
-
             navContainer.appendChild(marker);
         });
-
-        console.log('Initializing carousel...');
-        initializeCarousel(4);
-        console.log('Carousel initialization complete');
         
+        // Initialize carousel
+        console.log('About to initialize carousel with slides:', document.querySelectorAll('.carousel-slide').length);
+        initializeCarousel(4);  // Start at Q3Al
+        console.log('Carousel initialization complete');
+        return true;
     } catch (error) {
-        console.error('Error in initialization:', error);
-        console.log('Error details:', error.stack);
+        console.error('Detailed initialization error:', error);
+        console.error('Error stack:', error.stack);
+        throw error;
     }
-} 
+}
