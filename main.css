@@ -1,3 +1,9 @@
+* {
+    -webkit-tap-highlight-color: transparent;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+}
+
 body {
     margin: 0;
     padding: 0;
@@ -56,6 +62,7 @@ body {
         rgba(255, 255, 255, 0.02) 70%,
         rgba(255, 255, 255, 0) 100%
     );
+    -webkit-backdrop-filter: blur(10px);
     backdrop-filter: blur(10px);
     z-index: 1000;
 }
@@ -73,8 +80,8 @@ body {
 
 .carousel-wrapper {
     width: 100%;
-    max-width: 800px;
-    height: 600px;
+    max-width: min(1200px, 90vw);  /* Larger on big screens, but not too large */
+    height: min(80vh, 800px);      /* Taller on big screens, max 800px */
     margin: 0 auto;
     display: flex;
     flex-direction: column;
@@ -92,6 +99,8 @@ body {
 .carousel-track {
     display: flex;
     height: 100%;
+    -webkit-transition: transform 0.5s ease-out;
+    -ms-transition: transform 0.5s ease-out;
     transition: transform 0.5s ease-out;
     width: 100%;
     position: relative;
@@ -101,6 +110,8 @@ body {
 .nav-button {
     position: fixed;
     top: 50%;
+    -webkit-transform: translateY(-50%);
+    -ms-transform: translateY(-50%);
     transform: translateY(-50%);
     width: min(100px, 15vw);  /* Either 100px or 15% of viewport width, whichever is smaller */
     height: min(61.8px, 9.27vw);  /* Maintain golden ratio (61.8% of width) */
@@ -111,6 +122,7 @@ body {
     color: transparent;
     font-size: 18px;
     transition: all 0.3s ease;
+    -webkit-backdrop-filter: blur(4px);
     backdrop-filter: blur(4px);
 }
 
@@ -217,13 +229,13 @@ body {
 /* Logo Styles */
 .logo {
     position: absolute;
-    top: 44px;
+    top: 33px;
     left: 50%;
     transform: translateX(-50%);
     text-align: center;
     text-shadow: 0 0 30px rgba(255, 255, 255, 0.3);
     font-family: var(--logo-font);
-    font-size: 1.4em;
+    font-size: clamp(1.4em, 3vw, 2.2em);  /* Min 1.4em, Max 2.2em, scales with viewport */
     letter-spacing: 0.2em;
     font-weight: 400;
     text-transform: lowercase;
@@ -243,7 +255,7 @@ body {
     transform: translateX(-50%);
     color: rgba(255, 255, 255, 0.7);
     letter-spacing: 0.4em;
-    font-size: 0.5em;
+    font-size: clamp(0.5em, 1vw, 0.8em);  /* Scale with viewport */
 }
 
 /* Model Viewer Additional Styles */
@@ -255,9 +267,46 @@ model-viewer {
     --progress-bar-color: transparent;  /* This hides the loading line */
     --progress-bar-height: 0px;        /* Removes the space taken by the loading bar */
     background: transparent;
+    max-height: 80vh;  /* Prevent too tall on large screens */
 }
 
 /* Remove old loading styles */
 .loading-text, .loading-spinner {
     display: none;
+}
+
+/* Add fallback for older browsers */
+@supports not (backdrop-filter: blur(10px)) {
+    .main-nav {
+        background: rgba(0, 0, 0, 0.8);
+    }
+}
+
+/* Mobile optimizations */
+@media (hover: none) {
+    .nav-button:hover {
+        background: rgba(0, 0, 0, 0.5);
+    }
+}
+
+/* Add animation prefixes */
+@-webkit-keyframes rotate {
+    from { -webkit-transform: rotate(0deg); }
+    to { -webkit-transform: rotate(360deg); }
+}
+
+/* Add media query for large screens */
+@media (min-width: 1440px) {
+    .nav-button {
+        width: min(120px, 8vw);     /* Larger buttons on big screens */
+        height: min(74.16px, 4.94vw); /* Maintain golden ratio */
+    }
+    
+    .nav-button.prev {
+        left: max(30px, 5vw);      /* Further out on big screens */
+    }
+    
+    .nav-button.next {
+        right: max(30px, 5vw);
+    }
 }
