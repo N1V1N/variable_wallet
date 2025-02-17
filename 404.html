@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>404 - Page Not Found</title>
+    <link rel="stylesheet" href="styles.css">
+    <style>
+        .error-container {
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            animation: fadeIn 0.5s ease-in;
+        }
+        
+        .error-code {
+            font-size: 8rem;
+            margin: 0;
+            animation: float 3s ease-in-out infinite;
+        }
+        
+        .error-message {
+            font-size: 2rem;
+            margin: 1rem 0;
+            opacity: 0.8;
+        }
+        
+        .home-link {
+            color: var(--text-color);
+            text-decoration: none;
+            border: 1px solid var(--text-color);
+            padding: 1rem 2rem;
+            margin-top: 2rem;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .home-link:hover {
+            background-color: var(--text-color);
+            color: var(--primary-color);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(255, 255, 255, 0.1);
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-20px); }
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+    </style>
+</head>
+<body>
+    <div class="error-container">
+        <h1 class="error-code">404</h1>
+        <p class="error-message">Oops! Page Not Found</p>
+        <p style="max-width: 600px; margin: 1rem;">The page you're looking for seems to have wandered off into another dimension.</p>
+        <a href="index.html" class="home-link">Return to Gallery</a>
+    </div>
+</body>
+</html> 
