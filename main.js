@@ -136,8 +136,10 @@ document.addEventListener('DOMContentLoaded', () => {
                 animationToggle.checked = true;
             }
             
+            // Save both the preference and the choice if "Don't show again" is checked
             if (dontShowAgain) {
                 localStorage.setItem('cpuManagementPreference', 'permanent');
+                localStorage.setItem('cpuManagementChoice', accepted ? 'yes' : 'no');
             }
             
             animationToggle.dispatchEvent(new Event('change'));
@@ -220,12 +222,26 @@ document.addEventListener('DOMContentLoaded', () => {
     window.addEventListener('load', () => {
         const getCPUPreference = () => {
             return new Promise((resolve) => {
-                // Only show CPU dialog on non-mobile devices with multiple cores
-                if (navigator.hardwareConcurrency > 1 && 
-                    localStorage.getItem('cpuManagementPreference') !== 'permanent' &&
-                    !/Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent)) {
-                    const dialog = createCPUDialog(resolve);
-                    document.body.appendChild(dialog);
+                if (navigator.hardwareConcurrency > 1) {
+                    const savedPreference = localStorage.getItem('cpuManagementPreference');
+                    const savedChoice = localStorage.getItem('cpuManagementChoice');
+                    
+                    if (savedPreference === 'permanent' && savedChoice) {
+                        // Apply saved choice
+                        if (savedChoice === 'yes') {
+                            manageCPUUsage();
+                            animationToggle.checked = false;
+                        } else {
+                            animationToggle.checked = true;
+                        }
+                        animationToggle.dispatchEvent(new Event('change'));
+                        resolve();
+                    } else if (!/Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent)) {
+                        const dialog = createCPUDialog(resolve);
+                        document.body.appendChild(dialog);
+                    } else {
+                        resolve();
+                    }
                 } else {
                     resolve();
                 }
