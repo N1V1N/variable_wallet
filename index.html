@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Variable Wallet - CNC Machined Excellence</title>
+    <link rel="icon" type="image/png" sizes="32x32" href="images/favicon.png">
+    <meta name="theme-color" content="#1a1a1a">
+    <link rel="stylesheet" href="styles.css">
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        .product-placeholder {
+            width: 100%;
+            height: 200px;
+            background-color: #ccc;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        .placeholder-text {
+            font-size: 24px;
+            font-weight: bold;
+            color: #666;
+        }
+    </style>
+</head>
+<body>
+    <nav class="navbar">
+        <div class="container">
+            <div class="logo">Variable Wallet</div>
+            <button class="nav-toggle">☰</button>
+            <ul class="nav-menu">
+                <li><a href="#" id="homeLink">Home</a></li>
+                <li><a href="#materials">Materials</a></li>
+                <li><a href="#process">Process</a></li>
+                <li><a href="#waitlist">Waitlist</a></li>
+                <li><a href="#contact">Contact</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <main>
+        <section id="home" class="hero">
+            <div class="container">
+                <h1>Made in the United States of America</h1>
+                <p>CNC Machined Wallets in Titanium, Aluminum, and Damascus Steel</p>
+                <div class="hero-image">
+                    <img src="images/variable-wallet.jpg" alt="Variable Wallet Product" class="product-image">
+                </div>
+            </div>
+        </section>
+
+        <section id="materials" class="content-section">
+            <div class="container">
+                <h2>Premium Materials</h2>
+                <div class="launch-note">
+                    <span class="highlight">First Release: Limited to 300 Aluminum Wallets</span>
+                    <p class="pricing-note">Starting at $33/piece</p>
+                    <p>Future releases will include Titanium and Damascus Steel options</p>
+                </div>
+                <div class="materials-grid">
+                    <div class="material-card">
+                        <h3>Grade 5 Titanium</h3>
+                        <p>Aerospace-grade strength with incredible lightness</p>
+                        <span class="availability">Coming Soon</span>
+                    </div>
+                    <div class="material-card active">
+                        <div class="limited-badge">First 300</div>
+                        <h3>2024 Aluminum</h3>
+                        <p>Aircraft-grade durability with minimal weight</p>
+                        <span class="availability">Available Summer 2025</span>
+                    </div>
+                    <div class="material-card">
+                        <h3>Damascus Steel</h3>
+                        <p>Unique patterns, legendary strength</p>
+                        <span class="availability">Coming Soon</span>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="process" class="content-section">
+            <div class="container">
+                <h2>CNC Precision</h2>
+                <div class="process-highlights">
+                    <p>Each wallet is meticulously crafted using state-of-the-art CNC machinery, ensuring perfect precision and consistency. Our manufacturing process combines advanced technology with artisanal attention to detail.</p>
+                    <div class="specs">
+                        <div class="spec-item">
+                            <span class="spec-value">±0.003"</span>
+                            <span class="spec-label">Tolerance</span>
+                        </div>
+                        <div class="spec-item">
+                            <span class="spec-value">3-Axis</span>
+                            <span class="spec-label">CNC</span>
+                        </div>
+                        <div class="spec-item">
+                            <span class="spec-value">100%</span>
+                            <span class="spec-label">USA Made</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="waitlist" class="content-section">
+            <div class="container">
+                <h2>Join the Waitlist</h2>
+                <p>Be the first to know when wallets become available</p>
+                <form class="waitlist-form" id="waitlistForm">
+                    <div class="form-group">
+                        <label for="name">Name</label>
+                        <input type="text" id="name" name="name" required autocomplete="name">
+                    </div>
+                    <div class="form-group">
+                        <label for="email">Email</label>
+                        <input type="email" id="email" name="email" required autocomplete="email">
+                    </div>
+                    <div class="form-group">
+                        <label for="message">Message (Optional)</label>
+                        <textarea id="message" name="message" autocomplete="off"></textarea>
+                    </div>
+                    <button type="submit" class="submit-btn">Join Waitlist</button>
+                    <div class="form-message" id="formMessage"></div>
+                </form>
+            </div>
+        </section>
+        <p class="patent-note">Patent Pending</p>
+
+        <section id="contact" class="content-section">
+            <div class="container">
+                <h2>Contact</h2>
+                <p>Ready to own a precision-engineered wallet?</p>
+                <div class="contact-info">
+                    <p>Email us at: <a href="mailto:variablewallet@gmail.com">variablewallet@gmail.com</a></p>
+                    <p>Crafted with Love in the USA</p>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer>
+        <div class="container">
+            <p>&copy; 2024 Variable Wallet</p>
+        </div>
+    </footer>
+
+    <script src="script.js"></script>
+</body>
+</html>

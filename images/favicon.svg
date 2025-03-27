@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="32" height="32" viewBox="0 0 32 32" version="1.1" xmlns="http://www.w3.org/2000/svg">
+    <style>
+        path {
+            fill: #c0c0c0;
+        }
+        @media (prefers-color-scheme: light) {
+            path {
+                fill: #1a1a1a;
+            }
+        }
+    </style>
+    <path d="M16 2 L28 28 L16 20 L4 28 L16 2 Z" />
+</svg>
