@@ -71,15 +71,12 @@ document.addEventListener('DOMContentLoaded', () => {
                 const email = formData.get('email');
                 const message = formData.get('message') || '';
 
-                // Get the token from your server or environment
-                const token = await fetch('/.netlify/functions/get-github-token').then(r => r.text());
-
                 // Trigger GitHub Actions workflow
                 const response = await fetch('https://api.github.com/repos/N1V1N/variable_wallet/actions/workflows/waitlist.yml/dispatches', {
                     method: 'POST',
                     headers: {
                         'Accept': 'application/vnd.github.v3+json',
-                        'Authorization': `Bearer ${token}`
+                        'Authorization': 'Bearer ' + 'WAITLIST_TOKEN'
                     },
                     body: JSON.stringify({
                         ref: 'main',
