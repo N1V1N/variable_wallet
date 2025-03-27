@@ -62,30 +62,45 @@ document.addEventListener('DOMContentLoaded', () => {
             
             const submitBtn = waitlistForm.querySelector('.submit-btn');
             submitBtn.disabled = true;
+            formMessage.textContent = '';
             
             try {
+                // Get form data
                 const formData = new FormData(waitlistForm);
-                const data = new URLSearchParams(formData);
+                const name = formData.get('name');
+                const email = formData.get('email');
+                const message = formData.get('message') || '';
 
-                const response = await fetch('http://localhost:8000/submit-waitlist', {
+                // Get the token from your server or environment
+                const token = await fetch('/.netlify/functions/get-github-token').then(r => r.text());
+
+                // Trigger GitHub Actions workflow
+                const response = await fetch('https://api.github.com/repos/N1V1N/variable_wallet/actions/workflows/waitlist.yml/dispatches', {
                     method: 'POST',
-                    body: data,
                     headers: {
-                        'Content-Type': 'application/x-www-form-urlencoded'
-                    }
+                        'Accept': 'application/vnd.github.v3+json',
+                        'Authorization': `Bearer ${token}`
+                    },
+                    body: JSON.stringify({
+                        ref: 'main',
+                        inputs: {
+                            name: name,
+                            email: email,
+                            message: message
+                        }
+                    })
                 });
 
-                const result = await response.json();
-
-                if (result.status === 'success') {
-                    formMessage.textContent = 'Thank you for joining our waitlist!';
+                if (response.ok) {
+                    formMessage.textContent = 'Thank you for joining our waitlist! Your submission has been saved.';
                     formMessage.className = 'form-message success';
                     waitlistForm.reset();
                 } else {
-                    throw new Error('Submission failed');
+                    throw new Error('Failed to save your submission');
                 }
             } catch (error) {
-                formMessage.textContent = 'There was an error submitting your request. Please try again.';
+                console.error('Error:', error);
+                formMessage.textContent = 'There was an error saving your submission. Please try again later.';
                 formMessage.className = 'form-message error';
             } finally {
                 submitBtn.disabled = false;

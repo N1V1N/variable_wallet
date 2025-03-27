@@ -1,0 +1,45 @@
+name: Waitlist Form
+
+on:
+  workflow_dispatch:
+    inputs:
+      name:
+        description: 'Name'
+        required: true
+        type: string
+      email:
+        description: 'Email'
+        required: true
+        type: string
+      message:
+        description: 'Message'
+        required: false
+        type: string
+
+jobs:
+  save-to-file:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+      
+      - name: Save form data
+        run: |
+          # Create waitlist directory if it doesn't exist
+          mkdir -p waitlist
+          
+          # Format the data
+          echo "Name: ${{ github.event.inputs.name }}" >> waitlist/submissions.txt
+          echo "Email: ${{ github.event.inputs.email }}" >> waitlist/submissions.txt
+          echo "Message: ${{ github.event.inputs.message }}" >> waitlist/submissions.txt
+          echo "Date: $(date)" >> waitlist/submissions.txt
+          echo "====================" >> waitlist/submissions.txt
+          
+      - name: Commit changes
+        run: |
+          git config --local user.email "github-actions@github.com"
+          git config --local user.name "GitHub Actions"
+          git add waitlist/submissions.txt
+          git commit -m "Add new waitlist submission" || echo "No changes to commit"
+          git push
