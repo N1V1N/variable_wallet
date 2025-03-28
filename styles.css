@@ -465,6 +465,14 @@ main {
     text-shadow: var(--glow);
 }
 
+.price-note {
+    display: block;
+    font-size: 0.8rem;
+    color: var(--accent-color);
+    opacity: 0.8;
+    margin-top: 0.2rem;
+}
+
 /* Footer */
 footer {
     background-color: var(--primary-color);
