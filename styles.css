@@ -472,6 +472,7 @@ footer {
     color: var(--text-color);
     text-align: center;
     padding: 2rem 0;
+    border-top: 1px solid var(--accent-color);
 }
 
 footer .container {
