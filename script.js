@@ -51,4 +51,39 @@ document.addEventListener('DOMContentLoaded', () => {
             }
         });
     });
+
+    // Handle waitlist form submission
+    const waitlistForm = document.getElementById('waitlistForm');
+    const formMessage = document.getElementById('formMessage');
+
+    if (waitlistForm) {
+        waitlistForm.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const submitBtn = waitlistForm.querySelector('.submit-btn');
+            submitBtn.disabled = true;
+            
+            try {
+                const response = await fetch(waitlistForm.action, {
+                    method: 'POST',
+                    body: new FormData(waitlistForm),
+                    headers: {
+                        'Accept': 'application/json'
+                    }
+                });
+
+                if (response.ok) {
+                    formMessage.textContent = 'Thank you for joining our waitlist! We\'ll be in touch soon.';
+                    formMessage.className = 'form-message success';
+                    waitlistForm.reset();
+                } else {
+                    throw new Error('Submission failed');
+                }
+            } catch (error) {
+                formMessage.textContent = 'Sorry, there was an error. Please try again.';
+                formMessage.className = 'form-message error';
+            } finally {
+                submitBtn.disabled = false;
+            }
+        });
+    }
 });
