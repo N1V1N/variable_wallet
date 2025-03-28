@@ -35,11 +35,14 @@ body {
 
 /* Navigation */
 .navbar {
-    background: var(--primary-color);
-    padding: 1rem 0;
     position: fixed;
-    width: 100%;
+    top: 0;
+    left: 0;
+    right: 0;
     z-index: 1000;
+    background-color: rgba(26, 26, 26, 0.67);
+    padding: 1rem 0;
+    backdrop-filter: blur(5px);
 }
 
 .navbar .container {
@@ -606,11 +609,12 @@ section {
     scroll-margin-top: 100px;
 }
 
-.navbar {
-    position: fixed;
-    width: 100%;
-    z-index: 1000;
-    background: var(--primary-color);
+.made-in {
+    font-size: 0.6rem;
+    letter-spacing: 0.2em;
+    margin-bottom: 0.5rem;
+    transform: scale(0.5);
+    transform-origin: center;
 }
 
 .container {
