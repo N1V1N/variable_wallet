@@ -522,12 +522,12 @@ footer .container:last-child p {
     }
 }
 
-/* Matrix Vines */
+/* Matrix effect styling */
 .matrix-vines {
     position: absolute;
     top: 0;
     left: 0;
-    width: 100%;
+    right: 0;
     height: calc(var(--navbar-height) * 2);
     pointer-events: none;
     z-index: 1;
