@@ -73,11 +73,19 @@ document.addEventListener('DOMContentLoaded', () => {
                     method: 'POST',
                     body: formData,
                     headers: {
-                        'Accept': 'application/json'
-                    }
+                        'Accept': 'application/json',
+                        'Content-Type': 'application/json'
+                    },
+                    mode: 'cors'
                 });
 
+                if (!response.ok) {
+                    throw new Error(`HTTP error! status: ${response.status}`);
+                }
+
                 const result = await response.json();
+                console.log('Formspree response:', result); // Debug log
+                
                 if (result.ok) {
                     formMessage.textContent = 'Thank you for joining our waitlist! We\'ll be in touch soon.';
                     formMessage.className = 'form-message success';
