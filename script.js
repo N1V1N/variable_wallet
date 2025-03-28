@@ -55,19 +55,23 @@ document.addEventListener('DOMContentLoaded', () => {
     // Waitlist form handling
     const formMessage = document.getElementById('formMessage');
     
-    window.formspree.init({
-        forms: {
-            'waitlistForm': {
-                onSuccess: function(response) {
-                    formMessage.textContent = 'Thank you for joining our waitlist! We\'ll be in touch soon.';
-                    formMessage.className = 'form-message success';
-                    document.getElementById('waitlistForm').reset();
-                },
-                onError: function(errors) {
-                    formMessage.textContent = 'Sorry, there was an error submitting your form. Please try again.';
-                    formMessage.className = 'form-message error';
+    window.addEventListener('load', function() {
+        window.formspree.init({
+            forms: {
+                'waitlistForm': {
+                    hashAnchor: '#waitlist',
+                    onSuccess: function(response) {
+                        formMessage.textContent = 'Thank you for joining our waitlist! We\'ll be in touch soon.';
+                        formMessage.className = 'form-message success';
+                        document.getElementById('waitlistForm').reset();
+                    },
+                    onError: function(errors) {
+                        console.error('Formspree error:', errors);
+                        formMessage.textContent = 'Sorry, there was an error submitting your form. Please try again.';
+                        formMessage.className = 'form-message error';
+                    }
                 }
             }
-        }
+        });
     });
 });
