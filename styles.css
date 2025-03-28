@@ -523,6 +523,92 @@ footer .container:last-child p {
     }
 }
 
+/* Matrix Vines */
+.matrix-vines {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: calc(var(--navbar-height) * 2);
+    pointer-events: none;
+    z-index: 1;
+    overflow: hidden;
+}
+
+.vine {
+    position: absolute;
+    width: 2px;
+    height: 100px;
+    background: linear-gradient(to bottom, 
+        rgba(192, 192, 192, 0) 0%,
+        rgba(192, 192, 192, 0.4) 50%,
+        rgba(192, 192, 192, 0) 100%);
+    animation: vineFlow 8s infinite;
+    transform-origin: top;
+}
+
+.vine:nth-child(1) {
+    left: 20%;
+    animation-delay: 0s;
+    height: 150px;
+}
+
+.vine:nth-child(2) {
+    left: 40%;
+    animation-delay: -2s;
+    height: 120px;
+}
+
+.vine:nth-child(3) {
+    left: 60%;
+    animation-delay: -4s;
+    height: 180px;
+}
+
+.vine:nth-child(4) {
+    left: 80%;
+    animation-delay: -6s;
+    height: 140px;
+}
+
+.vine:nth-child(5) {
+    left: 30%;
+    animation-delay: -3s;
+    height: 160px;
+}
+
+@keyframes vineFlow {
+    0% {
+        opacity: 0;
+        transform: translateY(-100%) scaleY(1);
+    }
+    20% {
+        opacity: 0.8;
+        transform: translateY(0) scaleY(1.2);
+    }
+    40% {
+        opacity: 0.5;
+        transform: translateY(20%) scaleY(0.8);
+    }
+    60% {
+        opacity: 0.8;
+        transform: translateY(40%) scaleY(1.1);
+    }
+    80% {
+        opacity: 0.3;
+        transform: translateY(60%) scaleY(0.9);
+    }
+    100% {
+        opacity: 0;
+        transform: translateY(80%) scaleY(1);
+    }
+}
+
+/* Make sure navbar is above vines */
+.navbar {
+    z-index: 2;
+}
+
 /* Responsive Design */
 @media (max-width: 768px) {
     :root {
