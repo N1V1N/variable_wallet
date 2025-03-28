@@ -73,25 +73,18 @@ document.addEventListener('DOMContentLoaded', () => {
                     method: 'POST',
                     body: formData,
                     headers: {
-                        'Accept': 'application/json',
-                        'Content-Type': 'application/json'
-                    },
-                    mode: 'cors'
+                        'Accept': 'application/json'
+                    }
                 });
 
-                if (!response.ok) {
-                    throw new Error(`HTTP error! status: ${response.status}`);
-                }
+                console.log('Response status:', response.status); // Debug log
 
-                const result = await response.json();
-                console.log('Formspree response:', result); // Debug log
-                
-                if (result.ok) {
+                if (response.ok) {
                     formMessage.textContent = 'Thank you for joining our waitlist! We\'ll be in touch soon.';
                     formMessage.className = 'form-message success';
                     waitlistForm.reset();
                 } else {
-                    throw new Error(result.error || 'Failed to submit form');
+                    throw new Error('Form submission failed');
                 }
             } catch (error) {
                 console.error('Form submission error:', error);
