@@ -577,6 +577,66 @@ footer .container:last-child p {
     height: 160px;
 }
 
+.vine:nth-child(6) {
+    left: 15%;
+    animation-delay: -1s;
+    height: 170px;
+}
+
+.vine:nth-child(7) {
+    left: 45%;
+    animation-delay: -3.5s;
+    height: 130px;
+}
+
+.vine:nth-child(8) {
+    left: 65%;
+    animation-delay: -5.5s;
+    height: 190px;
+}
+
+.vine:nth-child(9) {
+    left: 85%;
+    animation-delay: -7s;
+    height: 145px;
+}
+
+.vine:nth-child(10) {
+    left: 95%;
+    animation-delay: -2.5s;
+    height: 155px;
+}
+
+.vine:nth-child(11) {
+    left: 5%;
+    animation-delay: -4.2s;
+    height: 175px;
+}
+
+.vine:nth-child(12) {
+    left: 25%;
+    animation-delay: -1.8s;
+    height: 135px;
+}
+
+.vine:nth-child(13) {
+    left: 35%;
+    animation-delay: -5.2s;
+    height: 165px;
+}
+
+.vine:nth-child(14) {
+    left: 55%;
+    animation-delay: -3.7s;
+    height: 185px;
+}
+
+.vine:nth-child(15) {
+    left: 70%;
+    animation-delay: -2.3s;
+    height: 140px;
+}
+
 @keyframes vineFlow {
     0% {
         opacity: 0;
