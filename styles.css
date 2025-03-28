@@ -450,11 +450,11 @@ main {
     font-size: 0.8em;
     text-transform: uppercase;
     letter-spacing: 1px;
-    margin: 2rem auto;
+    margin-top: 0.5rem;
     text-align: center;
     font-weight: bold;
     text-shadow: var(--glow);
-    opacity: 0.3;
+    opacity: 0.7;
 }
 
 /* Pricing Note */
@@ -787,3 +787,12 @@ section {
     padding: 0 20px;
     position: relative;
 }
+
+.matrix-container {
+    width: 100%;
+    height: 100%;
+    padding: 0 20px;
+    position: relative;
+}
+
+/* Responsive Design */
