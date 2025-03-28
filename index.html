@@ -8,7 +8,6 @@
     <meta name="theme-color" content="#1a1a1a">
     <link rel="stylesheet" href="styles.css">
     <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700&display=swap" rel="stylesheet">
-    <script src="https://formspree.io/js/formspree.min.js" defer></script>
     <style>
         .product-placeholder {
             width: 100%;
@@ -107,7 +106,7 @@
             <div class="container">
                 <h2>Join the Waitlist</h2>
                 <p>Be the first to know when wallets become available</p>
-                <form class="waitlist-form formspree" id="waitlistForm" action="https://formspree.io/f/mgvalvbq" method="POST">
+                <form class="waitlist-form" id="waitlistForm" action="https://formspree.io/f/mgvalvbq" method="POST">
                     <div class="form-group">
                         <label for="name">Name</label>
                         <input type="text" id="name" name="name" required>
@@ -120,9 +119,8 @@
                         <label for="message">Message (Optional)</label>
                         <textarea id="message" name="message"></textarea>
                     </div>
-                    <input type="hidden" name="_next" value="https://www.variablewallet.com#waitlist">
+                    <input type="hidden" name="_next" value="https://www.variablewallet.com/thanks.html">
                     <button type="submit" class="submit-btn">Join Waitlist</button>
-                    <div class="form-message" id="formMessage"></div>
                 </form>
             </div>
         </section>
