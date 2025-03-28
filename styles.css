@@ -15,7 +15,6 @@
     --light-bg: #2a2a2a;
     --metal-gradient: linear-gradient(45deg, var(--secondary-color), var(--accent-color));
     --navbar-height: 72px;
-    --hero-spacing: clamp(2rem, 5vh, 4rem);
 }
 
 /* Reset */
@@ -132,7 +131,7 @@ main {
 }
 
 .hero .container {
-    padding-top: calc(var(--navbar-height) * 2 - var(--hero-spacing));
+    padding-top: 6rem;
 }
 
 .hero::before {
@@ -149,7 +148,7 @@ main {
 
 .hero h1 {
     font-size: clamp(2rem, 5vw, 3.5rem);
-    margin-bottom: calc(var(--hero-spacing) * 0.5);
+    margin-bottom: calc(0.5rem);
     text-transform: uppercase;
     letter-spacing: 5px;
     position: relative;
@@ -188,13 +187,8 @@ main {
 }
 
 @media (max-width: 768px) {
-    .hero-image {
-        margin: 2rem auto 0;
-        padding: 0 1rem;
-    }
-
-    .product-image {
-        max-width: 90%;
+    .hero .container {
+        padding-top: 2rem;
     }
 }
 
@@ -202,7 +196,7 @@ main {
     font-size: clamp(1.2rem, 3vw, 1.8rem);
     letter-spacing: 0.2em;
     display: block;
-    margin-bottom: calc(var(--hero-spacing) * 0.25);
+    margin-bottom: calc(0.25rem);
 }
 
 /* Materials Grid */
@@ -529,6 +523,10 @@ footer .container {
 
 /* Responsive Design */
 @media (max-width: 768px) {
+    :root {
+        --navbar-height: 60px;
+    }
+    
     .navbar {
         padding: 0.5rem 0;
         height: auto;
