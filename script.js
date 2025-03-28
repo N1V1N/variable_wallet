@@ -57,42 +57,11 @@ document.addEventListener('DOMContentLoaded', () => {
     const formMessage = document.getElementById('formMessage');
 
     if (waitlistForm) {
-        waitlistForm.addEventListener('submit', async (e) => {
-            e.preventDefault();
-            
+        waitlistForm.addEventListener('submit', function(e) {
             const submitBtn = waitlistForm.querySelector('.submit-btn');
             submitBtn.disabled = true;
-            formMessage.textContent = '';
-            
-            try {
-                // Get form data
-                const formData = new FormData(waitlistForm);
-
-                // Submit to Formspree
-                const response = await fetch(waitlistForm.action, {
-                    method: 'POST',
-                    body: formData,
-                    headers: {
-                        'Accept': 'application/json'
-                    }
-                });
-
-                console.log('Response status:', response.status); // Debug log
-
-                if (response.ok) {
-                    formMessage.textContent = 'Thank you for joining our waitlist! We\'ll be in touch soon.';
-                    formMessage.className = 'form-message success';
-                    waitlistForm.reset();
-                } else {
-                    throw new Error('Form submission failed');
-                }
-            } catch (error) {
-                console.error('Form submission error:', error);
-                formMessage.textContent = 'Sorry, there was an error submitting your form. Please try again.';
-                formMessage.className = 'form-message error';
-            } finally {
-                submitBtn.disabled = false;
-            }
+            formMessage.textContent = 'Submitting...';
+            formMessage.className = 'form-message';
         });
     }
 });
