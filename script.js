@@ -67,37 +67,27 @@ document.addEventListener('DOMContentLoaded', () => {
             try {
                 // Get form data
                 const formData = new FormData(waitlistForm);
-                const name = formData.get('name');
-                const email = formData.get('email');
-                const message = formData.get('message') || '';
 
-                // Trigger GitHub Actions workflow
-                const response = await fetch('https://api.github.com/repos/N1V1N/variable_wallet/actions/workflows/waitlist.yml/dispatches', {
+                // Submit to Formspree
+                const response = await fetch(waitlistForm.action, {
                     method: 'POST',
+                    body: formData,
                     headers: {
-                        'Accept': 'application/vnd.github.v3+json',
-                        'Authorization': 'Bearer ' + 'WAITLIST_TOKEN'
-                    },
-                    body: JSON.stringify({
-                        ref: 'main',
-                        inputs: {
-                            name: name,
-                            email: email,
-                            message: message
-                        }
-                    })
+                        'Accept': 'application/json'
+                    }
                 });
 
-                if (response.ok) {
-                    formMessage.textContent = 'Thank you for joining our waitlist! Your submission has been saved.';
+                const result = await response.json();
+                if (result.ok) {
+                    formMessage.textContent = 'Thank you for joining our waitlist! We\'ll be in touch soon.';
                     formMessage.className = 'form-message success';
                     waitlistForm.reset();
                 } else {
-                    throw new Error('Failed to save your submission');
+                    throw new Error(result.error || 'Failed to submit form');
                 }
             } catch (error) {
-                console.error('Error:', error);
-                formMessage.textContent = 'There was an error saving your submission. Please try again later.';
+                console.error('Form submission error:', error);
+                formMessage.textContent = 'Sorry, there was an error submitting your form. Please try again.';
                 formMessage.className = 'form-message error';
             } finally {
                 submitBtn.disabled = false;
