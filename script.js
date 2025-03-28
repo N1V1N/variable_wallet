@@ -57,20 +57,20 @@ document.addEventListener('DOMContentLoaded', () => {
     const formMessage = document.getElementById('formMessage');
 
     if (waitlistForm) {
-        waitlistForm.addEventListener('submit', async (e) => {
+        waitlistForm.addEventListener('submit', function(e) {
             e.preventDefault();
             const submitBtn = waitlistForm.querySelector('.submit-btn');
             submitBtn.disabled = true;
+            formMessage.textContent = 'Submitting...';
             
-            try {
-                const response = await fetch(waitlistForm.action, {
-                    method: 'POST',
-                    body: new FormData(waitlistForm),
-                    headers: {
-                        'Accept': 'application/json'
-                    }
-                });
-
+            fetch(waitlistForm.action, {
+                method: 'POST',
+                body: new FormData(waitlistForm),
+                headers: {
+                    'Accept': 'application/json'
+                }
+            })
+            .then(response => {
                 if (response.ok) {
                     formMessage.textContent = 'Thank you for joining our waitlist! We\'ll be in touch soon.';
                     formMessage.className = 'form-message success';
@@ -78,12 +78,14 @@ document.addEventListener('DOMContentLoaded', () => {
                 } else {
                     throw new Error('Submission failed');
                 }
-            } catch (error) {
+            })
+            .catch(error => {
                 formMessage.textContent = 'Sorry, there was an error. Please try again.';
                 formMessage.className = 'form-message error';
-            } finally {
+            })
+            .finally(() => {
                 submitBtn.disabled = false;
-            }
+            });
         });
     }
 });
