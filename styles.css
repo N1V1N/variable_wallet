@@ -468,18 +468,19 @@ main {
 
 /* Footer */
 footer {
-    background: var(--primary-color);
+    background-color: var(--primary-color);
     color: var(--text-color);
-    padding: 2rem 0;
     text-align: center;
-    border-top: 1px solid var(--accent-color);
+    padding: 2rem 0;
 }
 
 footer .container {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 1rem;
+    margin-bottom: 0.5rem;
+}
+
+footer .container:last-child p {
+    font-size: 0.75em;
+    opacity: 0.5;
 }
 
 /* Contact Info */
