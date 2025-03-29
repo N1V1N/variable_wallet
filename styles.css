@@ -672,9 +672,9 @@ section {
     color: var(--accent-color);
     font-size: 0.8em;
     text-transform: uppercase;
-    letter-spacing: 1px; /* Reverted to original 1px spacing */
-    margin-top: -0.5rem;
-    margin-bottom: 2rem; /* Kept the increased spacing between elements */
+    letter-spacing: 1px;
+    margin-top: 0.44rem;
+    margin-bottom: -0.9rem; /* Even more negative margin to pull the form closer */
     text-align: center;
     opacity: 0.7;
 }
