@@ -184,13 +184,19 @@ main {
     z-index: 1;
     display: block !important;
     cursor: pointer; /* Show pointer cursor on hover */
+    /* Remove any potential filter effects */
+    filter: none;
+    /* Explicitly remove all shadow effects */
+    box-shadow: none;
 }
 
 .product-image {
     max-width: 100%;
     height: auto;
     border-radius: 8px;
-    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+    /* Explicitly remove all shadow effects */
+    box-shadow: none;
+    filter: none;
     display: block;
     margin: 0 auto;
     display: block !important;
