@@ -88,4 +88,35 @@ document.addEventListener('DOMContentLoaded', () => {
             });
         });
     }
+
+    // Handle image cycling on click
+    const heroImage = document.getElementById('hero-image');
+    if (heroImage) {
+        // Image paths in order - Only use the numbered PNG files
+        const imagePaths = [
+            'images/variable_wallet_1.png',
+            'images/variable_wallet_2.png',
+            'images/variable_wallet_3.png',
+            'images/variable_wallet_4.png'
+        ];
+        
+        // Force initial image to be the first in our array
+        const img = heroImage.querySelector('img');
+        if (img) {
+            img.src = imagePaths[0]; // Explicitly set to first image on load
+        }
+        
+        let currentImageIndex = 0;
+        
+        heroImage.addEventListener('click', function() {
+            // Move to next image
+            currentImageIndex = (currentImageIndex + 1) % imagePaths.length;
+            
+            // Update image source
+            if (img) {
+                // Add a cache-busting query parameter
+                img.src = imagePaths[currentImageIndex] + '?t=' + new Date().getTime();
+            }
+        });
+    }
 });

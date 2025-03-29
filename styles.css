@@ -183,6 +183,7 @@ main {
     position: relative;
     z-index: 1;
     display: block !important;
+    cursor: pointer; /* Show pointer cursor on hover */
 }
 
 .product-image {
@@ -202,6 +203,13 @@ main {
 .of-america {
     display: block;
     line-height: 0.95; /* Tighter spacing with line above */
+}
+
+.image-click-hint {
+    font-size: 0.8rem;
+    opacity: 0.7;
+    margin-top: 0.3rem;
+    font-style: italic;
 }
 
 @media (max-width: 768px) {
