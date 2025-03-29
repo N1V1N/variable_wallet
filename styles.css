@@ -58,6 +58,11 @@ body {
     height: 100%; /* Ensure the container takes full height */
 }
 
+.logo-container {
+    position: relative; /* For absolute positioning of EST 2024 */
+    margin-right: 2rem;
+}
+
 .logo {
     font-family: 'Cinzel', serif;
     font-size: 1.5rem;
@@ -66,7 +71,22 @@ body {
     color: var(--text-color);
     text-transform: uppercase;
     letter-spacing: 2px;
-    margin-right: 2rem;
+    /* Ensure the logo itself is centered on the bar */
+    position: relative;
+    top: 0;
+}
+
+.est-year {
+    font-size: 0.75em;
+    opacity: 0.5;
+    text-align: center;
+    letter-spacing: 2px;
+    /* Float in space relative to the Variable Wallet text */
+    position: absolute;
+    width: 100%;
+    left: 0;
+    top: 100%; /* Position it right below the Variable Wallet text */
+    margin-top: -0.7em; /* Further reduced to move it even closer to Variable Wallet text */
 }
 
 .nav-menu {
