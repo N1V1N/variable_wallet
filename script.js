@@ -114,8 +114,7 @@ document.addEventListener('DOMContentLoaded', () => {
         const imagePaths = [
             'images/variable_wallet_0.png',
             'images/variable_wallet_1.png',
-            'images/variable_wallet_2.png',
-            'images/variable_wallet_3.png'
+            'images/variable_wallet_2.png'
         ];
         
         // Force initial image to be the first in our array
