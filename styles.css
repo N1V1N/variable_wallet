@@ -195,6 +195,15 @@ main {
     display: block !important;
 }
 
+.united-states {
+    display: inline-block;
+}
+
+.of-america {
+    display: block;
+    line-height: 0.95; /* Tighter spacing with line above */
+}
+
 @media (max-width: 768px) {
     :root {
         --navbar-height: 60px;
