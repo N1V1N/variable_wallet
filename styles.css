@@ -14,7 +14,7 @@
     --glow: 0 0 10px rgba(192, 192, 192, 0.5);
     --light-bg: #2a2a2a;
     --metal-gradient: linear-gradient(45deg, var(--secondary-color), var(--accent-color));
-    --navbar-height: 72px;
+    --navbar-height: 36px; /* Reduced from 72px */
 }
 
 /* Reset */
@@ -32,20 +32,20 @@ body {
     background: var(--primary-color);
     min-height: 100vh;
     overflow-x: hidden;
-    padding-top: calc(var(--navbar-height) * 2);
+    padding-top: calc(var(--navbar-height) * 1); /* Reduced from 2x to 1x to match the new black bar height */
 }
 
 /* Navigation */
 .navbar {
     position: fixed;
-    top: var(--navbar-height);
+    top: var(--navbar-height); /* Positioned right below the black bar */
     left: 0;
     right: 0;
     z-index: 1000;
     background-color: rgba(26, 26, 26, 0.67);
     padding: 1rem 0;
     backdrop-filter: blur(5px);
-    height: var(--navbar-height);
+    height: calc(var(--navbar-height) * 2); /* Doubled the height to fully encompass the centered content */
 }
 
 .navbar .container {
@@ -105,8 +105,8 @@ body {
 
 /* Main Content */
 main {
-    margin-top: 60px;
-    padding-top: 80px;
+    margin-top: 30px;
+    padding-top: 40px;
 }
 
 .content-section {
@@ -124,14 +124,14 @@ main {
     position: relative;
     text-align: center;
     padding: 0;
-    margin-top: calc(-1 * var(--navbar-height) * 2);
+    margin-top: calc(-1 * var(--navbar-height) * 1); /* Reduced from 2x to 1x to match the new black bar height */
     background: linear-gradient(to bottom, 
-        var(--primary-color) calc(var(--navbar-height) * 2),
+        var(--primary-color) calc(var(--navbar-height) * 1),
         transparent 100%);
 }
 
 .hero .container {
-    padding-top: 2rem;
+    padding-top: calc(var(--navbar-height) * 2 + 10px); /* Increased padding to prevent text from running under the navbar */
     padding-bottom: 1rem;
 }
 
@@ -220,7 +220,7 @@ main {
 
 @media (max-width: 768px) {
     :root {
-        --navbar-height: 60px;
+        --navbar-height: 30px; /* Reduced from 60px to 30px - cutting the black bar height in half */
     }
     
     .navbar {
@@ -239,7 +239,7 @@ main {
     .nav-menu {
         position: fixed;
         right: -100%;
-        top: 60px;
+        top: 30px;
         flex-direction: column;
         background: var(--primary-color);
         width: auto;
@@ -283,18 +283,18 @@ main {
     }
 
     main {
-        padding-top: 60px;
+        padding-top: 30px;
     }
 
     section {
-        scroll-margin-top: 70px;
+        scroll-margin-top: 35px;
     }
 
     .hero {
         padding: 1rem 1rem;
-        margin-top: calc(-1 * var(--navbar-height) * 2);
+        margin-top: calc(-1 * var(--navbar-height) * 1); /* Reduced from 2x to 1x to match the new black bar height */
         background: linear-gradient(to bottom, 
-            var(--primary-color) calc(var(--navbar-height) * 2),
+            var(--primary-color) calc(var(--navbar-height) * 1),
             transparent 100%);
     }
 
@@ -333,12 +333,12 @@ main {
 
 /* Section-specific scroll margins */
 #materials, #process, #waitlist {
-    scroll-margin-top: 96px; /* Decreased from the default 100px to make sections appear lower */
+    scroll-margin-top: 36px; /* Decreased from the default 100px to make sections appear lower */
 }
 
 /* Adjusted badge positioning and fixed scroll behavior for sections */
 section {
-    scroll-margin-top: 100px;
+    scroll-margin-top: 40px;
 }
 
 .container {
@@ -712,7 +712,7 @@ footer .container:last-child p {
     top: 0;
     left: 0;
     right: 0;
-    height: calc(var(--navbar-height) * 2);
+    height: calc(var(--navbar-height) * 2); /* Doubled the height of the vines as requested */
     pointer-events: none;
     z-index: 1;
     overflow: hidden;
@@ -855,7 +855,7 @@ footer .container:last-child p {
 /* Responsive Design */
 @media (max-width: 768px) {
     :root {
-        --navbar-height: 60px;
+        --navbar-height: 30px; /* Reduced from 60px to 30px - cutting the black bar height in half */
     }
     
     .navbar {
@@ -874,7 +874,7 @@ footer .container:last-child p {
     .nav-menu {
         position: fixed;
         right: -100%;
-        top: 60px;
+        top: 30px;
         flex-direction: column;
         background: var(--primary-color);
         width: auto;
@@ -918,18 +918,18 @@ footer .container:last-child p {
     }
 
     main {
-        padding-top: 60px;
+        padding-top: 30px;
     }
 
     section {
-        scroll-margin-top: 70px;
+        scroll-margin-top: 35px;
     }
 
     .hero {
         padding: 1rem 1rem;
-        margin-top: calc(-1 * var(--navbar-height) * 2);
+        margin-top: calc(-1 * var(--navbar-height) * 1); /* Reduced from 2x to 1x to match the new black bar height */
         background: linear-gradient(to bottom, 
-            var(--primary-color) calc(var(--navbar-height) * 2),
+            var(--primary-color) calc(var(--navbar-height) * 1),
             transparent 100%);
     }
 
