@@ -1,4 +1,22 @@
+// Disable browser's automatic scroll restoration
+if ('scrollRestoration' in history) {
+    history.scrollRestoration = 'manual';
+}
+
 document.addEventListener('DOMContentLoaded', () => {
+    // Always scroll to top on page load/refresh (with a slight delay to ensure it works)
+    setTimeout(() => {
+        window.scrollTo({
+            top: 0,
+            behavior: 'auto'
+        });
+    }, 0);
+    
+    // Reset any hash in the URL without causing a page jump
+    if (window.location.hash) {
+        history.replaceState(null, document.title, window.location.pathname + window.location.search);
+    }
+
     // Mobile Navigation Toggle
     const navToggle = document.querySelector('.nav-toggle');
     const navMenu = document.querySelector('.nav-menu');
