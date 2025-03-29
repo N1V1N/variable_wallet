@@ -43,9 +43,11 @@ body {
     right: 0;
     z-index: 1000;
     background-color: rgba(26, 26, 26, 0.67);
-    padding: 1rem 0;
+    padding: 0; /* Changed from 1rem to ensure vertical centering */
     backdrop-filter: blur(5px);
     height: calc(var(--navbar-height) * 2); /* Doubled the height to fully encompass the centered content */
+    display: flex; /* Added to ensure vertical centering */
+    align-items: center; /* Added to ensure vertical centering */
 }
 
 .navbar .container {
@@ -53,6 +55,7 @@ body {
     justify-content: space-between;
     align-items: center;
     gap: 2rem;
+    height: 100%; /* Ensure the container takes full height */
 }
 
 .logo {
@@ -966,28 +969,32 @@ footer .container:last-child p {
     display: none;
 }
 
-/* Add scaling for larger screens */
+/* Add scaling for larger screens - revised for better proportional scaling */
 @media (min-width: 1440px) {
     :root {
-        --navbar-height: 32px; /* Slightly reduced for large screens */
+        --navbar-height: 30px; /* Proportionally scaled down */
     }
     
     .matrix-vines {
-        height: calc(var(--navbar-height) * 1.75); /* Proportionally scaled */
+        height: calc(var(--navbar-height) * 1.8); /* Proportionally scaled */
     }
     
     .navbar {
-        height: calc(var(--navbar-height) * 1.75); /* Proportionally scaled */
+        height: calc(var(--navbar-height) * 1.8); /* Proportionally scaled */
     }
     
-    body {
-        font-size: 1.05rem; /* Slight increase for readability */
+    .logo {
+        font-size: 1.4rem; /* Proportionally adjusted */
+    }
+    
+    .nav-menu a {
+        font-size: 0.85rem; /* Adjusted for better proportions */
     }
 }
 
 @media (min-width: 2560px) {
     :root {
-        --navbar-height: 28px; /* Further reduced for 4K screens */
+        --navbar-height: 26px; /* Further reduced for 4K screens */
     }
     
     .matrix-vines {
@@ -999,10 +1006,25 @@ footer .container:last-child p {
     }
     
     .container {
-        max-width: 1600px; /* Wider container for better proportions */
+        max-width: 1500px; /* Wider container for better proportions */
     }
     
-    body {
-        font-size: 1.1rem; /* Further increased for 4K readability */
+    .logo {
+        font-size: 1.3rem; /* Proportionally adjusted */
+    }
+    
+    .nav-menu a {
+        font-size: 0.8rem; /* Adjusted for better proportions */
+    }
+}
+
+/* Add ultra-wide screen scaling to prevent excessive shrinking */
+@media (min-width: 3840px) {
+    :root {
+        --navbar-height: 24px; /* Minimum size for ultra-wide screens */
+    }
+    
+    .container {
+        max-width: 1800px; /* Maximum width to prevent excessive stretching */
     }
 }
