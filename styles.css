@@ -140,7 +140,7 @@ main {
 .content-section .container {
     display: flex;
     flex-direction: column;
-    align-items: center;
+    align-items: center; /* This ensures all content inside is centered */
 }
 
 .hero {
@@ -258,6 +258,15 @@ main {
     .logo {
         font-size: 1.2rem;
     }
+    
+    .nav-logo {
+        font-size: 1.15rem;
+    }
+
+    .est-year {
+        font-size: 0.55rem;
+        letter-spacing: 2px; 
+    }
 
     .nav-menu {
         position: fixed;
@@ -329,12 +338,18 @@ main {
     .hero p {
         font-size: 1rem;
     }
-
+    
     .materials-grid {
-        grid-template-columns: 1fr;
-        max-width: 400px;
+        gap: 1.5rem;
+        justify-content: center; /* Ensures perfect centering */
     }
-
+    
+    .material-card {
+        flex: 0 0 100%; /* Full width */
+        max-width: 300px; /* Maintain consistent width */
+        margin-bottom: 0.5rem;
+    }
+    
     .specs {
         flex-direction: column;
         gap: 2rem;
@@ -381,30 +396,12 @@ section {
 
 /* Materials Grid */
 .materials-grid {
-    display: grid;
-    grid-template-columns: repeat(3, minmax(250px, 1fr));
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center; /* Ensures perfect centering */
     gap: 2rem;
     margin: 3rem auto 0;
     max-width: 900px;
-}
-
-@media (max-width: 992px) {
-    .materials-grid {
-        grid-template-columns: repeat(2, 1fr);
-        max-width: 600px;
-    }
-}
-
-@media (max-width: 768px) {
-    .materials-grid {
-        grid-template-columns: 1fr;
-        max-width: 400px;
-        gap: 1.5rem; /* Reduced gap for better mobile spacing */
-    }
-    
-    .material-card {
-        margin-bottom: 0.5rem; /* Add some bottom margin for better separation */
-    }
 }
 
 .material-card {
@@ -414,6 +411,9 @@ section {
     transition: var(--transition);
     position: relative;
     overflow: hidden;
+    flex: 0 0 calc(33.333% - 2rem); /* One third width minus the gap */
+    min-width: 250px; /* Minimum width for each card */
+    max-width: 300px; /* Maximum width for each card */
 }
 
 .material-card::before {
@@ -477,6 +477,12 @@ section {
     margin-top: 0.8rem;
     opacity: 0.85;
     font-style: italic;
+}
+
+@media (max-width: 992px) {
+    .material-card {
+        flex: 0 0 calc(50% - 2rem); /* Half width minus the gap */
+    }
 }
 
 /* Process Section */
