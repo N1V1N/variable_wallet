@@ -195,9 +195,136 @@ main {
 }
 
 @media (max-width: 768px) {
+    :root {
+        --navbar-height: 60px;
+    }
+    
+    .navbar {
+        padding: 0.5rem 0;
+        height: auto;
+    }
+
+    .navbar .container {
+        padding: 0 1rem;
+    }
+
+    .logo {
+        font-size: 1.2rem;
+    }
+
+    .nav-menu {
+        position: fixed;
+        right: -100%;
+        top: 60px;
+        flex-direction: column;
+        background: var(--primary-color);
+        width: auto;
+        min-width: 200px;
+        border-radius: 0 0 0 10px;
+        text-align: right;
+        transition: 0.3s;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+        padding: 0.5rem;
+        margin: 0;
+    }
+
+    .nav-menu.active {
+        right: 0;
+    }
+
+    .nav-menu li {
+        margin: 0.5rem 0;
+    }
+
+    .nav-menu a {
+        padding: 0.5rem 1rem;
+        display: block;
+        font-size: 0.9rem;
+        border-radius: 4px;
+    }
+
+    .nav-menu a:hover {
+        background: rgba(255, 255, 255, 0.1);
+    }
+
+    .nav-toggle {
+        display: block;
+        background: none;
+        border: none;
+        color: var(--text-color);
+        font-size: 1.5rem;
+        cursor: pointer;
+        padding: 0.5rem;
+        margin-left: auto;
+    }
+
+    main {
+        padding-top: 60px;
+    }
+
+    section {
+        scroll-margin-top: 70px;
+    }
+
+    .hero {
+        padding: 1rem 1rem;
+        margin-top: calc(-1 * var(--navbar-height) * 2);
+        background: linear-gradient(to bottom, 
+            var(--primary-color) calc(var(--navbar-height) * 2),
+            transparent 100%);
+    }
+
+    .hero h1 {
+        font-size: 2rem;
+        margin-top: 0.5rem;
+    }
+
+    .hero p {
+        font-size: 1rem;
+    }
+
+    .materials-grid {
+        grid-template-columns: 1fr;
+        max-width: 400px;
+    }
+
+    .specs {
+        flex-direction: column;
+        gap: 2rem;
+    }
+
     .hero .container {
         padding-top: 0rem;
     }
+}
+
+.material-showcase,
+.material-icon,
+.model-viewer,
+#three-container,
+.product-placeholder,
+.placeholder-text {
+    display: none;
+}
+
+/* Adjusted badge positioning and fixed scroll behavior for sections */
+section {
+    scroll-margin-top: 100px;
+}
+
+.container {
+    width: 90%;
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 20px;
+    position: relative;
+}
+
+.matrix-container {
+    width: 100%;
+    height: 100%;
+    padding: 0 20px;
+    position: relative;
 }
 
 /* Materials Grid */
@@ -770,7 +897,11 @@ footer .container:last-child p {
     }
 
     .hero {
-        padding: 2rem 1rem;
+        padding: 1rem 1rem;
+        margin-top: calc(-1 * var(--navbar-height) * 2);
+        background: linear-gradient(to bottom, 
+            var(--primary-color) calc(var(--navbar-height) * 2),
+            transparent 100%);
     }
 
     .hero h1 {
