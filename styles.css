@@ -965,3 +965,44 @@ footer .container:last-child p {
 .placeholder-text {
     display: none;
 }
+
+/* Add scaling for larger screens */
+@media (min-width: 1440px) {
+    :root {
+        --navbar-height: 32px; /* Slightly reduced for large screens */
+    }
+    
+    .matrix-vines {
+        height: calc(var(--navbar-height) * 1.75); /* Proportionally scaled */
+    }
+    
+    .navbar {
+        height: calc(var(--navbar-height) * 1.75); /* Proportionally scaled */
+    }
+    
+    body {
+        font-size: 1.05rem; /* Slight increase for readability */
+    }
+}
+
+@media (min-width: 2560px) {
+    :root {
+        --navbar-height: 28px; /* Further reduced for 4K screens */
+    }
+    
+    .matrix-vines {
+        height: calc(var(--navbar-height) * 1.5); /* Proportionally scaled */
+    }
+    
+    .navbar {
+        height: calc(var(--navbar-height) * 1.5); /* Proportionally scaled */
+    }
+    
+    .container {
+        max-width: 1600px; /* Wider container for better proportions */
+    }
+    
+    body {
+        font-size: 1.1rem; /* Further increased for 4K readability */
+    }
+}
