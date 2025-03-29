@@ -307,6 +307,11 @@ main {
     display: none;
 }
 
+/* Section-specific scroll margins */
+#materials, #process, #waitlist {
+    scroll-margin-top: 96px; /* Decreased from the default 100px to make sections appear lower */
+}
+
 /* Adjusted badge positioning and fixed scroll behavior for sections */
 section {
     scroll-margin-top: 100px;
@@ -935,24 +940,4 @@ footer .container:last-child p {
 .product-placeholder,
 .placeholder-text {
     display: none;
-}
-
-/* Adjusted badge positioning and fixed scroll behavior for sections */
-section {
-    scroll-margin-top: 100px;
-}
-
-.container {
-    width: 90%;
-    max-width: 1200px;
-    margin: 0 auto;
-    padding: 0 20px;
-    position: relative;
-}
-
-.matrix-container {
-    width: 100%;
-    height: 100%;
-    padding: 0 20px;
-    position: relative;
 }
