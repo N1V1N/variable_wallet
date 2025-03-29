@@ -225,7 +225,7 @@ main {
     
     .navbar {
         padding: 0.5rem 0;
-        height: auto;
+        height: calc(var(--navbar-height) * 2); /* Make sure we maintain double height on mobile */
     }
 
     .navbar .container {
@@ -318,7 +318,7 @@ main {
     }
 
     .hero .container {
-        padding-top: 0rem;
+        padding-top: calc(var(--navbar-height) * 2 + 20px); /* Increased padding on mobile to push content down */
     }
 }
 
@@ -860,7 +860,7 @@ footer .container:last-child p {
     
     .navbar {
         padding: 0.5rem 0;
-        height: auto;
+        height: calc(var(--navbar-height) * 2); /* Make sure we maintain double height on mobile */
     }
 
     .navbar .container {
@@ -953,7 +953,7 @@ footer .container:last-child p {
     }
 
     .hero .container {
-        padding-top: 0rem;
+        padding-top: calc(var(--navbar-height) * 2 + 20px); /* Increased padding on mobile to push content down */
     }
 }
 
