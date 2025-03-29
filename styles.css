@@ -918,7 +918,7 @@ footer .container:last-child p {
     }
     
     .matrix-vines {
-        height: var(--navbar-height); /* Equal to navbar-height for proper proportional scaling */
+        height: calc(var(--navbar-height) * 2); /* Keep the original double height ratio */
     }
     
     .navbar {
@@ -926,9 +926,9 @@ footer .container:last-child p {
     }
     
     .hero {
-        margin-top: calc(-1 * var(--navbar-height)); /* Adjust hero margin to match smaller navbar */
+        margin-top: calc(-1 * var(--navbar-height) * 2); /* Match the black bar height */
         background: linear-gradient(to bottom, 
-            var(--primary-color) var(--navbar-height),
+            var(--primary-color) calc(var(--navbar-height) * 2),
             transparent 100%);
     }
     
@@ -952,7 +952,7 @@ footer .container:last-child p {
     }
     
     .matrix-vines {
-        height: var(--navbar-height); /* Equal to navbar-height for proper proportional scaling */
+        height: calc(var(--navbar-height) * 2); /* Keep the original double height ratio */
     }
     
     .navbar {
@@ -960,9 +960,9 @@ footer .container:last-child p {
     }
     
     .hero {
-        margin-top: calc(-1 * var(--navbar-height)); /* Adjust hero margin to match smaller navbar */
+        margin-top: calc(-1 * var(--navbar-height) * 2); /* Match the black bar height */
         background: linear-gradient(to bottom, 
-            var(--primary-color) var(--navbar-height),
+            var(--primary-color) calc(var(--navbar-height) * 2),
             transparent 100%);
     }
     
@@ -986,7 +986,7 @@ footer .container:last-child p {
     }
     
     .matrix-vines {
-        height: var(--navbar-height); /* Equal to navbar-height for proper proportional scaling */
+        height: calc(var(--navbar-height) * 2); /* Keep the original double height ratio */
     }
     
     .navbar {
@@ -994,9 +994,9 @@ footer .container:last-child p {
     }
     
     .hero {
-        margin-top: calc(-1 * var(--navbar-height)); /* Adjust hero margin to match smaller navbar */
+        margin-top: calc(-1 * var(--navbar-height) * 2); /* Match the black bar height */
         background: linear-gradient(to bottom, 
-            var(--primary-color) var(--navbar-height),
+            var(--primary-color) calc(var(--navbar-height) * 2),
             transparent 100%);
     }
     
