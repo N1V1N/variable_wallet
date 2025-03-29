@@ -66,7 +66,7 @@ body {
 .logo {
     font-family: 'Cinzel', serif;
     font-size: 1.5rem;
-    font-weight: bold;
+    font-weight: normal; /* Changed from bold to normal */
     white-space: nowrap;
     color: var(--text-color);
     text-transform: uppercase;
@@ -659,12 +659,23 @@ section {
 /* Patent Note */
 .patent-note {
     color: var(--accent-color);
-    font-size: 0.8em;
+    font-size: 0.95em; /* Increased from 0.8em for more prominence */
     text-transform: uppercase;
-    letter-spacing: 1px;
+    letter-spacing: 3px; /* Tripled from 1px to 3px */
     margin-top: -1rem;
     text-align: center;
-    font-weight: bold;
+    opacity: 0.7;
+}
+
+/* Waitlist Note */
+.waitlist-note {
+    color: var(--accent-color);
+    font-size: 0.8em;
+    text-transform: uppercase;
+    letter-spacing: 1px; /* Reverted to original 1px spacing */
+    margin-top: -0.5rem;
+    margin-bottom: 2rem; /* Kept the increased spacing between elements */
+    text-align: center;
     opacity: 0.7;
 }
 
@@ -760,7 +771,7 @@ footer .container:last-child p {
     top: 0;
     left: 0;
     right: 0;
-    height: calc(var(--navbar-height) * 2); /* Doubled the height of the vines as requested */
+    height: calc(var(--navbar-height) * 2); /* Height tied to navbar-height variable for consistent scaling */
     pointer-events: none;
     z-index: 1;
     overflow: hidden;
@@ -769,7 +780,6 @@ footer .container:last-child p {
 .vine {
     position: absolute;
     width: 2px;
-    height: 100px;
     background: linear-gradient(to bottom, 
         rgba(192, 192, 192, 0) 0%,
         rgba(192, 192, 192, 0.4) 50%,
@@ -778,94 +788,95 @@ footer .container:last-child p {
     transform-origin: top;
 }
 
+/* Each vine's height is scaled relative to the navbar height */
 .vine:nth-child(1) {
     left: 20%;
     animation-delay: 0s;
-    height: 150px;
+    height: calc(var(--navbar-height) * 3);
 }
 
 .vine:nth-child(2) {
     left: 40%;
     animation-delay: -2s;
-    height: 120px;
+    height: calc(var(--navbar-height) * 2.4);
 }
 
 .vine:nth-child(3) {
     left: 60%;
     animation-delay: -4s;
-    height: 180px;
+    height: calc(var(--navbar-height) * 3.2);
 }
 
 .vine:nth-child(4) {
     left: 80%;
-    animation-delay: -6s;
-    height: 140px;
+    animation-delay: -1s;
+    height: calc(var(--navbar-height) * 2.8);
 }
 
 .vine:nth-child(5) {
-    left: 30%;
+    left: 10%;
     animation-delay: -3s;
-    height: 160px;
+    height: calc(var(--navbar-height) * 3.5);
 }
 
 .vine:nth-child(6) {
-    left: 15%;
-    animation-delay: -1s;
-    height: 170px;
+    left: 30%;
+    animation-delay: -5s;
+    height: calc(var(--navbar-height) * 2.6);
 }
 
 .vine:nth-child(7) {
-    left: 45%;
-    animation-delay: -3.5s;
-    height: 130px;
+    left: 50%;
+    animation-delay: -2.5s;
+    height: calc(var(--navbar-height) * 3.3);
 }
 
 .vine:nth-child(8) {
-    left: 65%;
-    animation-delay: -5.5s;
-    height: 190px;
+    left: 70%;
+    animation-delay: -4.5s;
+    height: calc(var(--navbar-height) * 2.7);
 }
 
 .vine:nth-child(9) {
-    left: 85%;
-    animation-delay: -7s;
-    height: 145px;
+    left: 90%;
+    animation-delay: -1.5s;
+    height: calc(var(--navbar-height) * 3.1);
 }
 
 .vine:nth-child(10) {
-    left: 95%;
-    animation-delay: -2.5s;
-    height: 155px;
+    left: 15%;
+    animation-delay: -3.5s;
+    height: calc(var(--navbar-height) * 2.9);
 }
 
 .vine:nth-child(11) {
     left: 5%;
     animation-delay: -4.2s;
-    height: 175px;
+    height: calc(var(--navbar-height) * 3.5);
 }
 
 .vine:nth-child(12) {
     left: 25%;
     animation-delay: -1.8s;
-    height: 135px;
+    height: calc(var(--navbar-height) * 2.7);
 }
 
 .vine:nth-child(13) {
     left: 35%;
     animation-delay: -5.2s;
-    height: 165px;
+    height: calc(var(--navbar-height) * 3.3);
 }
 
 .vine:nth-child(14) {
     left: 55%;
     animation-delay: -3.7s;
-    height: 185px;
+    height: calc(var(--navbar-height) * 3.7);
 }
 
 .vine:nth-child(15) {
     left: 70%;
     animation-delay: -2.3s;
-    height: 140px;
+    height: calc(var(--navbar-height) * 2.8);
 }
 
 @keyframes vineFlow {
@@ -907,20 +918,27 @@ footer .container:last-child p {
     }
     
     .matrix-vines {
-        height: calc(var(--navbar-height) * 1.8); /* Proportionally scaled */
+        height: var(--navbar-height); /* Equal to navbar-height for proper proportional scaling */
     }
     
     .navbar {
-        height: calc(var(--navbar-height) * 1.8); /* Proportionally scaled */
+        height: calc(var(--navbar-height) * 1.8); /* Translucent bar height */
+    }
+    
+    .hero {
+        margin-top: calc(-1 * var(--navbar-height)); /* Adjust hero margin to match smaller navbar */
+        background: linear-gradient(to bottom, 
+            var(--primary-color) var(--navbar-height),
+            transparent 100%);
     }
     
     .logo {
-        font-size: 1.2rem; /* Reduced for better proportions on large screens */
+        font-size: 1rem; /* Further reduced for better proportions on large screens */
     }
     
     .est-year {
-        font-size: 0.7em; /* Proportionally reduced */
-        letter-spacing: 1.6px; /* Slightly reduced for proportion */
+        font-size: 0.6em; /* Further reduced for better proportions */
+        letter-spacing: 1.5px; /* Slightly reduced for proportion */
     }
     
     .nav-menu a, .nav-toggle {
@@ -934,11 +952,18 @@ footer .container:last-child p {
     }
     
     .matrix-vines {
-        height: calc(var(--navbar-height) * 1.5); /* Proportionally scaled */
+        height: var(--navbar-height); /* Equal to navbar-height for proper proportional scaling */
     }
     
     .navbar {
-        height: calc(var(--navbar-height) * 1.5); /* Proportionally scaled */
+        height: calc(var(--navbar-height) * 1.5); /* Translucent bar height */
+    }
+    
+    .hero {
+        margin-top: calc(-1 * var(--navbar-height)); /* Adjust hero margin to match smaller navbar */
+        background: linear-gradient(to bottom, 
+            var(--primary-color) var(--navbar-height),
+            transparent 100%);
     }
     
     .container {
@@ -946,39 +971,45 @@ footer .container:last-child p {
     }
     
     .logo {
-        font-size: 1rem; /* Further reduced for 4K screens */
+        font-size: 0.85rem; /* Further reduced for 4K screens */
     }
     
     .est-year {
-        font-size: 0.65em; /* Proportionally reduced */
-        letter-spacing: 1.5px;
-    }
-    
-    .nav-menu a, .nav-toggle {
-        font-size: 0.7rem; /* Further scaled down menu items */
+        font-size: 0.5em; /* Further reduced for 4K screens */
+        letter-spacing: 1.2px;
     }
 }
 
-/* Ultra-wide screen scaling */
 @media (min-width: 3840px) {
     :root {
         --navbar-height: 18px; /* Minimum size for ultra-wide screens */
     }
     
-    .container {
-        max-width: 1800px; /* Maximum width to prevent excessive stretching */
+    .matrix-vines {
+        height: var(--navbar-height); /* Equal to navbar-height for proper proportional scaling */
+    }
+    
+    .navbar {
+        height: calc(var(--navbar-height) * 1.2); /* Translucent bar height */
+    }
+    
+    .hero {
+        margin-top: calc(-1 * var(--navbar-height)); /* Adjust hero margin to match smaller navbar */
+        background: linear-gradient(to bottom, 
+            var(--primary-color) var(--navbar-height),
+            transparent 100%);
     }
     
     .logo {
-        font-size: 0.9rem; /* Minimum size for ultra-wide screens */
+        font-size: 0.7rem; /* Very small for ultra-wide screens */
     }
     
     .est-year {
-        font-size: 0.6em;
-        letter-spacing: 1.4px;
+        font-size: 0.45em; /* Very small for ultra-wide screens */
+        letter-spacing: 1px;
     }
     
-    .nav-menu a, .nav-toggle {
-        font-size: 0.65rem;
+    .container {
+        max-width: 1800px; /* Extra wide container for ultra-wide screens */
     }
 }
