@@ -17,6 +17,40 @@ document.addEventListener('DOMContentLoaded', () => {
         history.replaceState(null, document.title, window.location.pathname + window.location.search);
     }
 
+    // Image paths in order - Only use the numbered PNG files
+    const imagePaths = [
+        'images/variable_wallet_0.png',
+        'images/variable_wallet_1.png',
+        'images/variable_wallet_2.png'
+    ];
+    
+    // Select a random image on page load/refresh
+    const heroImage = document.getElementById('hero-image');
+    if (heroImage) {
+        const img = heroImage.querySelector('img');
+        let randomIndex = 0; // Initialize the variable
+        
+        if (img) {
+            // Choose a random image from the array
+            randomIndex = Math.floor(Math.random() * imagePaths.length);
+            img.src = imagePaths[randomIndex];
+        }
+        
+        let currentImageIndex = randomIndex; // Start from the random image
+        
+        // Handle image cycling on click
+        heroImage.addEventListener('click', function() {
+            // Move to next image
+            currentImageIndex = (currentImageIndex + 1) % imagePaths.length;
+            
+            // Update image source
+            if (img) {
+                // Add a cache-busting query parameter
+                img.src = imagePaths[currentImageIndex] + '?t=' + new Date().getTime();
+            }
+        });
+    }
+
     // Mobile Navigation Toggle
     const navToggle = document.querySelector('.nav-toggle');
     const navMenu = document.querySelector('.nav-menu');
@@ -104,36 +138,6 @@ document.addEventListener('DOMContentLoaded', () => {
             .finally(() => {
                 submitBtn.disabled = false;
             });
-        });
-    }
-
-    // Handle image cycling on click
-    const heroImage = document.getElementById('hero-image');
-    if (heroImage) {
-        // Image paths in order - Only use the numbered PNG files
-        const imagePaths = [
-            'images/variable_wallet_0.png',
-            'images/variable_wallet_1.png',
-            'images/variable_wallet_2.png'
-        ];
-        
-        // Force initial image to be the first in our array
-        const img = heroImage.querySelector('img');
-        if (img) {
-            img.src = imagePaths[0]; // Explicitly set to first image on load
-        }
-        
-        let currentImageIndex = 0;
-        
-        heroImage.addEventListener('click', function() {
-            // Move to next image
-            currentImageIndex = (currentImageIndex + 1) % imagePaths.length;
-            
-            // Update image source
-            if (img) {
-                // Add a cache-busting query parameter
-                img.src = imagePaths[currentImageIndex] + '?t=' + new Date().getTime();
-            }
         });
     }
 });
