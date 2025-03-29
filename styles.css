@@ -131,7 +131,7 @@ main {
 }
 
 .hero .container {
-    padding-top: 3rem;
+    padding-top: 2rem;
     padding-bottom: 1rem;
 }
 
@@ -159,6 +159,13 @@ main {
 
 .hero h1 div {
     display: block;
+}
+
+.made-in {
+    font-size: clamp(0.9rem, 2.5vw, 1.5rem);
+    letter-spacing: 0.2em;
+    display: block;
+    margin-bottom: calc(0.25rem);
 }
 
 .hero p {
@@ -189,15 +196,8 @@ main {
 
 @media (max-width: 768px) {
     .hero .container {
-        padding-top: 2rem;
+        padding-top: 0rem;
     }
-}
-
-.made-in {
-    font-size: clamp(1.2rem, 3vw, 1.8rem);
-    letter-spacing: 0.2em;
-    display: block;
-    margin-bottom: calc(0.25rem);
 }
 
 /* Materials Grid */
@@ -791,6 +791,10 @@ footer .container:last-child p {
         flex-direction: column;
         gap: 2rem;
     }
+
+    .hero .container {
+        padding-top: 0rem;
+    }
 }
 
 .material-showcase,
@@ -821,5 +825,3 @@ section {
     padding: 0 20px;
     position: relative;
 }
-
-/* Responsive Design */
