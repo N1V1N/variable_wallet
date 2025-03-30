@@ -198,6 +198,14 @@ main {
     position: relative;
 }
 
+.stackable-note {
+    font-size: 0.7rem;
+    color: var(--accent-color);
+    font-style: italic;
+    margin: 0.5rem auto 0.75rem;
+    opacity: 0.85;
+}
+
 .hero-image {
     max-width: 500px;
     margin: 0.75rem auto 1.5rem;
@@ -381,6 +389,11 @@ main {
 
     .hero .container {
         padding-top: calc(var(--navbar-height) * 1 + 10px); /* Reduced by half from (var(--navbar-height) * 2 + 20px) */
+    }
+
+    .stackable-note {
+        font-size: 0.7rem;
+        margin: 0.4rem auto 0.6rem;
     }
 }
 
