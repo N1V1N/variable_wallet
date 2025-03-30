@@ -21,18 +21,25 @@ document.addEventListener('DOMContentLoaded', () => {
     const imagePaths = [
         'images/variable_wallet_0.png',
         'images/variable_wallet_1.png',
-        'images/variable_wallet_2.png'
+        'images/variable_wallet_2.png',
+        'images/variable_wallet_3.png',
+        'images/variable_wallet_4.png'
     ];
     
-    // Always start with the first image (variable_wallet_0)
+    // Alternate between first two images on page load
     const heroImage = document.getElementById('hero-image');
     if (heroImage) {
         const img = heroImage.querySelector('img');
-        let currentImageIndex = 0; // Always start with index 0
+        
+        // Use a more explicit random selection between 0 and 1
+        // Math.random() gives a value between 0 and 1
+        // Math.floor(Math.random() * 2) will give either 0 or 1
+        let currentImageIndex = Math.floor(Math.random() * 2); // Will be either 0 or 1
         
         if (img) {
-            // Set the initial image to variable_wallet_0
-            img.src = imagePaths[currentImageIndex];
+            // Set the initial image to either variable_wallet_0 or variable_wallet_1
+            // Add a cache-busting parameter to ensure the image is not cached
+            img.src = imagePaths[currentImageIndex] + '?t=' + new Date().getTime();
         }
         
         // Handle image cycling on click
