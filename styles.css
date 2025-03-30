@@ -733,7 +733,8 @@ section {
     color: var(--accent-color);
     font-size: 1.2rem;
     font-weight: normal;
-    margin-top: 0.5rem;
+    margin-top: 0;
+    margin-bottom: 15px;
     text-shadow: var(--glow);
 }
 
@@ -1076,6 +1077,32 @@ footer .container:last-child p {
     .container {
         max-width: 1800px; /* Extra wide container for ultra-wide screens */
     }
+}
+
+/* Batch Box */
+.batch-box {
+    border: 1px solid rgba(255, 255, 255, 0.4);
+    padding: 10px 18px;
+    margin: 10px 0 2px;
+    display: inline-block;
+    background-color: rgba(0, 0, 0, 0.15);
+    border-radius: 2px;
+}
+
+.batch-box .batch-title {
+    display: block;
+    font-size: 1.2rem;
+    letter-spacing: 2px;
+    margin-bottom: 4px;
+    color: var(--accent-color);
+    text-transform: uppercase;
+}
+
+.batch-box .batch-details {
+    display: block;
+    font-size: 0.85em;
+    opacity: 0.9;
+    color: var(--accent-color);
 }
 
 /* ... rest of the code remains the same ... */
