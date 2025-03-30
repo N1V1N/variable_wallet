@@ -218,11 +218,14 @@ main {
     transition: transform 0.3s ease;
 }
 
+/* Removing the hover-up effect on desktop */
+/* 
 @media (min-width: 769px) {
     .hero-image:hover {
         transform: translateY(-5px);
     }
 }
+*/
 
 .subtle-bounce-animation {
     animation: subtle-bounce 1.3s ease;
