@@ -49,6 +49,18 @@ document.addEventListener('DOMContentLoaded', () => {
                 img.src = imagePaths[currentImageIndex] + '?t=' + new Date().getTime();
             }
         });
+
+        // Mobile bounce animation after 1.33 seconds
+        if (window.innerWidth <= 768) {
+            setTimeout(() => {
+                heroImage.classList.add('mobile-bounce');
+                
+                // Remove the class after the animation completes to prevent it from happening again
+                setTimeout(() => {
+                    heroImage.classList.remove('mobile-bounce');
+                }, 1300); // Updated to match the 1.3s animation duration
+            }, 1330);
+        }
     }
 
     // Mobile Navigation Toggle
