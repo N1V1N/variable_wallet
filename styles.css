@@ -410,8 +410,19 @@ main {
 }
 
 /* Section-specific scroll margins */
-#materials, #process, #waitlist {
-    scroll-margin-top: 36px; /* Decreased from the default 100px to make sections appear lower */
+#materials {
+    scroll-margin-top: 0px; /* Completely removed margin to make the section stop at the very top */
+}
+
+#process, #waitlist {
+    scroll-margin-top: 36px; /* Kept the original value */
+}
+
+/* Mobile-specific scroll margins */
+@media (max-width: 768px) {
+    #materials {
+        scroll-margin-top: 36px; /* Restore original value for mobile */
+    }
 }
 
 /* Adjusted badge positioning and fixed scroll behavior for sections */
