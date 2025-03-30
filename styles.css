@@ -228,7 +228,7 @@ main {
 */
 
 .subtle-bounce-animation {
-    animation: subtle-bounce 1.3s ease;
+    animation: subtle-bounce 2.6s ease infinite;
 }
 
 .product-image {
