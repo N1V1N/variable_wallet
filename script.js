@@ -43,10 +43,24 @@ document.addEventListener('DOMContentLoaded', () => {
         // Start with continuous bounce animation
         heroImage.classList.add('subtle-bounce-animation');
         
-        // Handle image cycling on click
-        heroImage.addEventListener('click', function() {
-            // Move to next image
-            currentImageIndex = (currentImageIndex + 1) % imagePaths.length;
+        // Handle image cycling on click - left side goes backward, right side goes forward
+        heroImage.addEventListener('click', function(event) {
+            // Get the click position relative to the image
+            const rect = heroImage.getBoundingClientRect();
+            const clickX = event.clientX - rect.left;
+            const imageWidth = rect.width;
+            
+            // Determine if click was on left or right half
+            const isLeftSide = clickX < imageWidth / 2;
+            
+            if (isLeftSide) {
+                // Left side click - go to previous image
+                // Add 5 (total number of images) and subtract 1, then mod 5 to get previous index
+                currentImageIndex = (currentImageIndex + imagePaths.length - 1) % imagePaths.length;
+            } else {
+                // Right side click - go to next image
+                currentImageIndex = (currentImageIndex + 1) % imagePaths.length;
+            }
             
             // Update image source
             if (img) {
