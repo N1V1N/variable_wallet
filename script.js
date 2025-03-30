@@ -31,10 +31,20 @@ document.addEventListener('DOMContentLoaded', () => {
     if (heroImage) {
         const img = heroImage.querySelector('img');
         
-        // Use a more explicit random selection between 0 and 1
-        // Math.random() gives a value between 0 and 1
-        // Math.floor(Math.random() * 2) will give either 0 or 1
-        let currentImageIndex = Math.floor(Math.random() * 2); // Will be either 0 or 1
+        // Initialize currentImageIndex
+        let currentImageIndex = 0;
+        
+        // Check if the user has visited before
+        if (localStorage.getItem('lastShownImage') !== null) {
+            // User has visited before, show the opposite image from last time
+            currentImageIndex = localStorage.getItem('lastShownImage') === '0' ? 1 : 0;
+        } else {
+            // First visit, randomly choose between 0 and 1
+            currentImageIndex = Math.floor(Math.random() * 2);
+        }
+        
+        // Save the current image index for next visit
+        localStorage.setItem('lastShownImage', currentImageIndex.toString());
         
         if (img) {
             // Set the initial image to either variable_wallet_0 or variable_wallet_1
