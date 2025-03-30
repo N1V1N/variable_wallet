@@ -770,6 +770,22 @@ footer .container:last-child p {
     margin-top: -1.5rem;
 }
 
+.est-container p {
+    font-size: 0.7rem;
+    letter-spacing: 2px;
+    margin-top: -5px;
+}
+
+.est-date {
+    display: inline-block;
+    letter-spacing: 3px;
+}
+
+.est-triangle {
+    display: inline-block;
+    margin: 0 4px;
+}
+
 /* Contact Info */
 .contact-info {
     margin-top: 2rem;
