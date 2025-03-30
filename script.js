@@ -24,19 +24,16 @@ document.addEventListener('DOMContentLoaded', () => {
         'images/variable_wallet_2.png'
     ];
     
-    // Select a random image on page load/refresh
+    // Always start with the first image (variable_wallet_0)
     const heroImage = document.getElementById('hero-image');
     if (heroImage) {
         const img = heroImage.querySelector('img');
-        let randomIndex = 0; // Initialize the variable
+        let currentImageIndex = 0; // Always start with index 0
         
         if (img) {
-            // Choose a random image from the array
-            randomIndex = Math.floor(Math.random() * imagePaths.length);
-            img.src = imagePaths[randomIndex];
+            // Set the initial image to variable_wallet_0
+            img.src = imagePaths[currentImageIndex];
         }
-        
-        let currentImageIndex = randomIndex; // Start from the random image
         
         // Handle image cycling on click
         heroImage.addEventListener('click', function() {
