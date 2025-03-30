@@ -50,15 +50,25 @@ document.addEventListener('DOMContentLoaded', () => {
             }
         });
 
-        // Mobile bounce animation after 1.33 seconds
+        // Mobile bounce animation that repeats every 9 seconds
         if (window.innerWidth <= 768) {
+            // Initial animation after 1.33 seconds
             setTimeout(() => {
-                heroImage.classList.add('mobile-bounce');
+                // Function to handle the bounce animation
+                const doBounce = () => {
+                    heroImage.classList.add('mobile-bounce');
+                    
+                    // Remove the class after the animation completes
+                    setTimeout(() => {
+                        heroImage.classList.remove('mobile-bounce');
+                    }, 1300);
+                };
                 
-                // Remove the class after the animation completes to prevent it from happening again
-                setTimeout(() => {
-                    heroImage.classList.remove('mobile-bounce');
-                }, 1300); // Updated to match the 1.3s animation duration
+                // Do the initial bounce
+                doBounce();
+                
+                // Set up interval to repeat the animation every 9 seconds
+                setInterval(doBounce, 9000);
             }, 1330);
         }
     }
