@@ -75,13 +75,43 @@ document.addEventListener('DOMContentLoaded', () => {
             }, 1300);
         };
         
+        // Variable to store the bounce interval
+        let bounceInterval;
+        let isHovering = false;
+        
+        // Function to start the bounce interval
+        const startBounceInterval = () => {
+            if (!isHovering && !bounceInterval) {
+                bounceInterval = setInterval(doBounce, 9000);
+            }
+        };
+        
+        // Function to clear the bounce interval
+        const clearBounceInterval = () => {
+            if (bounceInterval) {
+                clearInterval(bounceInterval);
+                bounceInterval = null;
+            }
+        };
+        
+        // Add hover event listeners to pause/resume the animation
+        heroImage.addEventListener('mouseenter', () => {
+            isHovering = true;
+            clearBounceInterval();
+        });
+        
+        heroImage.addEventListener('mouseleave', () => {
+            isHovering = false;
+            startBounceInterval();
+        });
+        
         // Initial animation after 1.33 seconds
         setTimeout(() => {
             // Do the initial bounce
             doBounce();
             
             // Set up interval to repeat the animation every 9 seconds
-            setInterval(doBounce, 9000);
+            bounceInterval = setInterval(doBounce, 9000);
         }, 1330);
     }
 
