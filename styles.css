@@ -1083,7 +1083,7 @@ footer .container:last-child p {
 .batch-box {
     border: 1px solid rgba(255, 255, 255, 0.4);
     padding: 10px 18px;
-    margin: 5px 0 0;
+    margin: 5px 0 15px;
     display: inline-block;
     background-color: rgba(0, 0, 0, 0.15);
     border-radius: 2px;
@@ -1101,8 +1101,21 @@ footer .container:last-child p {
 .batch-box .batch-details {
     display: block;
     font-size: 0.85em;
+    margin-bottom: 6px;
     opacity: 0.9;
     color: var(--accent-color);
+}
+
+.batch-box .batch-price {
+    display: block;
+    font-size: 0.95em;
+    color: var(--accent-color);
+    margin-top: 2px;
+    font-weight: normal;
+}
+
+.batch-box .batch-price strong {
+    font-weight: bold;
 }
 
 /* ... rest of the code remains the same ... */
