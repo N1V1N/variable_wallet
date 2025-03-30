@@ -47,27 +47,25 @@ document.addEventListener('DOMContentLoaded', () => {
             }
         });
 
-        // Mobile bounce animation that repeats every 9 seconds
-        if (window.innerWidth <= 768) {
-            // Initial animation after 1.33 seconds
+        // Bounce animation that repeats every 9 seconds on all devices
+        // Function to handle the bounce animation
+        const doBounce = () => {
+            heroImage.classList.add('subtle-bounce-animation');
+            
+            // Remove the class after the animation completes
             setTimeout(() => {
-                // Function to handle the bounce animation
-                const doBounce = () => {
-                    heroImage.classList.add('mobile-bounce');
-                    
-                    // Remove the class after the animation completes
-                    setTimeout(() => {
-                        heroImage.classList.remove('mobile-bounce');
-                    }, 1300);
-                };
-                
-                // Do the initial bounce
-                doBounce();
-                
-                // Set up interval to repeat the animation every 9 seconds
-                setInterval(doBounce, 9000);
-            }, 1330);
-        }
+                heroImage.classList.remove('subtle-bounce-animation');
+            }, 1300);
+        };
+        
+        // Initial animation after 1.33 seconds
+        setTimeout(() => {
+            // Do the initial bounce
+            doBounce();
+            
+            // Set up interval to repeat the animation every 9 seconds
+            setInterval(doBounce, 9000);
+        }, 1330);
     }
 
     // Mobile Navigation Toggle

@@ -224,7 +224,7 @@ main {
     }
 }
 
-.mobile-bounce {
+.subtle-bounce-animation {
     animation: subtle-bounce 1.3s ease;
 }
 
