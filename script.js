@@ -52,18 +52,6 @@ document.addEventListener('DOMContentLoaded', () => {
             img.src = imagePaths[currentImageIndex] + '?t=' + new Date().getTime();
         }
         
-        // Handle image cycling on click
-        heroImage.addEventListener('click', function() {
-            // Move to next image
-            currentImageIndex = (currentImageIndex + 1) % imagePaths.length;
-            
-            // Update image source
-            if (img) {
-                // Add a cache-busting query parameter
-                img.src = imagePaths[currentImageIndex] + '?t=' + new Date().getTime();
-            }
-        });
-
         // Bounce animation that repeats every 9 seconds on all devices
         // Function to handle the bounce animation
         const doBounce = () => {
@@ -78,10 +66,16 @@ document.addEventListener('DOMContentLoaded', () => {
         // Variable to store the bounce interval
         let bounceInterval;
         let isHovering = false;
+        let userHasClicked = false; // Track if user has clicked the image
         
         // Function to start the bounce interval
         const startBounceInterval = () => {
-            if (!isHovering && !bounceInterval) {
+            // Only start the interval if:
+            // 1. Not currently hovering
+            // 2. No interval is currently running
+            // 3. User hasn't clicked the image yet
+            // 4. On mobile OR desktop (depending on device)
+            if (!isHovering && !bounceInterval && !userHasClicked) {
                 bounceInterval = setInterval(doBounce, 9000);
             }
         };
@@ -94,15 +88,43 @@ document.addEventListener('DOMContentLoaded', () => {
             }
         };
         
-        // Add hover event listeners to pause/resume the animation
-        heroImage.addEventListener('mouseenter', () => {
-            isHovering = true;
+        // Function to permanently disable bounce animation
+        const permanentlyDisableBounce = () => {
             clearBounceInterval();
-        });
+            userHasClicked = true; // Set flag to prevent future animations
+            // Remove any ongoing animations
+            heroImage.classList.remove('subtle-bounce-animation');
+        };
         
-        heroImage.addEventListener('mouseleave', () => {
-            isHovering = false;
-            startBounceInterval();
+        // Add hover event listeners to pause/resume the animation (desktop only)
+        if (window.innerWidth >= 769) { // Desktop only
+            heroImage.addEventListener('mouseenter', () => {
+                isHovering = true;
+                clearBounceInterval();
+            });
+            
+            heroImage.addEventListener('mouseleave', () => {
+                isHovering = false;
+                // Only restart if user hasn't clicked yet
+                if (!userHasClicked) {
+                    startBounceInterval();
+                }
+            });
+        }
+        
+        // Handle image cycling on click
+        heroImage.addEventListener('click', function() {
+            // Move to next image
+            currentImageIndex = (currentImageIndex + 1) % imagePaths.length;
+            
+            // Update image source
+            if (img) {
+                // Add a cache-busting query parameter
+                img.src = imagePaths[currentImageIndex] + '?t=' + new Date().getTime();
+            }
+            
+            // Permanently disable bounce animation after user interaction on all devices
+            permanentlyDisableBounce();
         });
         
         // Initial animation after 1.33 seconds
@@ -111,7 +133,10 @@ document.addEventListener('DOMContentLoaded', () => {
             doBounce();
             
             // Set up interval to repeat the animation every 9 seconds
-            bounceInterval = setInterval(doBounce, 9000);
+            // Only if user hasn't clicked yet
+            if (!userHasClicked) {
+                bounceInterval = setInterval(doBounce, 9000);
+            }
         }, 1330);
     }
 
