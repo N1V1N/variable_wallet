@@ -696,6 +696,15 @@ section {
     opacity: 0.8;
 }
 
+.batch-label {
+    display: block;
+    margin-bottom: -15px; /* Increased negative margin to bring the elements even closer */
+}
+
+.orders-label {
+    display: block;
+}
+
 /* Patent Note */
 .patent-note {
     color: var(--accent-color);
