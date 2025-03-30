@@ -380,7 +380,7 @@ main {
     }
 
     .hero .container {
-        padding-top: calc(var(--navbar-height) * 2 + 20px); /* Increased padding on mobile to push content down */
+        padding-top: calc(var(--navbar-height) * 1 + 10px); /* Reduced by half from (var(--navbar-height) * 2 + 20px) */
     }
 }
 
