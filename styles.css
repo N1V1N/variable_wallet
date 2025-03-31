@@ -249,24 +249,29 @@ main {
 
 /* Only show a subtle indicator on desktop */
 @media (min-width: 769px) {
-    .nav-left:hover::before, .nav-right:hover::after {
+    .nav-left::before, .nav-right::after {
         content: '';
         position: absolute;
         top: 50%;
         width: 20px;
         height: 20px;
-        border-top: 2px solid rgba(192, 192, 192, 0.4);
-        border-left: 2px solid rgba(192, 192, 192, 0.4);
+        border-top: 2px solid rgba(255, 255, 255, 0.5);
+        border-left: 2px solid rgba(255, 255, 255, 0.5);
         transform: translateY(-50%);
-        opacity: 0.7;
+        opacity: 0;
+        transition: opacity 0.3s ease;
     }
     
-    .nav-left:hover::before {
+    .nav-left:hover::before, .nav-right:hover::after {
+        opacity: 0.8;
+    }
+    
+    .nav-left::before {
         left: 20px;
         transform: translateY(-50%) rotate(-45deg);
     }
     
-    .nav-right:hover::after {
+    .nav-right::after {
         right: 20px;
         transform: translateY(-50%) rotate(135deg);
     }
