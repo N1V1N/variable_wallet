@@ -189,6 +189,7 @@ main {
     letter-spacing: 0.2em;
     display: block;
     margin-bottom: calc(0.15rem);
+    text-shadow: 0 0 3px rgba(192, 192, 192, 0.2);
 }
 
 .hero p {
@@ -468,10 +469,11 @@ section {
     border: 1px solid var(--accent-color);
     transition: var(--transition);
     position: relative;
-    overflow: hidden;
+    overflow: visible;
     flex: 0 0 calc(33.333% - 2rem); /* One third width minus the gap */
     min-width: 250px; /* Minimum width for each card */
     max-width: 300px; /* Maximum width for each card */
+    z-index: 1;
 }
 
 .material-card::before {
@@ -505,10 +507,40 @@ section {
     text-shadow: var(--glow);
 }
 
+.tier-badge {
+    position: absolute;
+    top: -10px;
+    left: -10px;
+    font-size: 0.65rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    padding: 3px 8px;
+    border-radius: 2px;
+    z-index: 2; /* Higher than the material card but lower than navbar */
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
+    color: black;
+    text-shadow: none;
+}
+
+.tier-badge.premium {
+    background-color: var(--titanium-color);
+    color: white;
+}
+
+.tier-badge.standard {
+    background-color: var(--aluminum-color);
+}
+
+.tier-badge.holy {
+    background-color: var(--damascus-color);
+    color: white;
+}
+
 .limited-badge {
     position: absolute;
-    top: 5px;
-    right: 5px;
+    top: 10px;
+    right: 10px;
     background: rgba(192, 192, 192, 0.2);
     color: white;
     padding: 0.25rem 0.5rem;
@@ -1134,6 +1166,24 @@ footer .container:last-child p {
 
 .batch-box .batch-price strong {
     font-weight: bold;
+}
+
+/* Batch box link styling */
+.batch-box-link {
+    text-decoration: none;
+    color: inherit;
+    display: inline-block;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.batch-box-link:hover {
+    transform: translateY(-2px);
+    cursor: pointer;
+}
+
+.batch-box-link:hover .batch-box {
+    border-color: var(--accent-color);
+    box-shadow: 0 2px 8px rgba(192, 192, 192, 0.2);
 }
 
 /* ... rest of the code remains the same ... */
