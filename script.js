@@ -19,12 +19,14 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Image paths in order - Only use the numbered PNG files
     const imagePaths = [
-        'images/variable_wallet_0.png',
         'images/variable_wallet_1.png',
         'images/variable_wallet_2.png',
         'images/variable_wallet_3.png',
         'images/variable_wallet_4.png',
-        'images/variable_wallet_5.png'
+        'images/variable_wallet_5.png',
+        'images/variable_wallet_6.png',
+        'images/variable_wallet_7.png',
+        'images/variable_wallet_8.png'
     ];
     
     // Always bouncing animation, always start with variable_wallet_1
@@ -32,8 +34,8 @@ document.addEventListener('DOMContentLoaded', () => {
     if (heroImage) {
         const img = heroImage.querySelector('img');
         
-        // Always start with variable_wallet_1 (index 1)
-        let currentImageIndex = 1;
+        // Always start with variable_wallet_1 (index 0)
+        let currentImageIndex = 0;
         
         if (img) {
             // Set the initial image to variable_wallet_1
@@ -56,7 +58,7 @@ document.addEventListener('DOMContentLoaded', () => {
             
             if (isLeftSide) {
                 // Left side click - go to previous image
-                // Add 5 (total number of images) and subtract 1, then mod 5 to get previous index
+                // Add 7 (total number of images) and subtract 1, then mod 8 to get previous index
                 currentImageIndex = (currentImageIndex + imagePaths.length - 1) % imagePaths.length;
             } else {
                 // Right side click - go to next image
