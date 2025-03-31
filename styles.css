@@ -263,7 +263,7 @@ main {
     }
     
     .nav-left:hover::before, .nav-right:hover::after {
-        opacity: 0.8;
+        opacity: 0.27; /* Reduced by 66% from 0.8 */
     }
     
     .nav-left::before {
