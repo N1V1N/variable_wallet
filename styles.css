@@ -228,11 +228,13 @@ main {
     position: absolute;
     top: 0;
     left: 0;
-    width: 100%;
+    width: 100vw; /* Full viewport width */
     height: 100%;
     display: flex;
     pointer-events: none; /* This allows clicks to pass through to the image by default */
     z-index: 2;
+    left: 50%;
+    transform: translateX(-50%); /* Center the navigation */
 }
 
 .nav-left, .nav-right {
