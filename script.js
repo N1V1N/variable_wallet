@@ -38,7 +38,7 @@ document.addEventListener('DOMContentLoaded', () => {
         let currentImageIndex = 0;
         
         if (img) {
-            // Set the initial image to variable_wallet_1
+            // Always set the initial image to variable_wallet_1
             // Add a cache-busting parameter to ensure the image is not cached
             img.src = imagePaths[currentImageIndex] + '?t=' + new Date().getTime();
         }
@@ -46,30 +46,61 @@ document.addEventListener('DOMContentLoaded', () => {
         // Start with continuous bounce animation
         heroImage.classList.add('subtle-bounce-animation');
         
-        // Handle image cycling on click - left side goes backward, right side goes forward
+        // Get navigation elements
+        const navLeft = heroImage.querySelector('.nav-left');
+        const navRight = heroImage.querySelector('.nav-right');
+        
+        // Function to update image
+        const updateImage = (newIndex) => {
+            currentImageIndex = newIndex;
+            // Update the image source with a timestamp to prevent caching issues
+            img.src = imagePaths[currentImageIndex] + '?t=' + Date.now();
+        };
+        
+        // Handle left navigation click - go to previous image
+        navLeft.addEventListener('click', function(event) {
+            // Stop event propagation to prevent the heroImage click handler from firing
+            event.stopPropagation();
+            // Add imagePaths.length and subtract 1, then mod by length to get previous index
+            const newIndex = (currentImageIndex + imagePaths.length - 1) % imagePaths.length;
+            updateImage(newIndex);
+        });
+        
+        // Handle right navigation click - go to next image
+        navRight.addEventListener('click', function(event) {
+            // Stop event propagation to prevent the heroImage click handler from firing
+            event.stopPropagation();
+            // Go to next image
+            const newIndex = (currentImageIndex + 1) % imagePaths.length;
+            updateImage(newIndex);
+        });
+        
+        // Keep the original click handler for backward compatibility
+        // but make it secondary to the new navigation
         heroImage.addEventListener('click', function(event) {
+            // Skip if the click was on a navigation element
+            if (event.target === navLeft || event.target === navRight) {
+                return;
+            }
+            
             // Get the click position relative to the image
             const rect = heroImage.getBoundingClientRect();
             const clickX = event.clientX - rect.left;
             const imageWidth = rect.width;
             
-            // Determine if click was on left or right half
+            // Determine if click was on left or right side
             const isLeftSide = clickX < imageWidth / 2;
             
+            let newIndex;
             if (isLeftSide) {
                 // Left side click - go to previous image
-                // Add 7 (total number of images) and subtract 1, then mod 8 to get previous index
-                currentImageIndex = (currentImageIndex + imagePaths.length - 1) % imagePaths.length;
+                newIndex = (currentImageIndex + imagePaths.length - 1) % imagePaths.length;
             } else {
                 // Right side click - go to next image
-                currentImageIndex = (currentImageIndex + 1) % imagePaths.length;
+                newIndex = (currentImageIndex + 1) % imagePaths.length;
             }
             
-            // Update image source
-            if (img) {
-                // Add a cache-busting query parameter
-                img.src = imagePaths[currentImageIndex] + '?t=' + new Date().getTime();
-            }
+            updateImage(newIndex);
         });
     }
 
