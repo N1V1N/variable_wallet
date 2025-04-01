@@ -1281,7 +1281,7 @@ footer .container:last-child p {
     
     .mobile-reorder .stackable-note {
         order: 1; /* Move below the slideshow */
-        margin-top: -0.33rem; /* Add negative margin to move text up */
+        margin-top: -0.66rem; /* Add negative margin to move text up */
     }
     
     .mobile-reorder .hero-image {
@@ -1316,7 +1316,7 @@ footer .container:last-child p {
     
     .mobile-reorder .stackable-note {
         order: 1;
-        margin-top: -0.33rem; /* Add negative margin to move text up */
+        margin-top: -0.66rem; /* Add negative margin to move text up */
     }
     
     .mobile-reorder .hero-image {
