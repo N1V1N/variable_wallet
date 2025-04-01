@@ -249,6 +249,11 @@ main {
     background-color: transparent; /* Remove the background highlight */
 }
 
+/* Prevent tap highlight color on mobile devices */
+.hero-image, .nav-left, .nav-right, .image-navigation {
+    -webkit-tap-highlight-color: transparent;
+}
+
 /* Only show a subtle indicator on desktop */
 @media (min-width: 769px) {
     .nav-left::before, .nav-right::after {
