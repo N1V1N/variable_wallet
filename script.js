@@ -25,8 +25,7 @@ document.addEventListener('DOMContentLoaded', () => {
         'images/variable_wallet_4.png',
         'images/variable_wallet_5.png',
         'images/variable_wallet_6.png',
-        'images/variable_wallet_7.png',
-        'images/variable_wallet_8.png'
+        'images/variable_wallet_7.png'
     ];
     
     // Always bouncing animation, always start with variable_wallet_1
