@@ -50,6 +50,25 @@ document.addEventListener('DOMContentLoaded', () => {
         const navLeft = heroImage.querySelector('.nav-left');
         const navRight = heroImage.querySelector('.nav-right');
         
+        // Pause animation when scrolling away from the hero section and resume when scrolling back
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    // Element is in view - enable click handlers and animation
+                    heroImage.classList.add('subtle-bounce-animation');
+                    navLeft.style.pointerEvents = 'auto';
+                    navRight.style.pointerEvents = 'auto';
+                } else {
+                    // Element is out of view - disable animation to save resources
+                    heroImage.classList.remove('subtle-bounce-animation');
+                    // Don't disable pointer events when out of view to ensure they're ready when scrolling back
+                }
+            });
+        }, { threshold: 0.1 }); // Trigger when at least 10% of the element is visible
+        
+        // Start observing the hero image
+        observer.observe(heroImage);
+        
         // Function to update image
         const updateImage = (newIndex) => {
             currentImageIndex = newIndex;
