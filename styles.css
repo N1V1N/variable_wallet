@@ -626,6 +626,25 @@ section {
     letter-spacing: 1px;
 }
 
+.pulse-effect {
+    display: block;
+    margin-top: 1rem;
+    font-size: 0.9rem;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    text-decoration: none;
+    color: var(--text-color);
+    animation: subtle-pulse 1.5s infinite ease-in-out;
+    cursor: pointer;
+}
+
+/* Pulse effect animation */
+@keyframes subtle-pulse {
+    0% { opacity: 0.7; }
+    50% { opacity: 1; }
+    100% { opacity: 0.7; }
+}
+
 .order-limit {
     font-size: 0.85rem;
     color: var(--accent-color);
