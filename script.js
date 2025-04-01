@@ -52,7 +52,7 @@ document.addEventListener('DOMContentLoaded', () => {
     // Start preloading all images immediately and store references
     const preloadedImages = preloadAllImages();
     
-    // Slideshow with random starting image (excluding 5, 6, and 7)
+    // Initialize the slideshow
     const heroImage = document.getElementById('hero-image');
     if (heroImage) {
         const img = heroImage.querySelector('img');
@@ -62,21 +62,31 @@ document.addEventListener('DOMContentLoaded', () => {
         const randomIndex = Math.floor(Math.random() * allowedIndices.length);
         let currentImageIndex = allowedIndices[randomIndex];
         
+        // Hide the hero image container until the image is loaded
+        heroImage.style.opacity = '0';
+        heroImage.style.transition = 'opacity 0.3s ease-in-out';
+        
         if (img) {
-            // Ensure the image is loaded before setting src
+            // Create a new image object for preloading
             const selectedImage = new Image();
             selectedImage.onload = function() {
+                // Set the image source after it's loaded
                 img.src = this.src;
+                
+                // Fade in the hero image container
+                heroImage.style.opacity = '1';
+                
+                // Start with continuous bounce animation
+                heroImage.classList.add('subtle-bounce-animation');
             };
             selectedImage.onerror = function() {
                 console.error('Failed to load initial image, falling back to first image');
                 img.src = imagePaths[0] + '?t=' + Date.now();
+                heroImage.style.opacity = '1';
+                heroImage.classList.add('subtle-bounce-animation');
             };
             selectedImage.src = imagePaths[currentImageIndex] + '?t=' + Date.now();
         }
-        
-        // Start with continuous bounce animation
-        heroImage.classList.add('subtle-bounce-animation');
         
         // Get navigation elements
         const navLeft = heroImage.querySelector('.nav-left');
