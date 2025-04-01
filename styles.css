@@ -274,13 +274,13 @@ main {
     }
     
     .nav-left::before {
-        left: 20px;
-        transform: translateY(-50%) rotate(-45deg);
+        left: 25%;
+        transform: translateY(-50%) translateX(-50%) rotate(-45deg);
     }
     
     .nav-right::after {
-        right: 20px;
-        transform: translateY(-50%) rotate(135deg);
+        right: 25%;
+        transform: translateY(-50%) translateX(50%) rotate(135deg);
     }
 }
 
