@@ -24,8 +24,7 @@ document.addEventListener('DOMContentLoaded', () => {
         'images/variable_wallet_3.png',
         'images/variable_wallet_4.png',
         'images/variable_wallet_5.png',
-        'images/variable_wallet_6.png',
-        'images/variable_wallet_7.png'
+        'images/variable_wallet_6.png'
     ];
     
     // Preload all images at the start for instant response
