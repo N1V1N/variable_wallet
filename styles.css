@@ -1259,7 +1259,7 @@ footer .container:last-child p {
         display: flex;
         flex-direction: column;
         align-items: center;
-        line-height: 1.5;
+        line-height: 1.2; /* Reduced from 1.5 to 1.2 */
         margin-bottom: 0; /* Remove bottom margin of slogan */
         white-space: normal; /* Allow wrapping in the stacked layout */
     }
@@ -1270,6 +1270,11 @@ footer .container:last-child p {
     
     .slogan-part {
         display: block;
+        margin-bottom: -0.33rem; /* Further reduce spacing between stacked slogan parts */
+    }
+    
+    .slogan-part:last-child {
+        margin-bottom: 0;
     }
     
     /* Reorder elements on mobile */
@@ -1296,7 +1301,7 @@ footer .container:last-child p {
         display: flex;
         flex-direction: column;
         align-items: center;
-        line-height: 1.5;
+        line-height: 1.2; /* Reduced from 1.5 to 1.2 */
         white-space: normal;
     }
     
@@ -1306,6 +1311,11 @@ footer .container:last-child p {
     
     .slogan-part {
         display: block;
+        margin-bottom: -0.35rem; /* Further reduce spacing between stacked slogan parts */
+    }
+    
+    .slogan-part:last-child {
+        margin-bottom: 0;
     }
     
     /* Reorder elements on medium screens too */

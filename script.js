@@ -28,6 +28,17 @@ document.addEventListener('DOMContentLoaded', () => {
         'images/variable_wallet_7.png'
     ];
     
+    // Preload all images at the start for instant response
+    const preloadAllImages = () => {
+        imagePaths.forEach(path => {
+            const img = new Image();
+            img.src = path + '?t=' + Date.now();
+        });
+    };
+    
+    // Start preloading all images immediately
+    preloadAllImages();
+    
     // Always bouncing animation, always start with variable_wallet_1
     const heroImage = document.getElementById('hero-image');
     if (heroImage) {
@@ -79,32 +90,24 @@ document.addEventListener('DOMContentLoaded', () => {
             isUpdating = true;
             currentImageIndex = newIndex;
             
-            // Preload the image before setting src to ensure smoother transitions
-            const preloadImg = new Image();
-            const newSrc = imagePaths[currentImageIndex] + '?t=' + Date.now();
+            // Show immediate feedback by updating the image right away
+            img.src = imagePaths[currentImageIndex] + '?t=' + Date.now();
             
-            preloadImg.onload = function() {
-                // Update the image source only after preloading
-                img.src = newSrc;
-                // Allow next update after a short delay to prevent accidental double-clicks
-                setTimeout(() => {
-                    isUpdating = false;
-                }, 50);
-            };
+            // Preload the next image in the sequence for smoother future transitions
+            const nextIndex = (currentImageIndex + 1) % imagePaths.length;
+            const preloadNextImg = new Image();
+            preloadNextImg.src = imagePaths[nextIndex] + '?t=' + Date.now();
             
-            preloadImg.onerror = function() {
-                // If preload fails, still update the image and reset flag
-                img.src = newSrc;
+            // Reset the updating flag after a minimal delay
+            setTimeout(() => {
                 isUpdating = false;
-            };
-            
-            // Start preloading
-            preloadImg.src = newSrc;
+            }, 10); // Reduced from 50ms to 10ms for faster response
         };
         
         // Handle left navigation click - go to previous image
         navLeft.addEventListener('click', function(event) {
             // Stop event propagation to prevent the heroImage click handler from firing
+            event.preventDefault();
             event.stopPropagation();
             // Add imagePaths.length and subtract 1, then mod by length to get previous index
             const newIndex = (currentImageIndex + imagePaths.length - 1) % imagePaths.length;
@@ -114,11 +117,27 @@ document.addEventListener('DOMContentLoaded', () => {
         // Handle right navigation click - go to next image
         navRight.addEventListener('click', function(event) {
             // Stop event propagation to prevent the heroImage click handler from firing
+            event.preventDefault();
             event.stopPropagation();
             // Go to next image
             const newIndex = (currentImageIndex + 1) % imagePaths.length;
             updateImage(newIndex);
         });
+        
+        // Add touch events for better mobile support
+        navLeft.addEventListener('touchstart', function(event) {
+            event.preventDefault();
+            event.stopPropagation();
+            const newIndex = (currentImageIndex + imagePaths.length - 1) % imagePaths.length;
+            updateImage(newIndex);
+        }, { passive: false });
+        
+        navRight.addEventListener('touchstart', function(event) {
+            event.preventDefault();
+            event.stopPropagation();
+            const newIndex = (currentImageIndex + 1) % imagePaths.length;
+            updateImage(newIndex);
+        }, { passive: false });
         
         // Keep the original click handler for backward compatibility
         // but make it secondary to the new navigation
