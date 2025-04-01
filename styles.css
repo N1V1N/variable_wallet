@@ -1252,3 +1252,21 @@ footer .container:last-child p {
 }
 
 /* ... rest of the code remains the same ... */
+
+@media (max-width: 550px) {
+    /* Mobile-specific styles for the slogan when it would start to wrap */
+    .stackable-note {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        line-height: 1.5;
+    }
+    
+    .slogan-triangle {
+        display: none;
+    }
+    
+    .slogan-part {
+        display: block;
+    }
+}
