@@ -93,21 +93,15 @@ document.addEventListener('DOMContentLoaded', () => {
             // Show immediate feedback by updating the image right away
             img.src = imagePaths[currentImageIndex] + '?t=' + Date.now();
             
-            // Preload the next image in the sequence for smoother future transitions
-            const nextIndex = (currentImageIndex + 1) % imagePaths.length;
-            const preloadNextImg = new Image();
-            preloadNextImg.src = imagePaths[nextIndex] + '?t=' + Date.now();
-            
-            // Reset the updating flag after a minimal delay
+            // Reset the updating flag after a short delay to prevent double triggers
             setTimeout(() => {
                 isUpdating = false;
-            }, 10); // Reduced from 50ms to 10ms for faster response
+            }, 300); // Add a small delay to prevent multiple rapid updates
         };
         
         // Handle left navigation click - go to previous image
         navLeft.addEventListener('click', function(event) {
             // Stop event propagation to prevent the heroImage click handler from firing
-            event.preventDefault();
             event.stopPropagation();
             // Add imagePaths.length and subtract 1, then mod by length to get previous index
             const newIndex = (currentImageIndex + imagePaths.length - 1) % imagePaths.length;
@@ -117,27 +111,53 @@ document.addEventListener('DOMContentLoaded', () => {
         // Handle right navigation click - go to next image
         navRight.addEventListener('click', function(event) {
             // Stop event propagation to prevent the heroImage click handler from firing
-            event.preventDefault();
             event.stopPropagation();
             // Go to next image
             const newIndex = (currentImageIndex + 1) % imagePaths.length;
             updateImage(newIndex);
         });
         
-        // Add touch events for better mobile support
+        // Add better touch handling that doesn't block scrolling
+        let touchStartX = 0;
+        let touchStartY = 0;
+        let touchMoved = false;
+        
+        // Add touch events to the navigation elements
         navLeft.addEventListener('touchstart', function(event) {
-            event.preventDefault();
-            event.stopPropagation();
-            const newIndex = (currentImageIndex + imagePaths.length - 1) % imagePaths.length;
-            updateImage(newIndex);
-        }, { passive: false });
+            touchStartX = event.touches[0].clientX;
+            touchStartY = event.touches[0].clientY;
+            touchMoved = false;
+        }, { passive: true });
+        
+        navLeft.addEventListener('touchmove', function() {
+            touchMoved = true;
+        }, { passive: true });
+        
+        navLeft.addEventListener('touchend', function(event) {
+            if (!touchMoved) {
+                // It was a tap, not a scroll attempt
+                const newIndex = (currentImageIndex + imagePaths.length - 1) % imagePaths.length;
+                updateImage(newIndex);
+            }
+        }, { passive: true });
         
         navRight.addEventListener('touchstart', function(event) {
-            event.preventDefault();
-            event.stopPropagation();
-            const newIndex = (currentImageIndex + 1) % imagePaths.length;
-            updateImage(newIndex);
-        }, { passive: false });
+            touchStartX = event.touches[0].clientX;
+            touchStartY = event.touches[0].clientY;
+            touchMoved = false;
+        }, { passive: true });
+        
+        navRight.addEventListener('touchmove', function() {
+            touchMoved = true;
+        }, { passive: true });
+        
+        navRight.addEventListener('touchend', function(event) {
+            if (!touchMoved) {
+                // It was a tap, not a scroll attempt
+                const newIndex = (currentImageIndex + 1) % imagePaths.length;
+                updateImage(newIndex);
+            }
+        }, { passive: true });
         
         // Keep the original click handler for backward compatibility
         // but make it secondary to the new navigation
