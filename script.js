@@ -30,27 +30,50 @@ document.addEventListener('DOMContentLoaded', () => {
     
     // Preload all images at the start for instant response
     const preloadAllImages = () => {
+        // Create an array to track loaded images
+        const preloadedImages = [];
+        
+        // Preload each image and store the Image object
         imagePaths.forEach(path => {
             const img = new Image();
+            img.onload = function() {
+                console.log('Preloaded: ' + path);
+            };
+            img.onerror = function() {
+                console.error('Failed to preload: ' + path);
+            };
             img.src = path + '?t=' + Date.now();
+            preloadedImages.push(img);
         });
+        
+        // Return the preloaded images array for reference
+        return preloadedImages;
     };
     
-    // Start preloading all images immediately
-    preloadAllImages();
+    // Start preloading all images immediately and store references
+    const preloadedImages = preloadAllImages();
     
-    // Always bouncing animation, always start with variable_wallet_1
+    // Slideshow with random starting image (excluding 5, 6, and 7)
     const heroImage = document.getElementById('hero-image');
     if (heroImage) {
         const img = heroImage.querySelector('img');
         
-        // Always start with variable_wallet_1 (index 0)
-        let currentImageIndex = 0;
+        // Get a random image index, excluding indices 4, 5, and 6 (images 5, 6, and 7)
+        const allowedIndices = [0, 1, 2, 3]; // Indices for images 1, 2, 3, and 4
+        const randomIndex = Math.floor(Math.random() * allowedIndices.length);
+        let currentImageIndex = allowedIndices[randomIndex];
         
         if (img) {
-            // Always set the initial image to variable_wallet_1
-            // Add a cache-busting parameter to ensure the image is not cached
-            img.src = imagePaths[currentImageIndex] + '?t=' + new Date().getTime();
+            // Ensure the image is loaded before setting src
+            const selectedImage = new Image();
+            selectedImage.onload = function() {
+                img.src = this.src;
+            };
+            selectedImage.onerror = function() {
+                console.error('Failed to load initial image, falling back to first image');
+                img.src = imagePaths[0] + '?t=' + Date.now();
+            };
+            selectedImage.src = imagePaths[currentImageIndex] + '?t=' + Date.now();
         }
         
         // Start with continuous bounce animation
@@ -90,13 +113,32 @@ document.addEventListener('DOMContentLoaded', () => {
             isUpdating = true;
             currentImageIndex = newIndex;
             
-            // Show immediate feedback by updating the image right away
-            img.src = imagePaths[currentImageIndex] + '?t=' + Date.now();
+            // Create a new image object to preload the next image
+            const nextImage = new Image();
+            nextImage.onload = function() {
+                // Update the image source only after successful preload
+                img.src = this.src;
+                
+                // Reset the updating flag after a short delay to prevent double triggers
+                setTimeout(() => {
+                    isUpdating = false;
+                }, 300); // Add a small delay to prevent multiple rapid updates
+            };
             
-            // Reset the updating flag after a short delay to prevent double triggers
-            setTimeout(() => {
+            nextImage.onerror = function() {
+                console.error('Failed to load image at index ' + newIndex + ', trying first image');
+                // Try to fall back to the first image
+                if (newIndex !== 0) {
+                    currentImageIndex = 0;
+                    img.src = imagePaths[0] + '?t=' + Date.now();
+                }
+                
+                // Reset the updating flag
                 isUpdating = false;
-            }, 300); // Add a small delay to prevent multiple rapid updates
+            };
+            
+            // Start loading the new image
+            nextImage.src = imagePaths[currentImageIndex] + '?t=' + Date.now();
         };
         
         // Handle left navigation click - go to previous image
