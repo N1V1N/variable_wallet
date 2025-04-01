@@ -54,26 +54,53 @@ document.addEventListener('DOMContentLoaded', () => {
         const observer = new IntersectionObserver((entries) => {
             entries.forEach(entry => {
                 if (entry.isIntersecting) {
-                    // Element is in view - enable click handlers and animation
+                    // Element is in view - enable animation
                     heroImage.classList.add('subtle-bounce-animation');
-                    navLeft.style.pointerEvents = 'auto';
-                    navRight.style.pointerEvents = 'auto';
                 } else {
                     // Element is out of view - disable animation to save resources
                     heroImage.classList.remove('subtle-bounce-animation');
-                    // Don't disable pointer events when out of view to ensure they're ready when scrolling back
                 }
+                // Always keep pointer events enabled for immediate response when user returns to view
+                navLeft.style.pointerEvents = 'auto';
+                navRight.style.pointerEvents = 'auto';
             });
         }, { threshold: 0.1 }); // Trigger when at least 10% of the element is visible
         
         // Start observing the hero image
         observer.observe(heroImage);
         
-        // Function to update image
+        // Track if an image update is in progress
+        let isUpdating = false;
+        
+        // Function to update image with improved reliability
         const updateImage = (newIndex) => {
+            // Prevent multiple rapid clicks from causing issues
+            if (isUpdating) return;
+            
+            isUpdating = true;
             currentImageIndex = newIndex;
-            // Update the image source with a timestamp to prevent caching issues
-            img.src = imagePaths[currentImageIndex] + '?t=' + Date.now();
+            
+            // Preload the image before setting src to ensure smoother transitions
+            const preloadImg = new Image();
+            const newSrc = imagePaths[currentImageIndex] + '?t=' + Date.now();
+            
+            preloadImg.onload = function() {
+                // Update the image source only after preloading
+                img.src = newSrc;
+                // Allow next update after a short delay to prevent accidental double-clicks
+                setTimeout(() => {
+                    isUpdating = false;
+                }, 50);
+            };
+            
+            preloadImg.onerror = function() {
+                // If preload fails, still update the image and reset flag
+                img.src = newSrc;
+                isUpdating = false;
+            };
+            
+            // Start preloading
+            preloadImg.src = newSrc;
         };
         
         // Handle left navigation click - go to previous image
