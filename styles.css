@@ -1260,6 +1260,8 @@ footer .container:last-child p {
         flex-direction: column;
         align-items: center;
         line-height: 1.5;
+        margin-bottom: 0; /* Remove bottom margin of slogan */
+        white-space: normal; /* Allow wrapping in the stacked layout */
     }
     
     .slogan-triangle {
@@ -1268,5 +1270,63 @@ footer .container:last-child p {
     
     .slogan-part {
         display: block;
+    }
+    
+    /* Reorder elements on mobile */
+    .mobile-reorder {
+        display: flex;
+        flex-direction: column;
+        margin-bottom: 1.5rem; /* Maintain the original spacing before the CNC text */
+    }
+    
+    .mobile-reorder .stackable-note {
+        order: 1; /* Move below the slideshow */
+        margin-top: 0; /* Remove space between slideshow and slogan */
+    }
+    
+    .mobile-reorder .hero-image {
+        order: 0; /* Keep the slideshow at the top */
+        margin-bottom: 0; /* Remove bottom margin of slideshow */
+    }
+}
+
+@media (min-width: 551px) and (max-width: 768px) {
+    /* Prevent wrapping by forcing the stacked layout at this size too */
+    .stackable-note {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        line-height: 1.5;
+        white-space: normal;
+    }
+    
+    .slogan-triangle {
+        display: none;
+    }
+    
+    .slogan-part {
+        display: block;
+    }
+    
+    /* Reorder elements on medium screens too */
+    .mobile-reorder {
+        display: flex;
+        flex-direction: column;
+    }
+    
+    .mobile-reorder .stackable-note {
+        order: 1;
+        margin-top: 0;
+    }
+    
+    .mobile-reorder .hero-image {
+        order: 0;
+        margin-bottom: 0;
+    }
+}
+
+@media (min-width: 769px) {
+    .stackable-note {
+        white-space: nowrap;
     }
 }
