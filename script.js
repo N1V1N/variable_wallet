@@ -166,9 +166,8 @@ document.addEventListener('DOMContentLoaded', () => {
                 
                 nextImage.onerror = function() {
                     console.error('Failed to load image at index ' + newIndex);
-                    // Try the next image instead of falling back to the first
-                    const nextIndex = (currentImageIndex + 1) % imagePaths.length;
-                    nextImage.src = imagePaths[nextIndex] + '?t=' + Date.now();
+                    // If loading fails, just keep the current image
+                    isUpdating = false;
                 };
                 
                 // Start loading the new image
