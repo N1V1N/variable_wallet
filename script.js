@@ -17,15 +17,8 @@ document.addEventListener('DOMContentLoaded', () => {
         history.replaceState(null, document.title, window.location.pathname + window.location.search);
     }
 
-    // Image paths in order - Only use the numbered PNG files
-    const imagePaths = [
-        'images/variable_wallet_1.png',
-        'images/variable_wallet_2.png',
-        'images/variable_wallet_3.png',
-        'images/variable_wallet_4.png',
-        'images/variable_wallet_5.png',
-        'images/variable_wallet_6.png'
-    ];
+    // Image paths - Automatically finds all numbered PNG files in the images folder
+    const imagePaths = Array.from({ length: 8 }, (_, i) => `images/variable_wallet_${i + 1}.png`);
     
     // Preload all images at the start for instant response
     const preloadAllImages = () => {
@@ -35,17 +28,12 @@ document.addEventListener('DOMContentLoaded', () => {
         // Preload each image and store the Image object
         imagePaths.forEach(path => {
             const img = new Image();
-            img.onload = function() {
-                console.log('Preloaded: ' + path);
-            };
-            img.onerror = function() {
-                console.error('Failed to preload: ' + path);
-            };
+            img.onload = function() { console.log('Preloaded: ' + path); };
+            img.onerror = function() { console.error('Failed to preload: ' + path); };
             img.src = path + '?t=' + Date.now();
             preloadedImages.push(img);
         });
         
-        // Return the preloaded images array for reference
         return preloadedImages;
     };
     
@@ -57,10 +45,9 @@ document.addEventListener('DOMContentLoaded', () => {
     if (heroImage) {
         const img = heroImage.querySelector('img');
         
-        // Get a random image index, excluding indices 4, 5, and 6 (images 5, 6, and 7)
-        const allowedIndices = [0, 1, 2, 3]; // Indices for images 1, 2, 3, and 4
-        const randomIndex = Math.floor(Math.random() * allowedIndices.length);
-        let currentImageIndex = allowedIndices[randomIndex];
+        // Get a random image index from all available images
+        const randomIndex = Math.floor(Math.random() * imagePaths.length);
+        let currentImageIndex = randomIndex;
         
         // Hide the hero image container until the image is loaded
         heroImage.style.opacity = '0';
@@ -70,20 +57,15 @@ document.addEventListener('DOMContentLoaded', () => {
             // Create a new image object for preloading
             const selectedImage = new Image();
             selectedImage.onload = function() {
-                // Set the image source after it's loaded
                 img.src = this.src;
-                
-                // Fade in the hero image container
                 heroImage.style.opacity = '1';
-                
-                // Start with continuous bounce animation
                 heroImage.classList.add('subtle-bounce-animation');
             };
             selectedImage.onerror = function() {
-                console.error('Failed to load initial image, falling back to first image');
-                img.src = imagePaths[0] + '?t=' + Date.now();
-                heroImage.style.opacity = '1';
-                heroImage.classList.add('subtle-bounce-animation');
+                console.error('Failed to load initial image');
+                // Try the next image instead of falling back to the first
+                const nextIndex = (currentImageIndex + 1) % imagePaths.length;
+                selectedImage.src = imagePaths[nextIndex] + '?t=' + Date.now();
             };
             selectedImage.src = imagePaths[currentImageIndex] + '?t=' + Date.now();
         }
@@ -135,15 +117,10 @@ document.addEventListener('DOMContentLoaded', () => {
             };
             
             nextImage.onerror = function() {
-                console.error('Failed to load image at index ' + newIndex + ', trying first image');
-                // Try to fall back to the first image
-                if (newIndex !== 0) {
-                    currentImageIndex = 0;
-                    img.src = imagePaths[0] + '?t=' + Date.now();
-                }
-                
-                // Reset the updating flag
-                isUpdating = false;
+                console.error('Failed to load image at index ' + newIndex);
+                // Try the next image instead of falling back to the first
+                const nextIndex = (currentImageIndex + 1) % imagePaths.length;
+                nextImage.src = imagePaths[nextIndex] + '?t=' + Date.now();
             };
             
             // Start loading the new image
@@ -152,18 +129,14 @@ document.addEventListener('DOMContentLoaded', () => {
         
         // Handle left navigation click - go to previous image
         navLeft.addEventListener('click', function(event) {
-            // Stop event propagation to prevent the heroImage click handler from firing
             event.stopPropagation();
-            // Add imagePaths.length and subtract 1, then mod by length to get previous index
-            const newIndex = (currentImageIndex + imagePaths.length - 1) % imagePaths.length;
+            const newIndex = (currentImageIndex - 1 + imagePaths.length) % imagePaths.length;
             updateImage(newIndex);
         });
         
         // Handle right navigation click - go to next image
         navRight.addEventListener('click', function(event) {
-            // Stop event propagation to prevent the heroImage click handler from firing
             event.stopPropagation();
-            // Go to next image
             const newIndex = (currentImageIndex + 1) % imagePaths.length;
             updateImage(newIndex);
         });
@@ -186,8 +159,7 @@ document.addEventListener('DOMContentLoaded', () => {
         
         navLeft.addEventListener('touchend', function(event) {
             if (!touchMoved) {
-                // It was a tap, not a scroll attempt
-                const newIndex = (currentImageIndex + imagePaths.length - 1) % imagePaths.length;
+                const newIndex = (currentImageIndex - 1 + imagePaths.length) % imagePaths.length;
                 updateImage(newIndex);
             }
         }, { passive: true });
@@ -204,7 +176,6 @@ document.addEventListener('DOMContentLoaded', () => {
         
         navRight.addEventListener('touchend', function(event) {
             if (!touchMoved) {
-                // It was a tap, not a scroll attempt
                 const newIndex = (currentImageIndex + 1) % imagePaths.length;
                 updateImage(newIndex);
             }
@@ -229,7 +200,7 @@ document.addEventListener('DOMContentLoaded', () => {
             let newIndex;
             if (isLeftSide) {
                 // Left side click - go to previous image
-                newIndex = (currentImageIndex + imagePaths.length - 1) % imagePaths.length;
+                newIndex = (currentImageIndex - 1 + imagePaths.length) % imagePaths.length;
             } else {
                 // Right side click - go to next image
                 newIndex = (currentImageIndex + 1) % imagePaths.length;
