@@ -620,7 +620,7 @@ section {
 
 .availability {
     display: block;
-    margin-top: 1rem;
+    margin-top: 1.8rem; /* Reduced from 1rem to 0.5rem */
     font-size: 0.9rem;
     text-transform: uppercase;
     letter-spacing: 1px;
@@ -628,13 +628,13 @@ section {
 
 .pulse-effect {
     display: block;
-    margin-top: 1rem;
-    font-size: 0.9rem;
+    margin-top: 1.8rem; /* Reduced from 1rem to 0.5rem */
+    font-size: 1.2rem;
     text-transform: uppercase;
     letter-spacing: 1px;
     text-decoration: none;
     color: var(--text-color);
-    animation: subtle-pulse 1.5s infinite ease-in-out;
+    animation: subtle-pulse 1.8s infinite ease-in-out;
     cursor: pointer;
 }
 
