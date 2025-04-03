@@ -263,110 +263,152 @@ document.addEventListener('DOMContentLoaded', () => {
                 
                 updateImage(newIndex);
             });
-        }
-    });
+            
+            // Add swipe gesture detection for mobile
+            if (window.innerWidth <= 768) {
+                let touchStartX = 0;
+                let touchEndX = 0;
+                let isSwiping = false;
 
-    // Add fade-in/fade-out animation for mobile arrows
-    if (window.innerWidth <= 768) {
-        const navLeft = document.querySelector('.nav-left');
-        const navRight = document.querySelector('.nav-right');
-        
-        if (navLeft && navRight) {
-            // Add fade-in animation class after a short delay
-            setTimeout(() => {
-                navLeft.classList.add('fade-in-out');
-                navRight.classList.add('fade-in-out');
-            }, 500); // 500ms delay for a subtle effect
-        }
-    }
+                heroImage.addEventListener('touchstart', function(event) {
+                    touchStartX = event.touches[0].clientX;
+                    isSwiping = true;
+                }, { passive: true });
 
-    // Mobile Navigation Toggle
-    const navToggle = document.querySelector('.nav-toggle');
-    const navMenu = document.querySelector('.nav-menu');
+                heroImage.addEventListener('touchmove', function(event) {
+                    if (isSwiping) {
+                        touchEndX = event.touches[0].clientX;
+                    }
+                }, { passive: true });
 
-    if (navToggle) {
-        navToggle.addEventListener('click', (e) => {
-            e.stopPropagation();
-            navMenu.classList.toggle('active');
-        });
-    }
+                heroImage.addEventListener('touchend', function(event) {
+                    if (isSwiping && imagePaths.length > 1) {
+                        const swipeThreshold = 50; // Minimum distance to be considered a swipe
+                        const swipeDistance = touchEndX - touchStartX;
 
-    // Close mobile menu when clicking outside
-    document.addEventListener('click', (e) => {
-        if (navMenu && navMenu.classList.contains('active') && 
-            !navMenu.contains(e.target) && 
-            !navToggle.contains(e.target)) {
-            navMenu.classList.remove('active');
-        }
-    });
+                        if (Math.abs(swipeDistance) > swipeThreshold) {
+                            // Prevent click event if it was a swipe
+                            event.preventDefault();
+                            
+                            if (swipeDistance > 0) {
+                                // Swipe right - go to previous image
+                                const newIndex = (currentImageIndex - 1 + imagePaths.length) % imagePaths.length;
+                                updateImage(newIndex);
+                            } else {
+                                // Swipe left - go to next image
+                                const newIndex = (currentImageIndex + 1) % imagePaths.length;
+                                updateImage(newIndex);
+                            }
+                        }
+                    }
+                    isSwiping = false;
+                }, { passive: false });
+            }
+            
+            // Add fade-in/fade-out animation for mobile arrows
+            if (window.innerWidth <= 768) {
+                const navLeft = document.querySelector('.nav-left');
+                const navRight = document.querySelector('.nav-right');
+                
+                if (navLeft && navRight) {
+                    // Add fade-in animation class after a short delay
+                    setTimeout(() => {
+                        navLeft.classList.add('fade-in-out');
+                        navRight.classList.add('fade-in-out');
+                    }, 500); // 500ms delay for a subtle effect
+                }
+            }
 
-    // Close mobile menu when clicking a link
-    const navLinks = document.querySelectorAll('.nav-menu a');
-    navLinks.forEach(link => {
-        link.addEventListener('click', () => {
-            navMenu.classList.remove('active');
-        });
-    });
+            // Mobile Navigation Toggle
+            const navToggle = document.querySelector('.nav-toggle');
+            const navMenu = document.querySelector('.nav-menu');
 
-    // Home link scroll to top
-    const homeLink = document.getElementById('homeLink');
-    if (homeLink) {
-        homeLink.addEventListener('click', (e) => {
-            e.preventDefault();
-            window.scrollTo({
-                top: 0,
-                behavior: 'smooth'
-            });
-        });
-    }
-
-    // Smooth scroll for other navigation links
-    document.querySelectorAll('a[href^="#"]:not(#homeLink)').forEach(anchor => {
-        anchor.addEventListener('click', function (e) {
-            e.preventDefault();
-            const target = document.querySelector(this.getAttribute('href'));
-            if (target) {
-                target.scrollIntoView({
-                    behavior: 'smooth'
+            if (navToggle) {
+                navToggle.addEventListener('click', (e) => {
+                    e.stopPropagation();
+                    navMenu.classList.toggle('active');
                 });
             }
-        });
+
+            // Close mobile menu when clicking outside
+            document.addEventListener('click', (e) => {
+                if (navMenu && navMenu.classList.contains('active') && 
+                    !navMenu.contains(e.target) && 
+                    !navToggle.contains(e.target)) {
+                    navMenu.classList.remove('active');
+                }
+            });
+
+            // Close mobile menu when clicking a link
+            const navLinks = document.querySelectorAll('.nav-menu a');
+            navLinks.forEach(link => {
+                link.addEventListener('click', () => {
+                    navMenu.classList.remove('active');
+                });
+            });
+
+            // Home link scroll to top
+            const homeLink = document.getElementById('homeLink');
+            if (homeLink) {
+                homeLink.addEventListener('click', (e) => {
+                    e.preventDefault();
+                    window.scrollTo({
+                        top: 0,
+                        behavior: 'smooth'
+                    });
+                });
+            }
+
+            // Smooth scroll for other navigation links
+            document.querySelectorAll('a[href^="#"]:not(#homeLink)').forEach(anchor => {
+                anchor.addEventListener('click', function (e) {
+                    e.preventDefault();
+                    const target = document.querySelector(this.getAttribute('href'));
+                    if (target) {
+                        target.scrollIntoView({
+                            behavior: 'smooth'
+                        });
+                    }
+                });
+            });
+
+            // Handle waitlist form submission
+            const waitlistForm = document.getElementById('waitlistForm');
+            const formMessage = document.getElementById('formMessage');
+
+            if (waitlistForm) {
+                waitlistForm.addEventListener('submit', function(e) {
+                    e.preventDefault();
+                    const submitBtn = waitlistForm.querySelector('.submit-btn');
+                    submitBtn.disabled = true;
+                    formMessage.textContent = 'Submitting...';
+                    
+                    fetch(waitlistForm.action, {
+                        method: 'POST',
+                        body: new FormData(waitlistForm),
+                        headers: {
+                            'Accept': 'application/json'
+                        }
+                    })
+                    .then(response => {
+                        if (response.ok) {
+                            formMessage.textContent = 'Thank you for joining our waitlist! We\'ll be in touch soon.';
+                            formMessage.className = 'form-message success';
+                            waitlistForm.reset();
+                        } else {
+                            throw new Error('Submission failed');
+                        }
+                    })
+                    .catch(error => {
+                        formMessage.textContent = 'Sorry, there was an error. Please try again.';
+                        formMessage.className = 'form-message error';
+                    })
+                    .finally(() => {
+                        submitBtn.disabled = false;
+                    });
+                });
+            }
+        }
     });
 
-    // Handle waitlist form submission
-    const waitlistForm = document.getElementById('waitlistForm');
-    const formMessage = document.getElementById('formMessage');
-
-    if (waitlistForm) {
-        waitlistForm.addEventListener('submit', function(e) {
-            e.preventDefault();
-            const submitBtn = waitlistForm.querySelector('.submit-btn');
-            submitBtn.disabled = true;
-            formMessage.textContent = 'Submitting...';
-            
-            fetch(waitlistForm.action, {
-                method: 'POST',
-                body: new FormData(waitlistForm),
-                headers: {
-                    'Accept': 'application/json'
-                }
-            })
-            .then(response => {
-                if (response.ok) {
-                    formMessage.textContent = 'Thank you for joining our waitlist! We\'ll be in touch soon.';
-                    formMessage.className = 'form-message success';
-                    waitlistForm.reset();
-                } else {
-                    throw new Error('Submission failed');
-                }
-            })
-            .catch(error => {
-                formMessage.textContent = 'Sorry, there was an error. Please try again.';
-                formMessage.className = 'form-message error';
-            })
-            .finally(() => {
-                submitBtn.disabled = false;
-            });
-        });
-    }
 });

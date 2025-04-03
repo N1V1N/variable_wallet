@@ -1393,7 +1393,7 @@ footer .container:last-child p {
 
     /* Animation for fade-in/fade-out */
     .fade-in-out {
-        animation: fadeInOut 1s ease forwards;
+        animation: fadeInOut 9s ease forwards;
     }
 
     @keyframes fadeInOut {
