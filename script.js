@@ -47,7 +47,13 @@ document.addEventListener('DOMContentLoaded', () => {
                 imagePaths.push(path);
                 i++;
             } else {
-                break;
+                // If we didn't find the current image, check if we have at least one image
+                if (imagePaths.length > 0) {
+                    break; // We found some images, stop looking
+                } else {
+                    // If no images found yet, try the next number
+                    i++;
+                }
             }
         }
         
@@ -97,12 +103,38 @@ document.addEventListener('DOMContentLoaded', () => {
                     img.src = this.src;
                     heroImage.style.opacity = '1';
                     heroImage.classList.add('subtle-bounce-animation');
+                    
+                    // Start loading all other images sequentially
+                    const remainingImages = [...imagePaths];
+                    remainingImages.splice(currentImageIndex, 1); // Remove the initial image
+                    
+                    // Load remaining images sequentially
+                    const loadSequentially = async (paths) => {
+                        for (const path of paths) {
+                            const img = new Image();
+                            img.onload = () => {
+                                console.log('Sequentially loaded: ' + path);
+                            };
+                            img.onerror = () => {
+                                console.error('Failed to load sequentially: ' + path);
+                                const index = imagePaths.indexOf(path);
+                                if (index > -1) {
+                                    imagePaths.splice(index, 1);
+                                }
+                            };
+                            img.src = path + '?t=' + Date.now();
+                        }
+                    };
+                    
+                    loadSequentially(remainingImages);
                 };
                 selectedImage.onerror = function() {
                     console.error('Failed to load initial image');
                     // If only one image, just use it without trying next
                     if (imagePaths.length === 1) {
                         img.src = imagePaths[0] + '?t=' + Date.now();
+                        heroImage.style.opacity = '1';
+                        heroImage.classList.add('subtle-bounce-animation');
                     } else {
                         // Try the next image if multiple images
                         const nextIndex = (currentImageIndex + 1) % imagePaths.length;
