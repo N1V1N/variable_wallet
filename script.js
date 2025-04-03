@@ -127,6 +127,33 @@ document.addEventListener('DOMContentLoaded', () => {
                     };
                     
                     loadSequentially(remainingImages);
+                    
+                    // Show navigation arrows after image loads
+                    const navLeft = heroImage.querySelector('.nav-left');
+                    const navRight = heroImage.querySelector('.nav-right');
+                    
+                    // Disable navigation if only one image
+                    if (imagePaths.length === 1) {
+                        navLeft.style.display = 'none';
+                        navRight.style.display = 'none';
+                    } else {
+                        navLeft.style.opacity = '0';
+                        navRight.style.opacity = '0';
+                        navLeft.style.transition = 'opacity 0.3s ease-in-out';
+                        navRight.style.transition = 'opacity 0.3s ease-in-out';
+                        
+                        // Fade in arrows after a short delay
+                        setTimeout(() => {
+                            navLeft.style.opacity = '1';
+                            navRight.style.opacity = '1';
+                            
+                            // Add fade-in-out animation for mobile
+                            if (window.innerWidth <= 768) {
+                                navLeft.classList.add('fade-in-out');
+                                navRight.classList.add('fade-in-out');
+                            }
+                        }, 300); // Delay to ensure smooth transition
+                    }
                 };
                 selectedImage.onerror = function() {
                     console.error('Failed to load initial image');
@@ -152,12 +179,6 @@ document.addEventListener('DOMContentLoaded', () => {
             // Get navigation elements
             const navLeft = heroImage.querySelector('.nav-left');
             const navRight = heroImage.querySelector('.nav-right');
-            
-            // Disable navigation if only one image
-            if (imagePaths.length === 1) {
-                navLeft.style.display = 'none';
-                navRight.style.display = 'none';
-            }
             
             // Pause animation when scrolling away from the hero section and resume when scrolling back
             const observer = new IntersectionObserver((entries) => {
