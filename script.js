@@ -104,7 +104,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     heroImage.style.opacity = '1';
                     heroImage.classList.add('subtle-bounce-animation');
                     
-                    // Start loading all other images sequentially
+                    // Start loading all other images sequentially in the background
                     const remainingImages = [...imagePaths];
                     remainingImages.splice(currentImageIndex, 1); // Remove the initial image
                     
