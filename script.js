@@ -266,6 +266,20 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     });
 
+    // Add fade-in/fade-out animation for mobile arrows
+    if (window.innerWidth <= 768) {
+        const navLeft = document.querySelector('.nav-left');
+        const navRight = document.querySelector('.nav-right');
+        
+        if (navLeft && navRight) {
+            // Add fade-in animation class after a short delay
+            setTimeout(() => {
+                navLeft.classList.add('fade-in-out');
+                navRight.classList.add('fade-in-out');
+            }, 500); // 500ms delay for a subtle effect
+        }
+    }
+
     // Mobile Navigation Toggle
     const navToggle = document.querySelector('.nav-toggle');
     const navMenu = document.querySelector('.nav-menu');

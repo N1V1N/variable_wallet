@@ -1359,3 +1359,46 @@ footer .container:last-child p {
         white-space: nowrap;
     }
 }
+
+/* Slideshow Navigation - Mobile Only */
+@media (max-width: 768px) {
+    .nav-left, .nav-right {
+        position: absolute;
+        top: 50%;
+        transform: translateY(-50%);
+        width: 0;
+        height: 0;
+        border: 12px solid transparent;
+        background: transparent;
+        cursor: pointer;
+        z-index: 10;
+        opacity: 0;
+        transition: opacity 0.3s ease;
+    }
+
+    .nav-left {
+        left: 20px;
+        border-right: 24px solid white;
+    }
+
+    .nav-right {
+        right: 20px;
+        border-left: 24px solid white;
+    }
+
+    /* Hover effect - scale the triangle slightly */
+    .nav-left:hover, .nav-right:hover {
+        transform: translateY(-50%) scale(1.1);
+    }
+
+    /* Animation for fade-in/fade-out */
+    .fade-in-out {
+        animation: fadeInOut 1s ease forwards;
+    }
+
+    @keyframes fadeInOut {
+        0% { opacity: 0; }
+        50% { opacity: 1; }
+        100% { opacity: 0; }
+    }
+}
