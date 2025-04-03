@@ -142,6 +142,11 @@ document.addEventListener('DOMContentLoaded', () => {
                     }
                 };
                 selectedImage.src = imagePaths[currentImageIndex] + '?t=' + Date.now();
+                
+                // Show the initial image immediately
+                img.src = imagePaths[currentImageIndex] + '?t=' + Date.now();
+                heroImage.style.opacity = '1';
+                heroImage.classList.add('subtle-bounce-animation');
             }
             
             // Get navigation elements
