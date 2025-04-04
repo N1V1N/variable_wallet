@@ -266,7 +266,7 @@ main {
         border-left: 2px solid rgba(255, 255, 255, 0.5);
         transform: translateY(-50%);
         opacity: 0;
-        transition: opacity 0.3s ease;
+        transition: opacity .3s ease;
     }
     
     .nav-left:hover::before, .nav-right:hover::after {
@@ -1393,7 +1393,7 @@ footer .container:last-child p {
 
     /* Animation for fade-in/fade-out */
     .fade-in-out {
-        animation: fadeInOut 9s ease forwards;
+        animation: fadeInOut 5s ease forwards;
     }
 
     @keyframes fadeInOut {
