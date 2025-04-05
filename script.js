@@ -17,6 +17,20 @@ document.addEventListener('DOMContentLoaded', () => {
         history.replaceState(null, document.title, window.location.pathname + window.location.search);
     }
 
+    // Initialize simple triangle indicators when the page is fully loaded
+    window.addEventListener('load', () => {
+        const leftIndicator = document.getElementById('left-indicator');
+        const rightIndicator = document.getElementById('right-indicator');
+        
+        if (leftIndicator && rightIndicator) {
+            // Add the fade animation class after a short delay
+            setTimeout(() => {
+                leftIndicator.classList.add('indicator-fade');
+                rightIndicator.classList.add('indicator-fade');
+            }, 300);
+        }
+    });
+
     // Image paths - Automatically finds all numbered PNG files in the images folder
     const imagePaths = [];
     
@@ -49,6 +63,13 @@ document.addEventListener('DOMContentLoaded', () => {
             } else {
                 // If we didn't find the current image, check if we have at least one image
                 if (imagePaths.length > 0) {
+                    // Sort paths numerically to ensure proper order
+                    imagePaths.sort((a, b) => {
+                        const numA = parseInt(a.match(/\d+/)[0]);
+                        const numB = parseInt(b.match(/\d+/)[0]);
+                        return numA - numB;
+                    });
+                    
                     break; // We found some images, stop looking
                 } else {
                     // If no images found yet, try the next number
@@ -57,21 +78,10 @@ document.addEventListener('DOMContentLoaded', () => {
             }
         }
         
-        // Preload each image and store the Image object
+        // Preload all images for instant response
         for (const path of imagePaths) {
             const img = new Image();
-            img.onload = function() { 
-                console.log('Preloaded: ' + path);
-            };
-            img.onerror = function() { 
-                console.error('Failed to preload: ' + path);
-                // Remove failed image from array
-                const index = imagePaths.indexOf(path);
-                if (index > -1) {
-                    imagePaths.splice(index, 1);
-                }
-            };
-            img.src = path + '?t=' + Date.now();
+            img.src = path;
             preloadedImages.push(img);
         }
         
@@ -86,94 +96,133 @@ document.addEventListener('DOMContentLoaded', () => {
         // Initialize the slideshow
         const heroImage = document.getElementById('hero-image');
         if (heroImage) {
-            const img = heroImage.querySelector('img');
+            const img = heroImage.querySelector('.product-image');
             
-            // Get a random image index from all available images
+            // Select a random image from all available images
             const randomIndex = Math.floor(Math.random() * imagePaths.length);
             let currentImageIndex = randomIndex;
+            let isUpdating = false;
             
-            // Hide the hero image container until the image is loaded
-            heroImage.style.opacity = '0';
-            heroImage.style.transition = 'opacity 0.3s ease-in-out';
-            
-            if (img) {
-                // Create a new image object for preloading
-                const selectedImage = new Image();
-                selectedImage.onload = function() {
-                    img.src = this.src;
-                    heroImage.style.opacity = '1';
-                    heroImage.classList.add('subtle-bounce-animation');
-                    
-                    // Start loading all other images sequentially in the background
-                    const remainingImages = [...imagePaths];
-                    remainingImages.splice(currentImageIndex, 1); // Remove the initial image
-                    
-                    // Load remaining images sequentially
-                    const loadSequentially = async (paths) => {
-                        for (const path of paths) {
-                            const img = new Image();
-                            img.onload = () => {
-                                console.log('Sequentially loaded: ' + path);
-                            };
-                            img.onerror = () => {
-                                console.error('Failed to load sequentially: ' + path);
-                                const index = imagePaths.indexOf(path);
-                                if (index > -1) {
-                                    imagePaths.splice(index, 1);
-                                }
-                            };
-                            img.src = path + '?t=' + Date.now();
-                        }
-                    };
-                    
-                    loadSequentially(remainingImages);
-                    
-                    // Show navigation arrows after image loads
-                    const navLeft = heroImage.querySelector('.nav-left');
-                    const navRight = heroImage.querySelector('.nav-right');
-                    
-                    // Disable navigation if only one image
-                    if (imagePaths.length === 1) {
-                        navLeft.style.display = 'none';
-                        navRight.style.display = 'none';
-                    } else {
-                        navLeft.style.opacity = '0';
-                        navRight.style.opacity = '0';
-                        navLeft.style.transition = 'opacity 0.3s ease-in-out';
-                        navRight.style.transition = 'opacity 0.3s ease-in-out';
-                        
-                        // Fade in arrows after a short delay
-                        setTimeout(() => {
-                            navLeft.style.opacity = '1';
-                            navRight.style.opacity = '1';
-                            
-                            // Add fade-in-out animation for mobile
-                            if (window.innerWidth <= 768) {
-                                navLeft.classList.add('fade-in-out');
-                                navRight.classList.add('fade-in-out');
-                            }
-                        }, 300); // Delay to ensure smooth transition
-                    }
-                };
-                selectedImage.onerror = function() {
-                    console.error('Failed to load initial image');
-                    // If only one image, just use it without trying next
-                    if (imagePaths.length === 1) {
-                        img.src = imagePaths[0] + '?t=' + Date.now();
-                        heroImage.style.opacity = '1';
-                        heroImage.classList.add('subtle-bounce-animation');
-                    } else {
-                        // Try the next image if multiple images
-                        const nextIndex = (currentImageIndex + 1) % imagePaths.length;
-                        selectedImage.src = imagePaths[nextIndex] + '?t=' + Date.now();
-                    }
-                };
-                selectedImage.src = imagePaths[currentImageIndex] + '?t=' + Date.now();
+            // Show the initial image
+            if (img && imagePaths.length > 0) {
+                img.src = imagePaths[currentImageIndex];
                 
-                // Show the initial image immediately
-                img.src = imagePaths[currentImageIndex] + '?t=' + Date.now();
-                heroImage.style.opacity = '1';
+                // Show navigation arrows after image loads
+                const navLeft = heroImage.querySelector('.nav-left');
+                const navRight = heroImage.querySelector('.nav-right');
+                
+                // Disable navigation if only one image
+                if (imagePaths.length === 1) {
+                    navLeft.style.display = 'none';
+                    navRight.style.display = 'none';
+                }
+                
+                // Add subtle bounce animation to the hero image
                 heroImage.classList.add('subtle-bounce-animation');
+            }
+            
+            // Simple function to go to previous image
+            const goToPrevious = () => {
+                if (isUpdating || imagePaths.length <= 1) return;
+                isUpdating = true;
+                
+                const newIndex = currentImageIndex > 0 ? currentImageIndex - 1 : imagePaths.length - 1;
+                updateImage(newIndex);
+            };
+            
+            // Simple function to go to next image
+            const goToNext = () => {
+                if (isUpdating || imagePaths.length <= 1) return;
+                isUpdating = true;
+                
+                const newIndex = currentImageIndex < imagePaths.length - 1 ? currentImageIndex + 1 : 0;
+                updateImage(newIndex);
+            };
+            
+            // Function to update image
+            const updateImage = (newIndex) => {
+                currentImageIndex = newIndex;
+                
+                // Create a new image object to preload
+                const nextImage = new Image();
+                nextImage.onload = function() {
+                    // Update the image source only after successful preload
+                    img.src = this.src;
+                    
+                    // Reset the updating flag after a short delay
+                    setTimeout(() => {
+                        isUpdating = false;
+                    }, 300);
+                };
+                
+                nextImage.onerror = function() {
+                    console.error('Failed to load image at index ' + newIndex);
+                    isUpdating = false;
+                };
+                
+                // Start loading the new image
+                nextImage.src = imagePaths[currentImageIndex];
+            };
+            
+            // Handle clicks on the hero image
+            heroImage.addEventListener('click', function(event) {
+                // Get click position
+                const rect = heroImage.getBoundingClientRect();
+                const clickX = event.clientX - rect.left;
+                const isLeftSide = clickX < rect.width / 2;
+                
+                // Navigate based on which side was clicked
+                if (isLeftSide) {
+                    goToPrevious();
+                } else {
+                    goToNext();
+                }
+            });
+            
+            // Handle touch events for mobile
+            if (window.innerWidth <= 768) {
+                let touchStartX = 0;
+                let touchEndX = 0;
+                let touchStartTime = 0;
+                
+                heroImage.addEventListener('touchstart', function(event) {
+                    touchStartX = event.touches[0].clientX;
+                    touchStartTime = new Date().getTime();
+                }, { passive: true });
+                
+                heroImage.addEventListener('touchend', function(event) {
+                    touchEndX = event.changedTouches[0].clientX;
+                    const touchEndTime = new Date().getTime();
+                    const touchDuration = touchEndTime - touchStartTime;
+                    
+                    // Determine if it was a swipe or a tap
+                    const touchDistance = touchEndX - touchStartX;
+                    
+                    // If it's a quick touch with minimal movement, treat as a tap
+                    if (touchDuration < 300 && Math.abs(touchDistance) < 30) {
+                        // Get tap position
+                        const rect = heroImage.getBoundingClientRect();
+                        const tapX = event.changedTouches[0].clientX - rect.left;
+                        const isLeftSide = tapX < rect.width / 2;
+                        
+                        // Navigate based on which side was tapped
+                        if (isLeftSide) {
+                            goToPrevious();
+                        } else {
+                            goToNext();
+                        }
+                    } 
+                    // If it's a swipe, navigate based on swipe direction
+                    else if (Math.abs(touchDistance) > 50) {
+                        if (touchDistance > 0) {
+                            // Swipe right - go to previous
+                            goToPrevious();
+                        } else {
+                            // Swipe left - go to next
+                            goToNext();
+                        }
+                    }
+                }, { passive: true });
             }
             
             // Get navigation elements
@@ -198,184 +247,6 @@ document.addEventListener('DOMContentLoaded', () => {
             
             // Start observing the hero image
             observer.observe(heroImage);
-            
-            // Track if an image update is in progress
-            let isUpdating = false;
-            
-            // Function to update image with improved reliability
-            const updateImage = (newIndex) => {
-                // Prevent multiple rapid clicks from causing issues
-                if (isUpdating) return;
-                
-                isUpdating = true;
-                currentImageIndex = newIndex;
-                
-                // Create a new image object to preload the next image
-                const nextImage = new Image();
-                nextImage.onload = function() {
-                    // Update the image source only after successful preload
-                    img.src = this.src;
-                    
-                    // Reset the updating flag after a short delay to prevent double triggers
-                    setTimeout(() => {
-                        isUpdating = false;
-                    }, 300); // Add a small delay to prevent multiple rapid updates
-                };
-                
-                nextImage.onerror = function() {
-                    console.error('Failed to load image at index ' + newIndex);
-                    // If loading fails, just keep the current image
-                    isUpdating = false;
-                };
-                
-                // Start loading the new image
-                nextImage.src = imagePaths[currentImageIndex] + '?t=' + Date.now();
-            };
-            
-            // Handle left navigation click - go to previous image
-            navLeft.addEventListener('click', function(event) {
-                event.stopPropagation();
-                if (imagePaths.length > 1) {
-                    const newIndex = (currentImageIndex - 1 + imagePaths.length) % imagePaths.length;
-                    updateImage(newIndex);
-                }
-            });
-            
-            // Handle right navigation click - go to next image
-            navRight.addEventListener('click', function(event) {
-                event.stopPropagation();
-                if (imagePaths.length > 1) {
-                    const newIndex = (currentImageIndex + 1) % imagePaths.length;
-                    updateImage(newIndex);
-                }
-            });
-            
-            // Add better touch handling that doesn't block scrolling
-            let touchStartX = 0;
-            let touchStartY = 0;
-            let touchMoved = false;
-            
-            // Add touch events to the navigation elements
-            navLeft.addEventListener('touchstart', function(event) {
-                touchStartX = event.touches[0].clientX;
-                touchStartY = event.touches[0].clientY;
-                touchMoved = false;
-            }, { passive: true });
-            
-            navLeft.addEventListener('touchmove', function() {
-                touchMoved = true;
-            }, { passive: true });
-            
-            navLeft.addEventListener('touchend', function(event) {
-                if (!touchMoved) {
-                    if (imagePaths.length > 1) {
-                        const newIndex = (currentImageIndex - 1 + imagePaths.length) % imagePaths.length;
-                        updateImage(newIndex);
-                    }
-                }
-            }, { passive: true });
-            
-            navRight.addEventListener('touchstart', function(event) {
-                touchStartX = event.touches[0].clientX;
-                touchStartY = event.touches[0].clientY;
-                touchMoved = false;
-            }, { passive: true });
-            
-            navRight.addEventListener('touchmove', function() {
-                touchMoved = true;
-            }, { passive: true });
-            
-            navRight.addEventListener('touchend', function(event) {
-                if (!touchMoved) {
-                    if (imagePaths.length > 1) {
-                        const newIndex = (currentImageIndex + 1) % imagePaths.length;
-                        updateImage(newIndex);
-                    }
-                }
-            }, { passive: true });
-            
-            // Keep the original click handler for backward compatibility
-            // but make it secondary to the new navigation
-            heroImage.addEventListener('click', function(event) {
-                // Skip if the click was on a navigation element
-                if (event.target === navLeft || event.target === navRight) {
-                    return;
-                }
-                
-                // Get the click position relative to the image
-                const rect = heroImage.getBoundingClientRect();
-                const clickX = event.clientX - rect.left;
-                const imageWidth = rect.width;
-                
-                // Determine if click was on left or right side
-                const isLeftSide = clickX < imageWidth / 2;
-                
-                let newIndex;
-                if (isLeftSide) {
-                    // Left side click - go to previous image
-                    newIndex = (currentImageIndex - 1 + imagePaths.length) % imagePaths.length;
-                } else {
-                    // Right side click - go to next image
-                    newIndex = (currentImageIndex + 1) % imagePaths.length;
-                }
-                
-                updateImage(newIndex);
-            });
-            
-            // Add swipe gesture detection for mobile
-            if (window.innerWidth <= 768) {
-                let touchStartX = 0;
-                let touchEndX = 0;
-                let isSwiping = false;
-
-                heroImage.addEventListener('touchstart', function(event) {
-                    touchStartX = event.touches[0].clientX;
-                    isSwiping = true;
-                }, { passive: true });
-
-                heroImage.addEventListener('touchmove', function(event) {
-                    if (isSwiping) {
-                        touchEndX = event.touches[0].clientX;
-                    }
-                }, { passive: true });
-
-                heroImage.addEventListener('touchend', function(event) {
-                    if (isSwiping && imagePaths.length > 1) {
-                        const swipeThreshold = 50; // Minimum distance to be considered a swipe
-                        const swipeDistance = touchEndX - touchStartX;
-
-                        if (Math.abs(swipeDistance) > swipeThreshold) {
-                            // Prevent click event if it was a swipe
-                            event.preventDefault();
-                            
-                            if (swipeDistance > 0) {
-                                // Swipe right - go to previous image
-                                const newIndex = (currentImageIndex - 1 + imagePaths.length) % imagePaths.length;
-                                updateImage(newIndex);
-                            } else {
-                                // Swipe left - go to next image
-                                const newIndex = (currentImageIndex + 1) % imagePaths.length;
-                                updateImage(newIndex);
-                            }
-                        }
-                    }
-                    isSwiping = false;
-                }, { passive: false });
-            }
-            
-            // Add fade-in/fade-out animation for mobile arrows
-            if (window.innerWidth <= 768) {
-                const navLeft = document.querySelector('.nav-left');
-                const navRight = document.querySelector('.nav-right');
-                
-                if (navLeft && navRight) {
-                    // Add fade-in animation class after a short delay
-                    setTimeout(() => {
-                        navLeft.classList.add('fade-in-out');
-                        navRight.classList.add('fade-in-out');
-                    }, 500); // 500ms delay for a subtle effect
-                }
-            }
 
             // Mobile Navigation Toggle
             const navToggle = document.querySelector('.nav-toggle');

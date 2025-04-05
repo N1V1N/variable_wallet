@@ -228,13 +228,11 @@ main {
     position: absolute;
     top: 0;
     left: 0;
-    width: 100vw; /* Full viewport width */
+    width: 100%;
     height: 100%;
     display: flex;
     pointer-events: none; /* This allows clicks to pass through to the image by default */
     z-index: 2;
-    left: 50%;
-    transform: translateX(-50%); /* Center the navigation */
 }
 
 .nav-left, .nav-right {
@@ -1270,6 +1268,82 @@ footer .container:last-child p {
     box-shadow: 0 2px 8px rgba(192, 192, 192, 0.2);
 }
 
+/* Mobile-specific navigation */
+@media (max-width: 768px) {
+    .image-navigation {
+        width: 100%; /* Match hero image width */
+        left: 0;
+        transform: none;
+    }
+}
+
+/* Slideshow Navigation - Mobile Only */
+@media (max-width: 768px) {
+    /* Keep the navigation areas for click functionality */
+    .nav-left, .nav-right {
+        position: absolute;
+        top: 0;
+        height: 100%;
+        width: 50%;
+        background: transparent;
+        cursor: pointer;
+        opacity: 0;
+    }
+    
+    .nav-left {
+        left: 0;
+    }
+    
+    .nav-right {
+        right: 0;
+    }
+}
+
+/* Desktop-specific navigation that spans full width */
+@media (min-width: 769px) {
+    .image-navigation {
+        width: 100vw; /* Full viewport width */
+        left: 50%;
+        transform: translateX(-50%); /* Center the navigation */
+    }
+}
+
+/* Simple triangle indicators */
+#left-indicator,
+#right-indicator {
+    position: fixed; /* Fixed position relative to viewport */
+    top: calc(50% + 69px); /* 69 pixels lower than center */
+    transform: translateY(-50%);
+    width: 0;
+    height: 0;
+    border: 12px solid transparent;
+    z-index: 9999;
+    opacity: 0;
+    pointer-events: none; /* Non-interactive */
+}
+
+#left-indicator {
+    left: 0; /* Left edge of screen */
+    border-right: 24px solid white;
+}
+
+#right-indicator {
+    right: 0; /* Right edge of screen */
+    border-left: 24px solid white;
+}
+
+/* Fade in and out animation */
+@keyframes simpleIndicatorFade {
+    0% { opacity: 0; }
+    15% { opacity: 0.33; } /* Max opacity 33% */
+    70% { opacity: 0.33; } /* Hold at 33% */
+    100% { opacity: 0; }
+}
+
+.indicator-fade {
+    animation: simpleIndicatorFade 6s ease-in-out forwards !important;
+}
+
 /* ... rest of the code remains the same ... */
 
 @media (max-width: 550px) {
@@ -1360,45 +1434,33 @@ footer .container:last-child p {
     }
 }
 
+/* Mobile-specific navigation */
+@media (max-width: 768px) {
+    .image-navigation {
+        width: 100%; /* Match hero image width */
+        left: 0;
+        transform: none;
+    }
+}
+
 /* Slideshow Navigation - Mobile Only */
 @media (max-width: 768px) {
+    /* Keep the navigation areas for click functionality */
     .nav-left, .nav-right {
         position: absolute;
-        top: 50%;
-        transform: translateY(-50%);
-        width: 0;
-        height: 0;
-        border: 12px solid transparent;
+        top: 0;
+        height: 100%;
+        width: 50%;
         background: transparent;
         cursor: pointer;
-        z-index: 10;
         opacity: 0;
-        transition: opacity 0.3s ease;
     }
-
+    
     .nav-left {
-        left: 20px;
-        border-right: 24px solid white;
+        left: 0;
     }
-
+    
     .nav-right {
-        right: 20px;
-        border-left: 24px solid white;
-    }
-
-    /* Hover effect - scale the triangle slightly */
-    .nav-left:hover, .nav-right:hover {
-        transform: translateY(-50%) scale(1.1);
-    }
-
-    /* Animation for fade-in/fade-out */
-    .fade-in-out {
-        animation: fadeInOut 5s ease forwards;
-    }
-
-    @keyframes fadeInOut {
-        0% { opacity: 0; }
-        50% { opacity: 1; }
-        100% { opacity: 0; }
+        right: 0;
     }
 }
