@@ -1,0 +1,8 @@
+[build]
+  publish = "/"
+
+# Redirect all URLs to index.html
+[[redirects]]
+  from = "/*"
+  to = "/index.html"
+  status = 200
