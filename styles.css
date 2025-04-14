@@ -94,16 +94,17 @@ body {
 }
 
 .est-year {
+    position: absolute;
+    left: 50%;
+    transform: translateX(calc(-50% - 33px));
+    top: 100%;
+    margin-top: -0.7em;
+    width: 164px;
+    white-space: nowrap;
     font-size: 0.75em;
     opacity: 0.5;
     text-align: center;
     letter-spacing: 2px;
-    /* Float in space relative to the Variable Wallet text */
-    position: absolute;
-    width: 100%;
-    left: 0;
-    top: 100%; /* Position it right below the Variable Wallet text */
-    margin-top: -0.7em; /* Further reduced to move it even closer to Variable Wallet text */
 }
 
 .nav-menu {
