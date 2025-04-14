@@ -105,6 +105,7 @@ document.addEventListener('DOMContentLoaded', () => {
             
             // Show the initial image
             if (img && imagePaths.length > 0) {
+                // Set the source to the first slideshow image
                 img.src = imagePaths[currentImageIndex];
                 
                 // Show navigation arrows after image loads
@@ -123,8 +124,7 @@ document.addEventListener('DOMContentLoaded', () => {
             
             // Simple function to go to previous image
             const goToPrevious = () => {
-                if (isUpdating || imagePaths.length <= 1) return;
-                isUpdating = true;
+                if (imagePaths.length <= 1) return;
                 
                 const newIndex = currentImageIndex > 0 ? currentImageIndex - 1 : imagePaths.length - 1;
                 updateImage(newIndex);
@@ -132,8 +132,7 @@ document.addEventListener('DOMContentLoaded', () => {
             
             // Simple function to go to next image
             const goToNext = () => {
-                if (isUpdating || imagePaths.length <= 1) return;
-                isUpdating = true;
+                if (imagePaths.length <= 1) return;
                 
                 const newIndex = currentImageIndex < imagePaths.length - 1 ? currentImageIndex + 1 : 0;
                 updateImage(newIndex);
@@ -141,27 +140,19 @@ document.addEventListener('DOMContentLoaded', () => {
             
             // Function to update image
             const updateImage = (newIndex) => {
+                if (isUpdating) return;
+                isUpdating = true;
+                
+                const img = heroImage.querySelector('.product-image');
+                img.src = imagePaths[newIndex];
+                
+                // Update current index
                 currentImageIndex = newIndex;
                 
-                // Create a new image object to preload
-                const nextImage = new Image();
-                nextImage.onload = function() {
-                    // Update the image source only after successful preload
-                    img.src = this.src;
-                    
-                    // Reset the updating flag after a short delay
-                    setTimeout(() => {
-                        isUpdating = false;
-                    }, 300);
-                };
-                
-                nextImage.onerror = function() {
-                    console.error('Failed to load image at index ' + newIndex);
+                // Reset updating flag after a small delay to prevent rapid clicks
+                setTimeout(() => {
                     isUpdating = false;
-                };
-                
-                // Start loading the new image
-                nextImage.src = imagePaths[currentImageIndex];
+                }, 50);
             };
             
             // Handle clicks on the hero image
