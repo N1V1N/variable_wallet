@@ -89,21 +89,20 @@ body {
     font-size: 1.618em; /* Golden ratio for the first letter */
     font-style: italic; /* Keep it italic like the V in Variable */
     font-weight: bold; /* Add bold styling to the W */
-    opacity: 0.98; /* Increased from 0.35 to 0.55 */
-    margin-right: -0.15em; /* Very slightly reduced space after W */
+    opacity: .98; /* Increased from 0.35 to 0.55 */
+    margin-right: -.12em; /* Very slightly reduced space after W */
 }
 
 .est-year {
     position: absolute;
-    left: 50%;
-    transform: translateX(calc(-50% - 33px));
+    left: 4%;
     top: 100%;
     margin-top: -0.7em;
     width: 164px;
     white-space: nowrap;
     font-size: 0.75em;
     opacity: 0.5;
-    text-align: center;
+    text-align: left;
     letter-spacing: 2px;
 }
 
