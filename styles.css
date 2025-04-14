@@ -79,6 +79,7 @@ body {
 .logo .wallet-text {
     font-size: 0.618em; /* Golden ratio (1/1.618) for "Wallet" text */
     letter-spacing: 1.5px; /* Slightly tighter letter spacing */
+    opacity: 0.55; /* Match the opacity of the W letter */
 }
 
 .w-letter {
@@ -86,6 +87,7 @@ body {
     font-style: italic; /* Keep it italic like the V in Variable */
     font-weight: bold; /* Add bold styling to the W */
     opacity: 0.55; /* Increased from 0.35 to 0.55 */
+    margin-right: -0.15em; /* Very slightly reduced space after W */
 }
 
 .est-year {
@@ -961,7 +963,8 @@ footer {
 /* Add specific styling for the footer wallet text */
 footer .wallet-text {
     font-size: 0.618em; /* Golden ratio (1/1.618) for "Wallet" text in footer */
-    letter-spacing: 1.5px;
+    letter-spacing: 1.5px; /* Slightly tighter letter spacing */
+    opacity: 0.55; /* Match the opacity of the W letter */
 }
 
 /* Animations */
