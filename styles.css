@@ -76,6 +76,18 @@ body {
     top: 0;
 }
 
+.logo .wallet-text {
+    font-size: 0.618em; /* Golden ratio (1/1.618) for "Wallet" text */
+    letter-spacing: 1.5px; /* Slightly tighter letter spacing */
+}
+
+.w-letter {
+    font-size: 1.618em; /* Golden ratio for the first letter */
+    font-style: italic; /* Keep it italic like the V in Variable */
+    font-weight: bold; /* Add bold styling to the W */
+    opacity: 0.55; /* Increased from 0.35 to 0.55 */
+}
+
 .est-year {
     font-size: 0.75em;
     opacity: 0.5;
@@ -208,7 +220,7 @@ main {
 }
 
 .hero-image {
-    max-width: 500px;
+    max-width: 400px; /* Reduced from 500px to make the wallet appear smaller */
     margin: 0.75rem auto 1.5rem;
     text-align: center;
     position: relative;
@@ -296,8 +308,10 @@ main {
 }
 
 .product-image {
-    max-width: 100%;
+    width: 100%;
     height: auto;
+    padding: 10px 0; /* Added padding on top and bottom to make the wallet appear smaller vertically */
+    box-sizing: border-box;
     border-radius: 8px;
     box-shadow: none;
     filter: none;
@@ -891,41 +905,41 @@ footer {
     border-top: 1px solid var(--accent-color);
 }
 
-footer .container {
-    margin-bottom: 0;
+.footer-content {
+    width: 100%;
+    max-width: 300px;
+    margin: 0 auto;
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
 }
 
-footer .container p {
+/* Adjust the brand name to match the date width exactly */
+.brand-name {
     margin-bottom: 0.2rem;
-}
-
-footer .container:last-child {
-    margin-top: -0.75rem;
-}
-
-footer .container:last-child p {
-    font-size: 0.75em;
-    opacity: 0.5;
-}
-
-.est-container {
-    margin-top: -1.5rem;
-}
-
-.est-container p {
-    font-size: 0.7rem;
-    letter-spacing: 2px;
-    margin-top: -5px;
+    white-space: nowrap;
+    text-align: center;
+    font-size: 0.8em; /* Further reduce to match date width exactly */
+    transform-origin: center;
+    letter-spacing: -0.5px; /* Tighter letter spacing */
+    display: block;
+    width: 175px; /* Set a fixed width based on the date width */
+    margin-left: auto;
+    margin-right: auto;
 }
 
 .est-date {
-    display: inline-block;
-    letter-spacing: 3px;
-}
-
-.est-triangle {
-    display: inline-block;
-    margin: 0 4px;
+    font-size: 0.75em;
+    opacity: 0.5;
+    margin-top: -0.75rem;
+    white-space: nowrap;
+    text-align: center;
+    letter-spacing: 1px; /* Maintain consistent letter spacing */
+    display: block;
+    width: 175px; /* Set the same fixed width as the brand name */
+    margin-left: auto;
+    margin-right: auto;
 }
 
 /* Contact Info */
@@ -942,6 +956,12 @@ footer .container:last-child p {
 
 .contact-info a:hover {
     text-shadow: var(--glow);
+}
+
+/* Add specific styling for the footer wallet text */
+footer .wallet-text {
+    font-size: 0.618em; /* Golden ratio (1/1.618) for "Wallet" text in footer */
+    letter-spacing: 1.5px;
 }
 
 /* Animations */
