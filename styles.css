@@ -89,7 +89,7 @@ body {
     font-size: 1.618em; /* Golden ratio for the first letter */
     font-style: italic; /* Keep it italic like the V in Variable */
     font-weight: bold; /* Add bold styling to the W */
-    opacity: 0.55; /* Increased from 0.35 to 0.55 */
+    opacity: 0.98; /* Increased from 0.35 to 0.55 */
     margin-right: -0.15em; /* Very slightly reduced space after W */
 }
 
@@ -1492,5 +1492,5 @@ footer .wallet-text {
 }
 
 .allet-text {
-    opacity: 0.5; /* Increased opacity for better readability */
+    opacity: 0.98; /* Increased opacity for better readability */
 }
