@@ -79,7 +79,10 @@ body {
 .logo .wallet-text {
     font-size: 0.618em; /* Golden ratio (1/1.618) for "Wallet" text */
     letter-spacing: 1.5px; /* Slightly tighter letter spacing */
-    opacity: 0.55; /* Match the opacity of the W letter */
+}
+
+.wallet-text {
+    opacity: 0.55; /* Base opacity for wallet text */
 }
 
 .w-letter {
@@ -964,7 +967,7 @@ footer {
 footer .wallet-text {
     font-size: 0.618em; /* Golden ratio (1/1.618) for "Wallet" text in footer */
     letter-spacing: 1.5px; /* Slightly tighter letter spacing */
-    opacity: 0.55; /* Match the opacity of the W letter */
+    opacity: 0.55; /* Base opacity for wallet text */
 }
 
 /* Animations */
@@ -1486,4 +1489,8 @@ footer .wallet-text {
     .nav-right {
         right: 0;
     }
+}
+
+.allet-text {
+    opacity: 0.5; /* Increased opacity for better readability */
 }
