@@ -646,7 +646,7 @@ section {
 .pulse-effect {
     display: block;
     margin-top: 1.8rem; /* Reduced from 1rem to 0.5rem */
-    font-size: 1.2rem;
+    font-size: .9rem;
     text-transform: uppercase;
     letter-spacing: 1px;
     text-decoration: none;
