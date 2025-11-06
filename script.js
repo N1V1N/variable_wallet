@@ -419,7 +419,7 @@ document.addEventListener('DOMContentLoaded', () => {
             // Reset finish selection to unselected state
             if (finishes.length > 0) {
                 selectedFinish = null; // No selection until user clicks
-                finishSelected.textContent = 'Finish';
+                finishSelected.textContent = 'Select Color';
                 finishSelected.classList.add('unselected');
             }
             
