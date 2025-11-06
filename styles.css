@@ -2001,7 +2001,6 @@ footer .wallet-text {
         display: block !important;
         background: var(--light-bg) !important;
         border: 1px solid var(--accent-color) !important;
-        border-radius: 8px;
         position: relative;
         -webkit-transform: translateZ(0);
         transform: translateZ(0);
