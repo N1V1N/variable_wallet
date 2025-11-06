@@ -75,7 +75,7 @@
                 <li><a href="#" id="homeLink">Home</a></li>
                 <li><a href="#materials">Materials</a></li>
                 <li><a href="#process">Process</a></li>
-                <li><a href="#waitlist">Waitlist</a></li>
+                <li><a href="#create-your-own">Buy Now!</a></li>
                 <li><a href="#contact">Contact</a></li>
                 <li><a href="https://hdmplaques.com" target="_blank" rel="noopener">HD&M</a></li>
             </ul>
@@ -110,11 +110,11 @@
             <div class="container">
                 <h2>Materials</h2>
                 <div class="materials-grid">
-                    <div class="material-card active">
+                    <div class="material-card active" onclick="document.getElementById('create-your-own').scrollIntoView({behavior: 'smooth'})">
                         <div class="tier-badge standard">Standard</div>
                         <h3>Aluminum</h3>
                         <p style="opacity: 0.33;">Corrosion resistance, minimal weight</p>
-                        <a href="#waitlist" class="availability pulse-effect">Batch I</a>
+                        <span class="availability pulse-effect">Available Now!</span>
                         <span class="price-note" style="margin-top: -.33rem;">Priced at <strong>$33</strong>/piece</span>
                     </div>
                     <div class="material-card">
@@ -133,15 +133,13 @@
                     </div>
                 </div>
                 <div class="launch-note">
-                    <a href="#waitlist" class="batch-box-link">
+                    <a href="#create-your-own" class="batch-box-link">
                         <div class="batch-box">
-                            <span class="batch-title">Batch I</span>
+                            <span class="batch-title">Available Now!</span>
                             <span class="batch-details">(Aluminum Only)</span>
-                            <span class="batch-details">Join the Waitlist!</span>
                         </div>
                     </a>
                     <p>Future releases will include Titanium and Damascus Steel options</p>
-                    <p class="order-limit">(Maximum of 7 pieces per order in Batch I)</p>
                 </div>
             </div>
         </section>
@@ -169,6 +167,8 @@
             </div>
         </section>
 
+        <!-- Waitlist section (commented for backup) -->
+        <!--
         <section id="waitlist" class="content-section">
             <div class="container">
                 <h2>2025 Waitlist</h2>
@@ -195,6 +195,62 @@
                 <p class="patent-note">Patent Pending</p>
             </div>
         </section>
+        -->
+
+        <section id="create-your-own" class="content-section">
+            <div class="container">
+                <h2>Assemble Your Variable Wallet!</h2>
+                <p class="create-note" style="font-size: 0.88rem; opacity: 0.9; margin-top: 0.1rem;"><i>(Aluminum Only)</i></p>
+                <div class="product-selector">
+                    <div class="selection-section">
+                        <h3>Piece Selection</h3>
+                        <div class="product-options">
+                            <div class="product-selector-card">
+                                <div class="custom-dropdown">
+                                    <div class="dropdown-trigger" id="model-dropdown">
+                                        <span id="model-selected" class="unselected">Select model</span>
+                                    </div>
+                                    <div class="dropdown-options" id="model-options">
+                                        <div class="dropdown-option" data-value="mk1">MK I</div>
+                                        <div class="dropdown-option" data-value="mk2">MK II</div>
+                                    </div>
+                                </div>
+                                <div class="custom-dropdown">
+                                    <div class="dropdown-trigger" id="finish-dropdown">
+                                        <span id="finish-selected" class="unselected">Select Color</span>
+                                    </div>
+                                    <div class="dropdown-options" id="finish-options">
+                                        <!-- MK I finishes (default) -->
+                                        <div class="dropdown-option" data-value="machined">Machined Finish</div>
+                                        <div class="dropdown-option" data-value="red">Red</div>
+                                        <div class="dropdown-option" data-value="gunmetal">Gunmetal</div>
+                                        <div class="dropdown-option" data-value="purple">Purple</div>
+                                        <div class="dropdown-option" data-value="gold">Gold</div>
+                                        <div class="dropdown-option" data-value="teal">Teal</div>
+                                    </div>
+                                </div>
+                                <button type="button" class="add-to-cart-btn" data-product="mk1">Add</button>
+                            </div>
+                        </div>
+                    </div>
+                
+                <div class="cart-section">
+                        <h3>Your New Wallet <span id="cart-counter">(0)</span></h3>
+                        <div class="cart-summary" id="cartSummary">
+                            <ul id="cartItemsList"></ul>
+                            <div class="cart-total">
+                                <span>Total Price: $</span><span id="totalPrice">0</span>
+                            </div>
+                            <div id="paypal-button-container"></div>
+                            <div class="startup-note">
+                                <p>We're a startup working hard to fulfill orders as quickly as possible! Shipping timelines vary, but you'll receive an email when your pieces are ready to ship. Questions? Email us anytime at <a href="mailto:variablewallet@gmail.com" style="color: #c0c0c0; text-decoration: underline;">variablewallet@gmail.com</a></p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <p class="patent-note">Patent Pending</p>
+            </div>
+        </section>
 
         <section id="contact" class="content-section" style="padding-bottom: 0;">
             <div class="container">
@@ -202,8 +258,8 @@
                 <div class="contact-info" style="margin-bottom: 0;">
                     <p>Email: <a href="mailto:variablewallet@gmail.com">variablewallet@gmail.com</a></p>
                     <div style="margin: -.22rem 0 0 0;">
-                        <p style="opacity: 0.12; font-size: 1.08rem; margin-bottom: -0.22rem;">Veteran Owned and Operated</p>
-                        <p style="opacity: 0.09; font-size: 1rem; margin-bottom: 3.69rem;">Crafted with Love in the USA</p>
+                        <p style="opacity: 0.24; font-size: 1.08rem; margin-bottom: -0.22rem;">Veteran Owned and Operated</p>
+                        <p style="opacity: 0.13; font-size: 1rem; margin-bottom: 3.69rem;">Crafted with Love in the USA</p>
                     </div>
                 </div>
             </div>
@@ -215,6 +271,20 @@
         <p style="font-size: 0.75em; opacity: 0.5; margin-top: -0.75rem; letter-spacing: 1px;">EST&nbsp;&nbsp;12&nbsp;&nbsp;∆&nbsp;&nbsp;31&nbsp;&nbsp;∆&nbsp;&nbsp;2024</p>
     </footer>
 
+    <!-- Thank You Modal -->
+    <div class="thank-you-modal" id="thankYouModal">
+        <div class="thank-you-content">
+            <h2>Thank You!</h2>
+            <p>Thank you for your purchase and support! We truly appreciate you choosing Variable Wallet.</p>
+            <p>You'll receive an email confirmation shortly, and we'll notify you again when your wallet pieces are about to ship.</p>
+            <p>Have any questions? Feel free to reach out to us anytime at <a href="mailto:variablewallet@gmail.com" style="color: #c0c0c0; text-decoration: underline;">variablewallet@gmail.com</a> – we're always happy to help!</p>
+            <p class="order-id">Order ID: <span id="modalOrderId"></span></p>
+            <button class="close-modal-btn" onclick="closeThankYouModal()">Continue Shopping</button>
+        </div>
+    </div>
+
+    <!-- PayPal SDK with Venmo and Apple Pay support - LIVE MODE - USA ONLY -->
+    <script src="https://www.paypal.com/sdk/js?client-id=AW99Gf6rsDoSEY30Wafqh3n8eT9FFB1llaXpBilTuwD-U3CWza79kf2yfXsMGQMSICbsLDaSngi3-YGT&currency=USD&enable-funding=venmo&components=buttons,funding-eligibility"></script>
     <script src="script.js" defer></script>
 </body>
 </html>
