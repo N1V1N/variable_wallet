@@ -660,7 +660,7 @@ document.addEventListener('DOMContentLoaded', () => {
                         });
                         
                         const subtotal = cartItems.reduce((sum, item) => sum + item.price, 0);
-                        const shipping = 0.00; // Free shipping
+                        const shipping = 0.01; // $0.01 to show shipping line in PayPal
                         const tax = 0.00; // Tax calculated after address is provided
                         const totalAmount = subtotal + shipping + tax;
                         
@@ -672,7 +672,7 @@ document.addEventListener('DOMContentLoaded', () => {
                         return actions.order.create({
                             intent: 'CAPTURE', // CRITICAL: Mark as immediate sale/capture, not authorization
                             purchase_units: [{
-                                description: 'Variable Wallet Order - Free Shipping',
+                                description: 'Variable Wallet Order',
                                 reference_id: 'default',
                                 soft_descriptor: 'VARIABLE WALLET', // Shows on customer's card statement
                                 amount: {
@@ -733,7 +733,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     const subtotal = cartItems.reduce((sum, item) => sum + item.price, 0);
                     const taxRate = stateTaxRates[stateCode] || 0; // Default to 0 if state not found
                     const tax = subtotal * taxRate;
-                    const shipping = 0.00; // Free shipping
+                    const shipping = 0.01; // $0.01 to show shipping line in PayPal
                     const total = subtotal + tax + shipping;
                     
                     console.log(`Tax calculation: Subtotal: $${subtotal.toFixed(2)}, Rate: ${(taxRate * 100).toFixed(2)}%, Tax: $${tax.toFixed(2)}, Total: $${total.toFixed(2)}`);
