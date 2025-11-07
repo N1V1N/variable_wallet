@@ -648,9 +648,16 @@ document.addEventListener('DOMContentLoaded', () => {
                             // Convert "Machined" to "Shiny" for display
                             const displayFinish = item.finish === 'Machined' ? 'Shiny' : item.finish;
                             
+                            // Generate unique SKU: MODEL-MATERIAL-COLOR
+                            const modelCode = item.product === 'MK II' ? 'MKII' : 'MKI';
+                            const materialCode = 'AL'; // Currently all Aluminum (will expand to TI, DA later)
+                            const colorCode = displayFinish.toUpperCase().replace(/\s+/g, '');
+                            const sku = `${modelCode}-${materialCode}-${colorCode}`;
+                            
                             return {
                                 name: `${item.product} - ${displayFinish}`,
                                 description: `Variable Wallet ${item.product} in ${displayFinish}`,
+                                sku: sku, // Unique product identifier (e.g., MKI-AL-RED, MKII-AL-GOLD)
                                 unit_amount: {
                                     currency_code: 'USD',
                                     value: item.price.toFixed(2)
@@ -661,7 +668,10 @@ document.addEventListener('DOMContentLoaded', () => {
                         
                         const subtotal = cartItems.reduce((sum, item) => sum + item.price, 0);
                         const shipping = 0.01; // $0.01 to show shipping line in PayPal
-                        const tax = 0.00; // Tax calculated after address is provided
+                        // Default tax estimate (2.9% - CO rate) for Venmo users who skip onShippingChange
+                        // Will be updated to actual state tax if onShippingChange fires
+                        const defaultTaxRate = 0.029; 
+                        const tax = subtotal * defaultTaxRate;
                         const totalAmount = subtotal + shipping + tax;
                         
                         // Validate total
@@ -669,7 +679,7 @@ document.addEventListener('DOMContentLoaded', () => {
                             throw new Error('Invalid order total');
                         }
                         
-                        return actions.order.create({
+                        const orderPayload = {
                             intent: 'CAPTURE', // CRITICAL: Mark as immediate sale/capture, not authorization
                             purchase_units: [{
                                 description: 'Variable Wallet Order',
@@ -695,17 +705,16 @@ document.addEventListener('DOMContentLoaded', () => {
                                 },
                                 items: items,
                                 payee: {
-                                    merchant_id: undefined // Will use your default merchant account
+                                    merchant_id: undefined
                                 }
                             }],
                             application_context: {
                                 brand_name: 'Variable Wallet',
-                                shipping_preference: 'GET_FROM_FILE', // Request shipping address from PayPal
-                                payment_method: {
-                                    payee_preferred: 'IMMEDIATE_PAYMENT_REQUIRED'
-                                }
+                                shipping_preference: 'GET_FROM_FILE' // Request shipping address from PayPal
                             }
-                        });
+                        };
+                        
+                        return actions.order.create(orderPayload);
                     } catch (error) {
                         console.error('Error creating order:', error);
                         alert('Failed to create order: ' + error.message);
