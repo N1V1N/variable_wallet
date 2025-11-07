@@ -672,7 +672,7 @@ document.addEventListener('DOMContentLoaded', () => {
                         return actions.order.create({
                             intent: 'CAPTURE', // CRITICAL: Mark as immediate sale/capture, not authorization
                             purchase_units: [{
-                                description: 'Variable Wallet Order',
+                                description: 'Variable Wallet Order - Free Shipping',
                                 reference_id: 'default',
                                 soft_descriptor: 'VARIABLE WALLET', // Shows on customer's card statement
                                 amount: {
