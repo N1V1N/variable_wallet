@@ -670,8 +670,11 @@ document.addEventListener('DOMContentLoaded', () => {
                         }
                         
                         return actions.order.create({
+                            intent: 'CAPTURE', // CRITICAL: Mark as immediate sale/capture, not authorization
                             purchase_units: [{
                                 description: 'Variable Wallet Order',
+                                reference_id: 'default',
+                                soft_descriptor: 'VARIABLE WALLET', // Shows on customer's card statement
                                 amount: {
                                     currency_code: 'USD',
                                     value: totalAmount.toFixed(2),
@@ -690,10 +693,17 @@ document.addEventListener('DOMContentLoaded', () => {
                                         }
                                     }
                                 },
-                                items: items
+                                items: items,
+                                payee: {
+                                    merchant_id: undefined // Will use your default merchant account
+                                }
                             }],
                             application_context: {
-                                shipping_preference: 'GET_FROM_FILE' // Request shipping address from PayPal
+                                brand_name: 'Variable Wallet',
+                                shipping_preference: 'GET_FROM_FILE', // Request shipping address from PayPal
+                                payment_method: {
+                                    payee_preferred: 'IMMEDIATE_PAYMENT_REQUIRED'
+                                }
                             }
                         });
                     } catch (error) {
