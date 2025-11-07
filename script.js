@@ -811,8 +811,21 @@ document.addEventListener('DOMContentLoaded', () => {
                         // - Send order to your server/database
                         // - Update inventory
                     }).catch(function(error) {
+                        console.error('🚨 CAPTURE FAILED!');
                         console.error('Error capturing order:', error);
-                        alert('Payment could not be processed. Please contact support with Order ID: ' + data.orderID);
+                        console.error('Error name:', error.name);
+                        console.error('Error message:', error.message);
+                        console.error('Error stack:', error.stack);
+                        console.error('Full error object:', JSON.stringify(error, null, 2));
+                        console.error('Order ID that failed:', data.orderID);
+                        
+                        // Show detailed error to user
+                        let errorMsg = 'Payment could not be processed.\n\n';
+                        errorMsg += 'Order ID: ' + data.orderID + '\n';
+                        errorMsg += 'Error: ' + (error.message || error.toString()) + '\n\n';
+                        errorMsg += 'Please check your PayPal account or contact support.';
+                        
+                        alert(errorMsg);
                     });
                 },
                 
