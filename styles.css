@@ -1513,10 +1513,12 @@ footer .wallet-text {
 /* Create Your Own! Section */
 .product-selector {
     display: grid;
-    grid-template-columns: 1fr 1fr;
+    grid-template-columns: repeat(auto-fit, 480px); /* Fixed at 480px - no growing */
     gap: 2rem;
-    max-width: 1000px;
-    margin: 2rem auto;
+    width: 100%;
+    margin-top: 2rem;
+    margin-bottom: 2rem;
+    justify-content: center;
 }
 
 .cart-section, .selection-section {
@@ -1635,14 +1637,17 @@ footer .wallet-text {
     list-style: none !important;
 }
 
-#create-your-own h2,
-#create-your-own h3,
-#create-your-own p,
-#create-your-own span,
-#create-your-own .dropdown-trigger span,
-#create-your-own .dropdown-option,
-#create-your-own .cart-total span {
-    opacity: 0.88 !important;
+/* Section labels - light grey for subtle appearance */
+#create-your-own .selection-section h3,
+#create-your-own .cart-section h3,
+#create-your-own .cart-total .price-label {
+    color: #888888 !important;
+}
+
+/* Price stays bright */
+#create-your-own .cart-total .dollar-sign,
+#create-your-own .cart-total #totalPrice {
+    color: #ffffff !important;
 }
 
 #create-your-own .cart-empty {
@@ -1832,6 +1837,46 @@ footer .wallet-text {
     text-align: center;
 }
 
+/* Material Selection Box (Aluminum, Titanium, etc.) */
+.material-selection-box {
+    background: rgba(0, 0, 0, 0.15);
+    border: 1px solid rgba(192, 192, 192, 0.25);
+    border-radius: 4px;
+    padding: 1.5rem;
+    margin-bottom: 1.5rem;
+}
+
+.material-selection-box:last-child {
+    margin-bottom: 0;
+}
+
+.material-box-header {
+    text-align: center;
+    margin-bottom: 1.5rem;
+    padding-bottom: 1rem;
+    border-bottom: 1px solid rgba(192, 192, 192, 0.15);
+}
+
+.material-box-header h4 {
+    margin: 0.5rem 0 0.5rem 0;
+    font-size: 1.1rem;
+    text-transform: uppercase;
+    letter-spacing: 1.5px;
+}
+
+.material-box-header .material-description {
+    font-size: 0.85rem;
+    opacity: 0.7;
+    margin: 0.5rem 0;
+}
+
+.material-box-header .price-note {
+    display: block;
+    margin-top: 0.5rem;
+    font-size: 0.9rem;
+    opacity: 0.9;
+}
+
 /* NEW CUSTOM DROPDOWN SYSTEM */
 .custom-dropdown {
     position: relative;
@@ -1842,6 +1887,7 @@ footer .wallet-text {
 .dropdown-trigger {
     width: 100%;
     padding: 0.75rem;
+    padding-right: 2.5rem; /* Space for arrow */
     background: rgba(0, 0, 0, 0.3);
     border: 1px solid rgba(192, 192, 192, 0.3);
     color: #fff;
@@ -1852,10 +1898,44 @@ footer .wallet-text {
     cursor: pointer;
     display: block;
     text-align: left;
+    position: relative;
+}
+
+/* Gothic pulsing arrow indicator */
+.dropdown-trigger::after {
+    content: '▼';
+    position: absolute;
+    right: 0.75rem;
+    top: 50%;
+    transform: translateY(-50%);
+    font-size: 0.8rem;
+    color: rgba(192, 192, 192, 0.6);
+    animation: gothic-pulse 2s ease-in-out infinite;
+    transition: transform 0.3s ease;
+}
+
+/* Rotate arrow when dropdown is open */
+.dropdown-trigger.active::after {
+    transform: translateY(-50%) rotate(180deg);
+}
+
+@keyframes gothic-pulse {
+    0%, 100% { 
+        opacity: 0.6;
+        color: rgba(192, 192, 192, 0.6);
+    }
+    50% { 
+        opacity: 0.9;
+        color: rgba(192, 192, 192, 0.9);
+    }
 }
 
 .dropdown-trigger:hover {
     border-color: var(--accent-color);
+}
+
+.dropdown-trigger:hover::after {
+    animation: gothic-pulse 1s ease-in-out infinite; /* Faster pulse on hover */
 }
 
 .dropdown-arrow {
@@ -1992,8 +2072,9 @@ footer .wallet-text {
 /* Mobile layout only */
 @media (max-width: 768px) {
     .product-selector {
-        grid-template-columns: 1fr;
+        grid-template-columns: 1fr !important; /* Force single column on mobile */
         gap: 1rem;
+        padding: 0 1rem;
     }
     
     .cart-section, .selection-section {

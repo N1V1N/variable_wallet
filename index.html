@@ -132,15 +132,7 @@
                         <span class="price-note" style="margin-top: -.33rem;">Estimated: ~<strong>$70</strong>/piece</span>
                     </div>
                 </div>
-                <div class="launch-note">
-                    <a href="#create-your-own" class="batch-box-link">
-                        <div class="batch-box">
-                            <span class="batch-title">Available Now!</span>
-                            <span class="batch-details">(Aluminum Only)</span>
-                        </div>
-                    </a>
-                    <p>Future releases will include Titanium and Damascus Steel options</p>
-                </div>
+                <p style="margin-top: 2rem; opacity: 0.8;">Future releases will include Titanium and Damascus Steel options</p>
             </div>
         </section>
 
@@ -200,50 +192,61 @@
         <section id="create-your-own" class="content-section">
             <div class="container">
                 <h2>Assemble Your Variable Wallet</h2>
-                <p class="create-note" style="font-size: 0.88rem; opacity: 0.9; margin-top: 0.1rem;"><i>(Aluminum Only)</i></p>
                 <div class="product-selector">
+                    <!-- Big container for all materials -->
                     <div class="selection-section">
                         <h3>Piece Selection</h3>
-                        <div class="product-options">
-                            <div class="product-selector-card">
-                                <div class="custom-dropdown">
-                                    <div class="dropdown-trigger" id="model-dropdown">
-                                        <span id="model-selected" class="unselected">Select model</span>
+                        
+                        <!-- Aluminum Material Box -->
+                        <div class="material-selection-box">
+                            <div class="material-box-header">
+                                <h4>Aluminum</h4>
+                                <span class="price-note">Priced at <strong>$33</strong>/piece</span>
+                            </div>
+                            <div class="product-options">
+                                <div class="product-selector-card">
+                                    <div class="custom-dropdown">
+                                        <div class="dropdown-trigger" id="model-dropdown">
+                                            <span id="model-selected" class="unselected">Select model</span>
+                                        </div>
+                                        <div class="dropdown-options" id="model-options">
+                                            <div class="dropdown-option" data-value="mk1">MK I</div>
+                                            <div class="dropdown-option" data-value="mk2">MK II</div>
+                                        </div>
                                     </div>
-                                    <div class="dropdown-options" id="model-options">
-                                        <div class="dropdown-option" data-value="mk1">MK I</div>
-                                        <div class="dropdown-option" data-value="mk2">MK II</div>
+                                    <div class="custom-dropdown">
+                                        <div class="dropdown-trigger" id="finish-dropdown">
+                                            <span id="finish-selected" class="unselected">Select Color</span>
+                                        </div>
+                                        <div class="dropdown-options" id="finish-options">
+                                            <!-- MK I finishes (default) -->
+                                            <div class="dropdown-option" data-value="machined">Machined Finish</div>
+                                            <div class="dropdown-option" data-value="red">Red</div>
+                                            <div class="dropdown-option" data-value="gunmetal">Gunmetal</div>
+                                            <div class="dropdown-option" data-value="purple">Purple</div>
+                                            <div class="dropdown-option" data-value="gold">Gold</div>
+                                            <div class="dropdown-option" data-value="teal">Teal</div>
+                                        </div>
                                     </div>
+                                    <button type="button" class="add-to-cart-btn" data-product="mk1">Add</button>
                                 </div>
-                                <div class="custom-dropdown">
-                                    <div class="dropdown-trigger" id="finish-dropdown">
-                                        <span id="finish-selected" class="unselected">Select Color</span>
-                                    </div>
-                                    <div class="dropdown-options" id="finish-options">
-                                        <!-- MK I finishes (default) -->
-                                        <div class="dropdown-option" data-value="machined">Machined Finish</div>
-                                        <div class="dropdown-option" data-value="red">Red</div>
-                                        <div class="dropdown-option" data-value="gunmetal">Gunmetal</div>
-                                        <div class="dropdown-option" data-value="purple">Purple</div>
-                                        <div class="dropdown-option" data-value="gold">Gold</div>
-                                        <div class="dropdown-option" data-value="teal">Teal</div>
-                                    </div>
-                                </div>
-                                <button type="button" class="add-to-cart-btn" data-product="mk1">Add</button>
                             </div>
                         </div>
+                        
+                        <!-- Future materials (Titanium, Damascus) will be added here as more .material-selection-box elements -->
+                        
                     </div>
-                
-                <div class="cart-section">
-                        <h3>Your New Wallet <span id="cart-counter">(0)</span></h3>
+                    
+                    <div class="cart-section">
+                        <h3>Cart <span id="cart-counter">(0)</span></h3>
                         <div class="cart-summary" id="cartSummary">
                             <ul id="cartItemsList"></ul>
                             <div class="cart-total">
-                                <span>Total Price: $</span><span id="totalPrice">0</span>
+                                <span class="price-label">Total: </span><span class="dollar-sign">$</span><span id="totalPrice">0</span>
                             </div>
                             <div id="paypal-button-container"></div>
                             <div class="startup-note">
-                                <p>We're a startup working hard to fulfill orders as quickly as possible! Shipping timelines vary, but you'll receive an email when your Variable Wallet pieces are ready to ship. Questions? Email me, Luke, anytime at <a href="mailto:variablewallet@gmail.com" style="color: #c0c0c0; text-decoration: underline;">variablewallet@gmail.com</a></p>
+                                <p>We're a startup working to fulfill orders as quickly as possible while maintaining maximum quality and attention to detail. Shipping timelines vary, but rest assured, you'll receive an email when your Variable Wallet pieces are ready to ship! Questions? Email me, Luke, anytime at <a href="mailto:variablewallet@gmail.com" style="color: #c0c0c0; text-decoration: underline;">variablewallet@gmail.com</a></p>
                             </div>
                         </div>
                     </div>
