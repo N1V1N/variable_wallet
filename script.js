@@ -632,13 +632,13 @@ document.addEventListener('DOMContentLoaded', () => {
             
             isRenderingPayPal = true; // Set flag
             
-            // Define the order of funding sources (Venmo first, Apple Pay second!)
+            // Define the order of funding sources
             const fundingSources = [
                 paypal.FUNDING.VENMO,      // 1st - Mobile-friendly
-                paypal.FUNDING.APPLEPAY,   // 2nd - Apple users
-                paypal.FUNDING.PAYPAL,     // 3rd - Traditional
-                paypal.FUNDING.PAYLATER,   // 4th - Buy now, pay later
-                paypal.FUNDING.CARD        // 5th - Credit/Debit cards
+                // paypal.FUNDING.APPLEPAY,   // 2nd - DISABLED: Requires PayPal merchant Apple Pay approval
+                paypal.FUNDING.PAYPAL,     // 2nd - Traditional
+                paypal.FUNDING.PAYLATER,   // 3rd - Buy now, pay later
+                paypal.FUNDING.CARD        // 4th - Credit/Debit cards
             ];
             
             // Render buttons for each funding source in order
