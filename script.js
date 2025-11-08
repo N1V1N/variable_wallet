@@ -463,14 +463,8 @@ document.addEventListener('DOMContentLoaded', () => {
             const product = selectedModel; // Use the selected model from dropdown
             const finish = selectedFinish;
             
-            // VALIDATION: Check if model and finish are selected
-            if (!product) {
-                alert('Please select your wallet model');
-                return;
-            }
-            
-            if (!finish) {
-                alert('Please select a finish color');
+            // VALIDATION: Silently skip if model and finish aren't selected
+            if (!product || !finish) {
                 return;
             }
             
