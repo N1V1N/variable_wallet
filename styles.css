@@ -2108,7 +2108,7 @@ footer .wallet-text {
     .cart-section, .selection-section {
         padding: 1.5rem;
         min-height: 200px;
-        min-width: 320px; /* Prevent dropdowns from wrapping text and arrow overlap */
+        min-width: 360px; /* Wide enough to show full dropdown text without cutoff */
         display: block !important;
         background: var(--light-bg) !important;
         border: 1px solid var(--accent-color) !important;
