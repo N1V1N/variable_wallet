@@ -660,11 +660,19 @@ document.addEventListener('DOMContentLoaded', () => {
                     if (forceRender && !isEligible) {
                         console.log('🔧 Force rendering Venmo on mobile (Chrome iOS compatibility)');
                     }
+                    
+                    // Configure button options based on funding source
+                    const buttonConfig = {
+                        fundingSource: fundingSource
+                    };
+                    
+                    // Only use commit mode for non-Venmo buttons (Venmo needs native flow for app deep linking)
+                    if (fundingSource !== paypal.FUNDING.VENMO) {
+                        buttonConfig.commit = true; // Shows "Pay Now" for faster checkout
+                    }
+                    
                     paypal.Buttons({
-                        fundingSource: fundingSource,
-                        
-                        // Enable commit mode - shows "Pay Now" and deep links to Venmo app on mobile
-                        commit: true,
+                        ...buttonConfig,
                         
                         // Style configuration for buttons
                         style: {
