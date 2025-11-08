@@ -661,7 +661,8 @@ document.addEventListener('DOMContentLoaded', () => {
                         style: {
                             layout: 'vertical',  // Stack buttons vertically
                             color: fundingSource === paypal.FUNDING.PAYPAL ? 'gold' : 
-                                   fundingSource === paypal.FUNDING.CARD ? 'black' : 'blue',
+                                   fundingSource === paypal.FUNDING.CARD ? 'black' :
+                                   fundingSource === paypal.FUNDING.APPLEPAY ? 'black' : 'blue',
                             shape: 'rect',
                             height: 45
                         },
