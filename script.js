@@ -637,8 +637,7 @@ document.addEventListener('DOMContentLoaded', () => {
             
             // Detect actual mobile device (not desktop browser)
             const isMobileDevice = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
-            const isTouchDevice = 'ontouchstart' in window || navigator.maxTouchPoints > 0;
-            const isActuallyMobile = isMobileDevice || (isTouchDevice && window.innerWidth <= 768);
+            const isActuallyMobile = isMobileDevice; // Simplified: just check user agent
             
             // Render buttons for each funding source in order
             fundingSources.forEach(fundingSource => {
@@ -647,10 +646,11 @@ document.addEventListener('DOMContentLoaded', () => {
                 console.log('[PayPal Debug] Funding source:', fundingSource, '| Eligible:', eligible, '| Actually Mobile:', isActuallyMobile, '| Browser:', navigator.userAgent.substring(0, 50));
                 
                 // CRITICAL: Block Venmo on desktop devices
-                if (fundingSource === paypal.FUNDING.VENMO && !isActuallyMobile) {
-                    console.log('[PayPal Debug] ⛔ Blocking Venmo on desktop device');
-                    return; // Skip Venmo on desktop
-                }
+                // TEMPORARILY DISABLED FOR DEBUGGING
+                // if (fundingSource === paypal.FUNDING.VENMO && !isActuallyMobile) {
+                //     console.log('[PayPal Debug] ⛔ Blocking Venmo on desktop device');
+                //     return; // Skip Venmo on desktop
+                // }
                 
                 // Check if this funding source is eligible
                 if (eligible) {
