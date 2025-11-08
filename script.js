@@ -631,22 +631,40 @@ document.addEventListener('DOMContentLoaded', () => {
                 paypal.FUNDING.VENMO,      // 1st - Mobile-friendly
                 paypal.FUNDING.APPLEPAY,   // 2nd - Apple users
                 paypal.FUNDING.PAYPAL,     // 3rd - Traditional
-                paypal.FUNDING.PAYLATER    // 4th - Buy now, pay later
+                paypal.FUNDING.PAYLATER,   // 4th - Buy now, pay later
+                paypal.FUNDING.CARD        // 5th - Credit/Debit cards
             ];
+            
+            // Detect actual mobile device (not desktop browser)
+            const isMobileDevice = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
+            const isTouchDevice = 'ontouchstart' in window || navigator.maxTouchPoints > 0;
+            const isActuallyMobile = isMobileDevice || (isTouchDevice && window.innerWidth <= 768);
             
             // Render buttons for each funding source in order
             fundingSources.forEach(fundingSource => {
+                // Log eligibility per browser/device for diagnostics
+                const eligible = paypal.isFundingEligible(fundingSource);
+                console.log('[PayPal Debug] Funding source:', fundingSource, '| Eligible:', eligible, '| Actually Mobile:', isActuallyMobile, '| Browser:', navigator.userAgent.substring(0, 50));
+                
+                // CRITICAL: Block Venmo on desktop devices
+                if (fundingSource === paypal.FUNDING.VENMO && !isActuallyMobile) {
+                    console.log('[PayPal Debug] ⛔ Blocking Venmo on desktop device');
+                    return; // Skip Venmo on desktop
+                }
+                
                 // Check if this funding source is eligible
-                if (paypal.isFundingEligible(fundingSource)) {
+                if (eligible) {
                     paypal.Buttons({
                         fundingSource: fundingSource,
                         
                         // Style configuration for buttons
                         style: {
                             layout: 'vertical',  // Stack buttons vertically
-                            color: fundingSource === paypal.FUNDING.PAYPAL ? 'gold' : 'blue',
+                            color: fundingSource === paypal.FUNDING.PAYPAL ? 'gold' : 
+                                   fundingSource === paypal.FUNDING.CARD ? 'black' : 'blue',
                             shape: 'rect',
                             height: 45
+                            // tagline not supported with vertical layout - PayPal shows branding automatically
                         },
                 
                 // Handle button click
@@ -886,9 +904,11 @@ document.addEventListener('DOMContentLoaded', () => {
                     }, 100);
                 }
                     }).render('#paypal-button-container').then(function() {
-                        console.log(`${fundingSource} button rendered successfully`);
+                        console.log(`✓ ${fundingSource} button rendered successfully`);
                     }).catch(function(err) {
-                        console.error(`Failed to render ${fundingSource} button:`, err);
+                        // Silently skip funding sources that claim eligibility but fail to render
+                        // This commonly happens with Apple Pay on non-Safari browsers
+                        console.log(`⚠️ Skipped ${fundingSource} button (not truly eligible on this device/browser)`);
                     });
                 }
             });
