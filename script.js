@@ -624,6 +624,11 @@ document.addEventListener('DOMContentLoaded', () => {
             }
             
             console.log('Rendering PayPal button with cart items:', cartItems);
+            
+            // Detect Safari
+            const isSafari = /^((?!chrome|android).)*safari/i.test(navigator.userAgent);
+            console.log('Browser Detection - Safari:', isSafari, 'UA:', navigator.userAgent);
+            
             isRenderingPayPal = true; // Set flag
             
             // Define the order of funding sources (Venmo first, Apple Pay second!)
@@ -638,7 +643,10 @@ document.addEventListener('DOMContentLoaded', () => {
             // Render buttons for each funding source in order
             fundingSources.forEach(fundingSource => {
                 // Check if this funding source is eligible
-                if (paypal.isFundingEligible(fundingSource)) {
+                const isEligible = paypal.isFundingEligible(fundingSource);
+                console.log('Funding Source:', fundingSource, '| Eligible:', isEligible, '| Safari:', isSafari);
+                
+                if (isEligible) {
                     paypal.Buttons({
                         fundingSource: fundingSource,
                         
