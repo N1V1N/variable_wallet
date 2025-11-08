@@ -352,6 +352,9 @@ document.addEventListener('DOMContentLoaded', () => {
         let selectedModel = null; // No initial selection
         let selectedFinish = null; // No initial selection
         
+        // Initially disable finish dropdown until model is selected
+        finishDropdown.classList.add('disabled');
+        
         // Define finishes for each model
         const modelFinishes = {
             mk1: [
@@ -384,6 +387,11 @@ document.addEventListener('DOMContentLoaded', () => {
         
         // Finish dropdown functionality
         finishDropdown.addEventListener('click', function() {
+            // Prevent opening if no model is selected (lock mode)
+            if (!selectedModel) {
+                return;
+            }
+            
             this.classList.toggle('active');
             finishOptions.classList.toggle('show');
             modelOptions.classList.remove('show');
@@ -394,10 +402,13 @@ document.addEventListener('DOMContentLoaded', () => {
         document.querySelectorAll('#model-options .dropdown-option').forEach(option => {
             option.addEventListener('click', function() {
                 selectedModel = this.dataset.value;
-                modelSelected.textContent = this.textContent;
+                modelSelected.innerHTML = this.innerHTML;
                 modelSelected.classList.remove('unselected');
                 modelDropdown.classList.remove('active');
                 modelOptions.classList.remove('show');
+                
+                // Enable finish dropdown now that model is selected
+                finishDropdown.classList.remove('disabled');
                 
                 // Update finish options
                 updateFinishOptions();
@@ -454,12 +465,12 @@ document.addEventListener('DOMContentLoaded', () => {
             
             // VALIDATION: Check if model and finish are selected
             if (!product) {
-                alert('Please select a model (MK I or MK II)');
+                alert('Please select your wallet model');
                 return;
             }
             
             if (!finish) {
-                alert('Please select a finish');
+                alert('Please select a finish color');
                 return;
             }
             
@@ -642,7 +653,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 onClick: function(data, actions) {
                     // Validate cart before allowing click
                     if (!cartItems || cartItems.length === 0) {
-                        alert('Your cart is empty. Please add items before checking out.');
+                        alert('Your cart is empty. Add pieces to checkout.');
                         return actions.reject();
                     }
                     return actions.resolve();
@@ -730,7 +741,7 @@ document.addEventListener('DOMContentLoaded', () => {
                         return actions.order.create(orderPayload);
                     } catch (error) {
                         console.error('Error creating order:', error);
-                        alert('Failed to create order: ' + error.message);
+                        alert('Unable to process order. Please try again.');
                         throw error;
                     }
                 },

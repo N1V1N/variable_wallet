@@ -107,12 +107,13 @@ body {
 }
 
 .dropdown-trigger span {
-    display: block;
+    display: inline;
     text-align: left;
     color: #fff;
     font-size: 0.9rem;
     text-transform: uppercase;
     letter-spacing: 1px;
+    white-space: nowrap; /* Prevent Safari from wrapping inline spans */
 }
 
 .dropdown-trigger span.unselected {
@@ -670,11 +671,20 @@ section {
     cursor: pointer;
 }
 
-/* Pulse effect animation */
+/* Pulse effect animation - Maximum brightness with glow */
 @keyframes subtle-pulse {
-    0% { opacity: 0.7; }
-    50% { opacity: 1; }
-    100% { opacity: 0.7; }
+    0% { 
+        opacity: 1;
+        text-shadow: 0 0 5px rgba(192, 192, 192, 0.3);
+    }
+    50% { 
+        opacity: 1;
+        text-shadow: 0 0 15px rgba(192, 192, 192, 0.8), 0 0 25px rgba(192, 192, 192, 0.4);
+    }
+    100% { 
+        opacity: 1;
+        text-shadow: 0 0 5px rgba(192, 192, 192, 0.3);
+    }
 }
 
 .order-limit {
@@ -1899,6 +1909,7 @@ footer .wallet-text {
     display: block;
     text-align: left;
     position: relative;
+    overflow: hidden; /* Safari fix for inline content */
 }
 
 /* Gothic pulsing arrow indicator */
@@ -1917,6 +1928,23 @@ footer .wallet-text {
 /* Rotate arrow when dropdown is open */
 .dropdown-trigger.active::after {
     transform: translateY(-50%) rotate(180deg);
+}
+
+/* Disabled state (when locked) */
+.dropdown-trigger.disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+    pointer-events: none;
+}
+
+/* Prevent arrow rotation when disabled */
+.dropdown-trigger.disabled.active::after {
+    transform: translateY(-50%);
+}
+
+/* Stop pulsing animation when disabled */
+.dropdown-trigger.disabled::after {
+    animation: none;
 }
 
 @keyframes gothic-pulse {
