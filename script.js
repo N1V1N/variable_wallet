@@ -657,6 +657,9 @@ document.addEventListener('DOMContentLoaded', () => {
                     paypal.Buttons({
                         fundingSource: fundingSource,
                         
+                        // Enable commit mode - shows "Pay Now" and deep links to Venmo app on mobile
+                        commit: true,
+                        
                         // Style configuration for buttons
                         style: {
                             layout: 'vertical',  // Stack buttons vertically
@@ -752,7 +755,8 @@ document.addEventListener('DOMContentLoaded', () => {
                             }],
                             application_context: {
                                 brand_name: 'Variable Wallet',
-                                shipping_preference: 'GET_FROM_FILE' // Request shipping address from PayPal
+                                shipping_preference: 'GET_FROM_FILE', // Request shipping address from PayPal
+                                user_action: 'PAY_NOW' // Shows "Pay Now" and encourages Venmo app deep linking on mobile
                             }
                         };
                         
