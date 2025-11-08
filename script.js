@@ -653,7 +653,13 @@ document.addEventListener('DOMContentLoaded', () => {
                     return; // Skip only Venmo, continue to other funding sources
                 }
                 
-                if (isEligible) {
+                // Force Venmo on mobile even if PayPal SDK says not eligible (Chrome iOS fix)
+                const forceRender = fundingSource === paypal.FUNDING.VENMO && isMobile;
+                
+                if (isEligible || forceRender) {
+                    if (forceRender && !isEligible) {
+                        console.log('🔧 Force rendering Venmo on mobile (Chrome iOS compatibility)');
+                    }
                     paypal.Buttons({
                         fundingSource: fundingSource,
                         
