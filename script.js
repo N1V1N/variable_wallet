@@ -615,15 +615,28 @@ document.addEventListener('DOMContentLoaded', () => {
             console.log('Rendering PayPal button with cart items:', cartItems);
             isRenderingPayPal = true; // Set flag
             
-            paypal.Buttons({
-                // Style configuration for buttons
-                style: {
-                    layout: 'vertical',  // Stack buttons vertically (PayPal, Venmo, Apple Pay)
-                    color: 'gold',       // Gold PayPal button
-                    shape: 'rect',       // Rectangular buttons
-                    label: 'paypal',     // Show PayPal label
-                    height: 45           // Button height
-                },
+            // Define the order of funding sources (Venmo first, Apple Pay second!)
+            const fundingSources = [
+                paypal.FUNDING.VENMO,      // 1st - Mobile-friendly
+                paypal.FUNDING.APPLEPAY,   // 2nd - Apple users
+                paypal.FUNDING.PAYPAL,     // 3rd - Traditional
+                paypal.FUNDING.PAYLATER    // 4th - Buy now, pay later
+            ];
+            
+            // Render buttons for each funding source in order
+            fundingSources.forEach(fundingSource => {
+                // Check if this funding source is eligible
+                if (paypal.isFundingEligible(fundingSource)) {
+                    paypal.Buttons({
+                        fundingSource: fundingSource,
+                        
+                        // Style configuration for buttons
+                        style: {
+                            layout: 'vertical',  // Stack buttons vertically
+                            color: fundingSource === paypal.FUNDING.PAYPAL ? 'gold' : 'blue',
+                            shape: 'rect',
+                            height: 45
+                        },
                 
                 // Handle button click
                 onClick: function(data, actions) {
@@ -861,17 +874,16 @@ document.addEventListener('DOMContentLoaded', () => {
                         renderPayPalButton();
                     }, 100);
                 }
-            }).render('#paypal-button-container').then(function() {
-                console.log('PayPal button rendered successfully');
-                isRenderingPayPal = false; // Reset flag on success
-            }).catch(function(err) {
-                console.error('Failed to render PayPal button:', err);
-                console.error('Error name:', err.name);
-                console.error('Error message:', err.message);
-                console.error('Full error:', JSON.stringify(err, null, 2));
-                isRenderingPayPal = false; // Reset flag on error
-                paypalContainer.innerHTML = '<p style="color: #ff6b6b; font-size: 0.8rem; margin-top: 1rem;">Failed to load payment buttons: ' + err.message + '<br>Check console for details (F12).</p>';
+                    }).render('#paypal-button-container').then(function() {
+                        console.log(`${fundingSource} button rendered successfully`);
+                    }).catch(function(err) {
+                        console.error(`Failed to render ${fundingSource} button:`, err);
+                    });
+                }
             });
+            
+            // Reset flag after all buttons are rendered
+            isRenderingPayPal = false;
         }
         
         // Initialize cart display
