@@ -625,9 +625,10 @@ document.addEventListener('DOMContentLoaded', () => {
             
             console.log('Rendering PayPal button with cart items:', cartItems);
             
-            // Detect Safari
+            // Detect Safari and Mobile
             const isSafari = /^((?!chrome|android).)*safari/i.test(navigator.userAgent);
-            console.log('Browser Detection - Safari:', isSafari, 'UA:', navigator.userAgent);
+            const isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
+            console.log('Browser Detection - Safari:', isSafari, '| Mobile:', isMobile, '| UA:', navigator.userAgent);
             
             isRenderingPayPal = true; // Set flag
             
@@ -644,7 +645,13 @@ document.addEventListener('DOMContentLoaded', () => {
             fundingSources.forEach(fundingSource => {
                 // Check if this funding source is eligible
                 const isEligible = paypal.isFundingEligible(fundingSource);
-                console.log('Funding Source:', fundingSource, '| Eligible:', isEligible, '| Safari:', isSafari);
+                console.log('Funding Source:', fundingSource, '| Eligible:', isEligible, '| Mobile:', isMobile);
+                
+                // Block Venmo on desktop devices (it's mobile-only)
+                if (fundingSource === paypal.FUNDING.VENMO && !isMobile) {
+                    console.log('⛔ Skipping Venmo on desktop device');
+                    return; // Skip only Venmo, continue to other funding sources
+                }
                 
                 if (isEligible) {
                     paypal.Buttons({
