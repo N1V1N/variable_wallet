@@ -2080,6 +2080,7 @@ footer .wallet-text {
     .cart-section, .selection-section {
         padding: 1.5rem;
         min-height: 200px;
+        min-width: 320px; /* Prevent dropdowns from wrapping text and arrow overlap */
         display: block !important;
         background: var(--light-bg) !important;
         border: 1px solid var(--accent-color) !important;
@@ -2118,5 +2119,11 @@ footer .wallet-text {
     
     .dropdown-options::-webkit-scrollbar-thumb:hover {
         background: rgba(192, 192, 192, 0.7);
+    }
+    
+    .dropdown-trigger {
+        white-space: nowrap; /* Prevent text wrapping in dropdowns */
+        overflow: hidden;
+        text-overflow: ellipsis;
     }
 }

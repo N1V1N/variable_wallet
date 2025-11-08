@@ -355,7 +355,7 @@ document.addEventListener('DOMContentLoaded', () => {
         // Define finishes for each model
         const modelFinishes = {
             mk1: [
-                { value: 'machined', text: 'Machined Finish' },
+                // { value: 'machined', text: 'Machined Finish' },
                 { value: 'red', text: 'Red' },
                 { value: 'gunmetal', text: 'Gunmetal' },
                 { value: 'purple', text: 'Purple' },
@@ -363,7 +363,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 { value: 'teal', text: 'Teal' }
             ],
             mk2: [
-                { value: 'machined', text: 'Machined Finish' },
+                // { value: 'machined', text: 'Machined Finish' },
                 { value: 'black', text: 'Black' }
             ]
         };
