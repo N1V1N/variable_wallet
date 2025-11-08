@@ -635,24 +635,13 @@ document.addEventListener('DOMContentLoaded', () => {
                 paypal.FUNDING.CARD        // 5th - Credit/Debit cards
             ];
             
-            // Detect actual mobile device (not desktop browser)
-            const isMobileDevice = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
-            const isActuallyMobile = isMobileDevice; // Simplified: just check user agent
-            
             // Render buttons for each funding source in order
             fundingSources.forEach(fundingSource => {
                 // Log eligibility per browser/device for diagnostics
                 const eligible = paypal.isFundingEligible(fundingSource);
-                console.log('[PayPal Debug] Funding source:', fundingSource, '| Eligible:', eligible, '| Actually Mobile:', isActuallyMobile, '| Browser:', navigator.userAgent.substring(0, 50));
+                console.log('[PayPal Debug] Funding source:', fundingSource, '| Eligible:', eligible, '| Browser:', navigator.userAgent.substring(0, 50));
                 
-                // CRITICAL: Block Venmo on desktop devices
-                // TEMPORARILY DISABLED FOR DEBUGGING
-                // if (fundingSource === paypal.FUNDING.VENMO && !isActuallyMobile) {
-                //     console.log('[PayPal Debug] ⛔ Blocking Venmo on desktop device');
-                //     return; // Skip Venmo on desktop
-                // }
-                
-                // Check if this funding source is eligible
+                // Check if this funding source is eligible (let PayPal SDK handle device filtering)
                 if (eligible) {
                     paypal.Buttons({
                         fundingSource: fundingSource,
