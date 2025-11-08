@@ -631,7 +631,8 @@ document.addEventListener('DOMContentLoaded', () => {
                 paypal.FUNDING.VENMO,      // 1st - Mobile-friendly
                 paypal.FUNDING.APPLEPAY,   // 2nd - Apple users
                 paypal.FUNDING.PAYPAL,     // 3rd - Traditional
-                paypal.FUNDING.PAYLATER    // 4th - Buy now, pay later
+                paypal.FUNDING.PAYLATER,   // 4th - Buy now, pay later
+                paypal.FUNDING.CARD        // 5th - Credit/Debit cards
             ];
             
             // Render buttons for each funding source in order
@@ -644,7 +645,8 @@ document.addEventListener('DOMContentLoaded', () => {
                         // Style configuration for buttons
                         style: {
                             layout: 'vertical',  // Stack buttons vertically
-                            color: fundingSource === paypal.FUNDING.PAYPAL ? 'gold' : 'blue',
+                            color: fundingSource === paypal.FUNDING.PAYPAL ? 'gold' : 
+                                   fundingSource === paypal.FUNDING.CARD ? 'black' : 'blue',
                             shape: 'rect',
                             height: 45
                         },
