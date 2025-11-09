@@ -76,9 +76,14 @@ body {
     top: 0;
 }
 
-.logo .wallet-text {
+.logo .wallet-text,
+h2 .wallet-text {
     font-size: 0.618em; /* Golden ratio (1/1.618) for "Wallet" text */
     letter-spacing: 1.5px; /* Slightly tighter letter spacing */
+}
+
+h2 {
+    font-weight: normal; /* Match the logo's thin letters */
 }
 
 .wallet-text {
@@ -517,17 +522,17 @@ main {
 
 /* Section-specific scroll margins */
 #materials {
-    scroll-margin-top: 0px; /* Completely removed margin to make the section stop at the very top */
+    scroll-margin-top: 40px;
 }
 
 #process, #waitlist {
-    scroll-margin-top: 36px; /* Kept the original value */
+    scroll-margin-top: 40px;
 }
 
 /* Mobile-specific scroll margins */
 @media (max-width: 768px) {
     #materials {
-        scroll-margin-top: 36px; /* Restore original value for mobile */
+        scroll-margin-top: 35px;
     }
 }
 

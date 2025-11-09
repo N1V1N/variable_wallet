@@ -604,6 +604,14 @@ document.addEventListener('DOMContentLoaded', () => {
                 });
                 
                 updateCartDisplay();
+                
+                // Scroll to cart on mobile/stacked layout
+                const cartSection = document.querySelector('.cart-section');
+                if (cartSection) {
+                    const yOffset = -80; // Stop 80px before the cart
+                    const y = cartSection.getBoundingClientRect().top + window.pageYOffset + yOffset;
+                    window.scrollTo({ top: y, behavior: 'smooth' });
+                }
             });
         }
         
@@ -637,6 +645,14 @@ document.addEventListener('DOMContentLoaded', () => {
                 });
                 
                 updateCartDisplay();
+                
+                // Scroll to cart on mobile/stacked layout
+                const cartSection = document.querySelector('.cart-section');
+                if (cartSection) {
+                    const yOffset = -80; // Stop 80px before the cart
+                    const y = cartSection.getBoundingClientRect().top + window.pageYOffset + yOffset;
+                    window.scrollTo({ top: y, behavior: 'smooth' });
+                }
             });
         }
         
