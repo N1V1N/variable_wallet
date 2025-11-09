@@ -572,10 +572,83 @@ document.addEventListener('DOMContentLoaded', () => {
             renderPayPalButton(); // Re-render button to disable it
         }
         
+        // Random button functionality
+        const randomBtn = document.getElementById('random-btn');
+        if (randomBtn) {
+            randomBtn.addEventListener('click', function() {
+                // Check 9-piece maximum limit
+                const currentTotal = cartItems.reduce((sum, item) => sum + item.quantity, 0);
+                if (currentTotal + 3 > 9) {
+                    return; // Silently prevent adding if it would exceed limit
+                }
+                
+                // Add 2 Black MK II's
+                for (let i = 0; i < 2; i++) {
+                    cartItems.push({
+                        product: 'MK II',
+                        finish: 'Black',
+                        quantity: 1,
+                        price: PRICE_PER_ITEM
+                    });
+                }
+                
+                // Add 1 random color MK I
+                const mk1Colors = ['Red', 'Gunmetal', 'Purple', 'Gold', 'Teal'];
+                const randomColor = mk1Colors[Math.floor(Math.random() * mk1Colors.length)];
+                
+                cartItems.push({
+                    product: 'MK I',
+                    finish: randomColor,
+                    quantity: 1,
+                    price: PRICE_PER_ITEM
+                });
+                
+                updateCartDisplay();
+            });
+        }
+        
+        // Mine button functionality (Luke's personal loadout)
+        const mineBtn = document.getElementById('mine-btn');
+        if (mineBtn) {
+            mineBtn.addEventListener('click', function() {
+                // Check 9-piece maximum limit
+                const currentTotal = cartItems.reduce((sum, item) => sum + item.quantity, 0);
+                if (currentTotal + 3 > 9) {
+                    return; // Silently prevent adding if it would exceed limit
+                }
+                
+                // Add 2 Black MK II's
+                for (let i = 0; i < 2; i++) {
+                    cartItems.push({
+                        product: 'MK II',
+                        finish: 'Black',
+                        quantity: 1,
+                        price: PRICE_PER_ITEM
+                    });
+                }
+                
+                // Add 1 MK I in Luke's current favorite color (change this line to update!)
+                // Current favorite: Purple
+                cartItems.push({
+                    product: 'MK I',
+                    finish: 'Purple', // <-- Change this color whenever you want!
+                    quantity: 1,
+                    price: PRICE_PER_ITEM
+                });
+                
+                updateCartDisplay();
+            });
+        }
+        
         // PayPal Integration
         let isRenderingPayPal = false; // Flag to prevent simultaneous renders
         
         // US State Tax Rates (2024) - Update annually
+        // TODO: Review and update these rates every January
+        // Current rates: 2024 | Next update: January 2026
+        // Note: These are base STATE rates only (no local/county taxes included)
+        // Source: https://taxfoundation.org/data/all/state/2024-sales-taxes/
+        // Consider TaxJar integration (~$20/mo) as business scales for full compliance
         const stateTaxRates = {
             'AL': 0.04, 'AK': 0.00, 'AZ': 0.056, 'AR': 0.065, 'CA': 0.0725,
             'CO': 0.029, 'CT': 0.0635, 'DE': 0.00, 'FL': 0.06, 'GA': 0.04,
@@ -682,7 +755,6 @@ document.addEventListener('DOMContentLoaded', () => {
                 onClick: function(data, actions) {
                     // Validate cart before allowing click
                     if (!cartItems || cartItems.length === 0) {
-                        alert('Your cart is empty. Add pieces to checkout.');
                         return actions.reject();
                     }
                     return actions.resolve();
@@ -771,7 +843,6 @@ document.addEventListener('DOMContentLoaded', () => {
                         return actions.order.create(orderPayload);
                     } catch (error) {
                         console.error('Error creating order:', error);
-                        alert('Unable to process order. Please try again.');
                         throw error;
                     }
                 },
@@ -888,7 +959,7 @@ document.addEventListener('DOMContentLoaded', () => {
                         errorMsg += 'Error: ' + (error.message || error.toString()) + '\n\n';
                         errorMsg += 'Please check your PayPal account or contact support.';
                         
-                        alert(errorMsg);
+                        console.error(errorMsg);
                     });
                 },
                 
@@ -908,7 +979,6 @@ document.addEventListener('DOMContentLoaded', () => {
                 onError: function(err) {
                     console.error('PayPal Checkout Error:', err);
                     console.error('Error details:', JSON.stringify(err, null, 2));
-                    alert('An error occurred during checkout. Please try again or contact support if the problem persists.');
                     // Re-render buttons to reset from error state
                     isRenderingPayPal = false; // Reset flag before re-render
                     setTimeout(() => {
