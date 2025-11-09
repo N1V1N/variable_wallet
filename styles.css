@@ -82,8 +82,8 @@ h2 .wallet-text {
     letter-spacing: 1.5px; /* Slightly tighter letter spacing */
 }
 
-h2 {
-    font-weight: normal; /* Match the logo's thin letters */
+#create-your-own h2 {
+    font-weight: normal; /* Match the logo's thin letters only for Variable Wallet heading */
 }
 
 .wallet-text {
@@ -983,10 +983,16 @@ footer {
     text-align: center;
 }
 
+.contact-info p {
+    font-weight: normal;
+    font-size: 1rem;
+}
+
 .contact-info a {
     color: var(--accent-color);
     text-decoration: none;
     transition: var(--transition);
+    font-weight: normal;
 }
 
 .contact-info a:hover {
