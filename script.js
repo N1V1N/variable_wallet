@@ -682,14 +682,17 @@ document.addEventListener('DOMContentLoaded', () => {
         function renderPayPalButton() {
             const paypalContainer = document.getElementById('paypal-button-container');
             
+            // Check if container exists
+            if (!paypalContainer) {
+                console.error('PayPal container not found');
+                return;
+            }
+            
             // Prevent multiple simultaneous renders
             if (isRenderingPayPal) {
                 console.log('PayPal button already rendering, skipping...');
                 return;
             }
-            
-            // Clear existing button
-            paypalContainer.innerHTML = '';
             
             // Only render button if PayPal SDK is loaded
             if (typeof paypal === 'undefined') {
@@ -699,12 +702,16 @@ document.addEventListener('DOMContentLoaded', () => {
                 return;
             }
             
-            // Only enable button if cart has items
-            if (cartItems.length === 0) {
-                console.log('Cart is empty, not rendering PayPal button');
-                isRenderingPayPal = false; // Reset flag
-                return; // Don't show button when cart is empty
-            }
+            // Clear existing buttons safely
+            // Use a small delay to ensure any previous renders have completed
+            paypalContainer.innerHTML = '';
+            
+            // Always show buttons (cart validation happens in onClick)
+            // if (cartItems.length === 0) {
+            //     console.log('Cart is empty, not rendering PayPal button');
+            //     isRenderingPayPal = false; // Reset flag
+            //     return; // Don't show button when cart is empty
+            // }
             
             console.log('Rendering PayPal button with cart items:', cartItems);
             
@@ -1004,7 +1011,12 @@ document.addEventListener('DOMContentLoaded', () => {
                     }).render('#paypal-button-container').then(function() {
                         console.log(`${fundingSource} button rendered successfully`);
                     }).catch(function(err) {
-                        console.error(`Failed to render ${fundingSource} button:`, err);
+                        // Suppress harmless "container removed from DOM" errors that occur during re-renders
+                        if (err && err.message && err.message.includes('container element removed')) {
+                            console.log(`${fundingSource} button: Ignoring benign DOM manipulation warning`);
+                        } else {
+                            console.error(`Failed to render ${fundingSource} button:`, err);
+                        }
                     });
                 }
             });

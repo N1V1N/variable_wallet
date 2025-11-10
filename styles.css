@@ -529,10 +529,18 @@ main {
     scroll-margin-top: 40px;
 }
 
+#create-your-own {
+    scroll-margin-top: -55px;
+}
+
 /* Mobile-specific scroll margins */
 @media (max-width: 768px) {
     #materials {
         scroll-margin-top: 35px;
+    }
+    
+    #create-your-own {
+        scroll-margin-top: -63px;
     }
 }
 
