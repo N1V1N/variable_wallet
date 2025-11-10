@@ -7,7 +7,7 @@
 
 ## 🛒 **Shopping Cart System**
 
-### Product Selection
+###  Selection
 - ✅ **Model Selection**: MK I, MK II dropdowns working
 - ✅ **Finish Selection**: Dynamic finishes based on model
   - MK I: Machined, Red, Gunmetal, Purple, Gold, Teal

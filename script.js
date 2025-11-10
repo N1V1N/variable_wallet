@@ -346,6 +346,7 @@ document.addEventListener('DOMContentLoaded', () => {
     
     // Global cart items array - accessible to all functions
     let cartItems = [];
+    let isRemovingItem = false; // Flag to prevent double-click on remove buttons
     
     if (addToCartBtn) {
         const PRICE_PER_ITEM = 33;
@@ -511,7 +512,14 @@ document.addEventListener('DOMContentLoaded', () => {
             }
             
             if (cartItems.length === 0) {
-                cartItemsList.innerHTML = '<li class="cart-empty">Add Pieces!</li>';
+                cartItemsList.innerHTML = '<li class="cart-empty">Empty</li>';
+                
+                // Show 0 card count when cart is empty
+                const cardCountDisclaimer = document.getElementById('cardCountDisclaimer');
+                if (cardCountDisclaimer) {
+                    cardCountDisclaimer.textContent = '0 Card Capacity';
+                    cardCountDisclaimer.style.display = 'block';
+                }
             } else {
                 // Store original indices for proper removal, then sort
                 const itemsWithIndices = cartItems.map((item, originalIndex) => ({
@@ -551,6 +559,17 @@ document.addEventListener('DOMContentLoaded', () => {
                     li.appendChild(removeBtn);
                     cartItemsList.appendChild(li);
                 });
+                
+                // Calculate and display card count
+                const mk1Count = cartItems.filter(item => item.product === 'MK I').length;
+                const mk2Count = cartItems.filter(item => item.product === 'MK II').length;
+                const totalCards = (mk1Count * 2) + (mk2Count * 3);
+                
+                const cardCountDisclaimer = document.getElementById('cardCountDisclaimer');
+                if (cardCountDisclaimer) {
+                    cardCountDisclaimer.textContent = `${totalCards} Card Capacity`;
+                    cardCountDisclaimer.style.display = 'block';
+                }
             }
             
             // Re-render PayPal button when cart changes
@@ -561,8 +580,16 @@ document.addEventListener('DOMContentLoaded', () => {
         
         // Remove individual cart item
         function removeCartItem(index) {
+            if (isRemovingItem) return; // Prevent double-click
+            
+            isRemovingItem = true;
             cartItems.splice(index, 1);
             updateCartDisplay();
+            
+            // Reset flag after a short delay
+            setTimeout(() => {
+                isRemovingItem = false;
+            }, 300);
         }
         
         // Clear cart
@@ -582,33 +609,35 @@ document.addEventListener('DOMContentLoaded', () => {
                     return; // Silently prevent adding if it would exceed limit
                 }
                 
-                // Add 2 Black MK II's
-                for (let i = 0; i < 2; i++) {
+                // Add 3 completely random pieces
+                const models = ['MK I', 'MK II'];
+                const mk1Colors = ['Red', 'Gunmetal', 'Purple', 'Gold', 'Teal'];
+                const mk2Colors = ['Black'];
+                
+                for (let i = 0; i < 3; i++) {
+                    const randomModel = models[Math.floor(Math.random() * models.length)];
+                    let randomColor;
+                    
+                    if (randomModel === 'MK I') {
+                        randomColor = mk1Colors[Math.floor(Math.random() * mk1Colors.length)];
+                    } else {
+                        randomColor = mk2Colors[0]; // MK II only has Black
+                    }
+                    
                     cartItems.push({
-                        product: 'MK II',
-                        finish: 'Black',
+                        product: randomModel,
+                        finish: randomColor,
                         quantity: 1,
                         price: PRICE_PER_ITEM
                     });
                 }
-                
-                // Add 1 random color MK I
-                const mk1Colors = ['Red', 'Gunmetal', 'Purple', 'Gold', 'Teal'];
-                const randomColor = mk1Colors[Math.floor(Math.random() * mk1Colors.length)];
-                
-                cartItems.push({
-                    product: 'MK I',
-                    finish: randomColor,
-                    quantity: 1,
-                    price: PRICE_PER_ITEM
-                });
                 
                 updateCartDisplay();
                 
                 // Scroll to cart on mobile/stacked layout
                 const cartSection = document.querySelector('.cart-section');
                 if (cartSection) {
-                    const yOffset = -80; // Stop 80px before the cart
+                    const yOffset = -93; // Align right under banner
                     const y = cartSection.getBoundingClientRect().top + window.pageYOffset + yOffset;
                     window.scrollTo({ top: y, behavior: 'smooth' });
                 }
@@ -649,7 +678,39 @@ document.addEventListener('DOMContentLoaded', () => {
                 // Scroll to cart on mobile/stacked layout
                 const cartSection = document.querySelector('.cart-section');
                 if (cartSection) {
-                    const yOffset = -80; // Stop 80px before the cart
+                    const yOffset = -93; // Align right under banner
+                    const y = cartSection.getBoundingClientRect().top + window.pageYOffset + yOffset;
+                    window.scrollTo({ top: y, behavior: 'smooth' });
+                }
+            });
+        }
+        
+        // Max capacity button functionality (3 MK II's in Black)
+        const maxBtn = document.getElementById('max-btn');
+        if (maxBtn) {
+            maxBtn.addEventListener('click', function() {
+                // Check 9-piece maximum limit
+                const currentTotal = cartItems.reduce((sum, item) => sum + item.quantity, 0);
+                if (currentTotal + 3 > 9) {
+                    return; // Silently prevent adding if it would exceed limit
+                }
+                
+                // Add 3 Black MK II's
+                for (let i = 0; i < 3; i++) {
+                    cartItems.push({
+                        product: 'MK II',
+                        finish: 'Black',
+                        quantity: 1,
+                        price: PRICE_PER_ITEM
+                    });
+                }
+                
+                updateCartDisplay();
+                
+                // Scroll to cart on mobile/stacked layout
+                const cartSection = document.querySelector('.cart-section');
+                if (cartSection) {
+                    const yOffset = -93; // Align right under banner
                     const y = cartSection.getBoundingClientRect().top + window.pageYOffset + yOffset;
                     window.scrollTo({ top: y, behavior: 'smooth' });
                 }
@@ -1011,9 +1072,9 @@ document.addEventListener('DOMContentLoaded', () => {
                     }).render('#paypal-button-container').then(function() {
                         console.log(`${fundingSource} button rendered successfully`);
                     }).catch(function(err) {
-                        // Suppress harmless "container removed from DOM" errors that occur during re-renders
+                        // Silently suppress harmless "container removed from DOM" errors that occur during re-renders
                         if (err && err.message && err.message.includes('container element removed')) {
-                            console.log(`${fundingSource} button: Ignoring benign DOM manipulation warning`);
+                            // Ignore - this is expected when re-rendering buttons
                         } else {
                             console.error(`Failed to render ${fundingSource} button:`, err);
                         }

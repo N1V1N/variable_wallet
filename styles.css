@@ -83,7 +83,11 @@ h2 .wallet-text {
 }
 
 #create-your-own h2 {
-    font-weight: normal; /* Match the logo's thin letters only for Variable Wallet heading */
+    font-weight: normal; /* Keep Variable Wallet thin */
+}
+
+#create-your-own h2:first-of-type {
+    font-weight: bold; /* Make "Assemble Your" bold like other section headings */
 }
 
 .wallet-text {
@@ -522,21 +526,21 @@ main {
 
 /* Section-specific scroll margins */
 #materials {
-    scroll-margin-top: 40px;
+    scroll-margin-top: 36px;
 }
 
 #process, #waitlist {
-    scroll-margin-top: 40px;
+    scroll-margin-top: 36px;
 }
 
 #create-your-own {
-    scroll-margin-top: -55px;
+    scroll-margin-top: 36px;
 }
 
 /* Mobile-specific scroll margins */
 @media (max-width: 768px) {
     #materials {
-        scroll-margin-top: 35px;
+        scroll-margin-top: 33px;
     }
     
     #create-your-own {
@@ -546,7 +550,7 @@ main {
 
 /* Adjusted badge positioning and fixed scroll behavior for sections */
 section {
-    scroll-margin-top: 40px;
+    scroll-margin-top: 0px;
 }
 
 .container {
@@ -1605,8 +1609,8 @@ footer .wallet-text {
 .cart-summary ul {
     list-style: none;
     padding: 0;
-    margin: 0 0 1.5rem 0;
-    min-height: 100px;
+    margin: 0 0 0.25rem 0;
+    min-height: 135px;
     border: 1px dashed rgba(192, 192, 192, 0.3);
     border-radius: 4px;
     padding: 1rem;
@@ -1887,7 +1891,6 @@ footer .wallet-text {
     text-align: center;
     margin-bottom: 0.75rem;
     padding-bottom: 1rem;
-    border-bottom: 1px solid rgba(192, 192, 192, 0.15);
 }
 
 .material-box-header h4 {
@@ -2104,12 +2107,17 @@ footer .wallet-text {
 
 .preset-buttons {
     display: flex;
+    flex-wrap: wrap;
     gap: 0.75rem;
     width: 100%;
+    justify-content: center;
+    padding-top: 0.75rem;
+    border-top: 1px solid rgba(192, 192, 192, 0.133);
 }
 
 .recommended-btn {
-    flex: 1;
+    flex: 0 0 calc(50% - 0.375rem);
+    max-width: calc(50% - 0.375rem);
     background: rgba(192, 192, 192, 0.15);
     border: 1px solid rgba(192, 192, 192, 0.4);
     color: #c0c0c0;

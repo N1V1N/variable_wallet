@@ -206,10 +206,6 @@
                                 <span class="price-note"><strong>$33</strong>/piece</span>
                             </div>
                             <div class="product-options">
-                                <div class="preset-buttons">
-                                    <button type="button" class="recommended-btn" id="random-btn">Random</button>
-                                    <button type="button" class="recommended-btn" id="mine-btn">Favorite</button>
-                                </div>
                                 <div class="product-selector-card">
                                     <div class="custom-dropdown">
                                         <div class="dropdown-trigger" id="model-dropdown">
@@ -230,10 +226,15 @@
                                     </div>
                                     <button type="button" class="add-to-cart-btn" data-product="mk1">Add</button>
                                 </div>
+                                <div class="preset-buttons">
+                                    <button type="button" class="recommended-btn" id="random-btn">Random<br><span style="font-size: 0.75em; opacity: 0.7;">(3 Pieces)</span></button>
+                                    <button type="button" class="recommended-btn" id="mine-btn">Favorite<br><span style="font-size: 0.75em; opacity: 0.7;">(3 Pieces)</span></button>
+                                </div>
                             </div>
                         </div>
                         
                         <!-- Future materials (Titanium, Damascus) will be added here as more .material-selection-box elements -->
+                        <!-- <button type="button" class="recommended-btn" id="max-btn">9 Cards<br><span style="font-size: 0.75em; opacity: 0.7;">(3 Pieces)</span></button>-->
                         
                     </div>
                     
@@ -241,6 +242,8 @@
                         <h3>Cart <span id="cart-counter">(0)</span></h3>
                         <div class="cart-summary" id="cartSummary">
                             <ul id="cartItemsList"></ul>
+                            <div class="card-count-disclaimer" id="cardCountDisclaimer" style="display: none; text-align: center; font-size: 0.75rem; opacity: 0.23; margin: 0.0rem 0 0.5rem 0; font-style: italic;">
+                            </div>
                             <div class="cart-total">
                                 <span class="price-label">Total: </span><span class="dollar-sign">$</span><span id="totalPrice">0</span>
                             </div>
