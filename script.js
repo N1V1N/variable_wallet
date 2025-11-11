@@ -292,6 +292,27 @@ document.addEventListener('DOMContentLoaded', () => {
                 });
             });
 
+            // Hero Shot Image Zoom
+            const heroShotImage = document.querySelector('.hero-shot-image');
+            const imageZoomOverlay = document.getElementById('imageZoomOverlay');
+            
+            if (heroShotImage && imageZoomOverlay) {
+                const overlayImage = imageZoomOverlay.querySelector('img');
+                
+                // Click to zoom in
+                heroShotImage.addEventListener('click', () => {
+                    overlayImage.src = heroShotImage.src;
+                    imageZoomOverlay.classList.add('active');
+                    document.body.style.overflow = 'hidden'; // Prevent scrolling
+                });
+                
+                // Click overlay to zoom out/close
+                imageZoomOverlay.addEventListener('click', () => {
+                    imageZoomOverlay.classList.remove('active');
+                    document.body.style.overflow = ''; // Restore scrolling
+                });
+            }
+
             // Handle waitlist form submission
             const waitlistForm = document.getElementById('waitlistForm');
             const formMessage = document.getElementById('formMessage');
@@ -512,7 +533,7 @@ document.addEventListener('DOMContentLoaded', () => {
             }
             
             if (cartItems.length === 0) {
-                cartItemsList.innerHTML = '<li class="cart-empty">No Pieces</li>';
+                cartItemsList.innerHTML = '<li class="cart-empty">Add Pieces</li>';
                 
                 // Show 0 card count when cart is empty
                 const cardCountDisclaimer = document.getElementById('cardCountDisclaimer');
