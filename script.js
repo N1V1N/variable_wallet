@@ -897,7 +897,7 @@ document.addEventListener('DOMContentLoaded', () => {
                         });
                         
                         const subtotal = cartItems.reduce((sum, item) => sum + item.price, 0);
-                        const shipping = 0.01; // $0.01 to show shipping line in PayPal
+                        const shipping = 0.00; // Free shipping (was $0.01 - changed to avoid PayPal fraud flags)
                         // Default tax estimate (2.9% - CO rate) for Venmo users who skip onShippingChange
                         // Will be updated to actual state tax if onShippingChange fires
                         const defaultTaxRate = 0.029; 
@@ -933,10 +933,7 @@ document.addEventListener('DOMContentLoaded', () => {
                                         }
                                     }
                                 },
-                                items: items,
-                                payee: {
-                                    merchant_id: undefined
-                                }
+                                items: items
                             }],
                             application_context: {
                                 brand_name: 'Variable Wallet',
@@ -972,7 +969,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     const subtotal = cartItems.reduce((sum, item) => sum + item.price, 0);
                     const taxRate = stateTaxRates[stateCode] || 0; // Default to 0 if state not found
                     const tax = subtotal * taxRate;
-                    const shipping = 0.01; // $0.01 to show shipping line in PayPal
+                    const shipping = 0.00; // Free shipping
                     const total = subtotal + tax + shipping;
                     
                     console.log(`Tax calculation: Subtotal: $${subtotal.toFixed(2)}, Rate: ${(taxRate * 100).toFixed(2)}%, Tax: $${tax.toFixed(2)}, Total: $${total.toFixed(2)}`);
