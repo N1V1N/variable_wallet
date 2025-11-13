@@ -189,10 +189,23 @@ main {
     padding-top: 2.5rem;
 }
 
+/* Add extra headroom above materials section */
+#materials.content-section {
+    padding-top: 9rem;
+}
+
 .content-section .container {
     display: flex;
     flex-direction: column;
     align-items: center; /* This ensures all content inside is centered */
+}
+
+#process h2 {
+    margin-bottom: 2.25rem;
+}
+
+#models h2 {
+    margin-bottom: 1.33rem;
 }
 
 .hero {
@@ -536,7 +549,7 @@ main {
 
 /* Section-specific scroll margins */
 #materials {
-    scroll-margin-top: 36px;
+    scroll-margin-top: -44px; /* Adjusted for increased padding-top (9rem vs 4rem default) */
 }
 
 #process, #waitlist {
@@ -554,7 +567,7 @@ main {
 /* Mobile-specific scroll margins */
 @media (max-width: 768px) {
     #materials {
-        scroll-margin-top: 33px;
+        scroll-margin-top: -47px; /* Adjusted for increased padding-top */
     }
     
     #create-your-own {
@@ -840,46 +853,84 @@ section {
     flex-shrink: 0; /* Prevent image from shrinking */
 }
 
-/* Smaller zoom on desktop */
+/* Full width on desktop */
 @media (min-width: 769px) {
     .image-zoom-overlay img {
-        max-width: 180%; /* 1.8x zoom on desktop */
-        max-height: 180%;
+        max-width: 100vw; /* Fill window width on desktop */
+        max-height: 100vh; /* Fill window height on desktop */
     }
 }
 
-/* Models Grid - Two Column Layout */
+/* Models Grid - Wrapping Layout */
 .models-grid {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
+    display: flex;
+    flex-wrap: wrap;
     gap: 2rem;
     max-width: 900px;
     margin: 0 auto;
     padding: 0 1rem;
     margin-top: 0.75rem; /* Smaller gap from image */
     margin-bottom: 1rem; /* Reduced bottom spacing */
+    justify-content: center;
 }
 
 .model-info-card {
     text-align: center;
-    padding: 0;
-    /* Removed background and border - no boxes */
+    padding: 1.25rem 1.5rem;
+    background: var(--light-bg);
+    border: 1px solid var(--accent-color);
+    border-radius: 0;
+    position: relative;
+    overflow: hidden;
+    transition: var(--transition);
+    width: fit-content;
+    max-width: 250px;
+    min-width: 220px;
+}
+
+.model-info-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: linear-gradient(135deg, rgba(192, 192, 192, 0.05) 0%, transparent 100%);
+    opacity: 0;
+    transition: var(--transition);
+}
+
+.model-info-card:hover::before {
+    opacity: 0.2;
 }
 
 .model-info-card h3 {
     font-size: 1.5rem;
-    margin-bottom: 0.5rem;
+    margin-bottom: 0.3rem;
     color: var(--text-color);
     font-weight: bold;
     letter-spacing: 2px;
     text-transform: uppercase;
     text-shadow: var(--glow);
+    position: relative;
+    z-index: 1;
 }
 
 .card-capacity {
     font-size: 1.1rem;
     opacity: 0.8;
-    margin-bottom: 1rem;
+    margin-bottom: 0.75rem;
+    position: relative;
+    z-index: 1;
+}
+
+.card-thickness {
+    font-size: 1.1rem;
+    opacity: 0.8;
+    margin-top: -.75rem;
+    margin-bottom: 0.75rem;
+    position: relative;
+    z-index: 1;
 }
 
 .material-label {
@@ -887,7 +938,9 @@ section {
     color: var(--text-color);
     opacity: 0.7;
     margin-top: -0.99rem;
-    margin-bottom: 0.5rem;
+    margin-bottom: 0.3rem;
+    position: relative;
+    z-index: 1;
 }
 
 .capacity-label {
@@ -900,18 +953,20 @@ section {
 .color-options p {
     margin: 0;
     line-height: 1.5;
+    opacity: 0.44;
 }
 
 .color-box {
     background: rgba(42, 42, 42, 0.5);
     border: 1px solid rgba(192, 192, 192, 0.3);
     border-radius: 0;
-    padding: 1rem;
-    margin-top: 0.5rem;
+    padding: 0.75rem 0.85rem;
+    margin-top: 0.3rem;
     width: 123px;
     margin-left: auto;
+    position: relative;
+    z-index: 1;
     margin-right: auto;
-    display: none; /* Hide color boxes to see page without them */
 }
 
 /* Waiting List Form Styles */

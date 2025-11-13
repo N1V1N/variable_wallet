@@ -809,8 +809,8 @@ document.addEventListener('DOMContentLoaded', () => {
                 paypal.FUNDING.VENMO,      // 1st - Mobile-friendly
                 // paypal.FUNDING.APPLEPAY,   // 2nd - DISABLED: Requires PayPal merchant Apple Pay approval
                 paypal.FUNDING.PAYPAL,     // 2nd - Traditional
-                paypal.FUNDING.PAYLATER,   // 3rd - Buy now, pay later
-                paypal.FUNDING.CARD        // 4th - Credit/Debit cards
+                // paypal.FUNDING.PAYLATER,   // 3rd - DISABLED: Available in PayPal checkout flow
+                paypal.FUNDING.CARD        // 3rd - Credit/Debit cards
             ];
             
             // Render buttons for each funding source in order
@@ -898,10 +898,7 @@ document.addEventListener('DOMContentLoaded', () => {
                         
                         const subtotal = cartItems.reduce((sum, item) => sum + item.price, 0);
                         const shipping = 0.00; // Free shipping (was $0.01 - changed to avoid PayPal fraud flags)
-                        // Default tax estimate (2.9% - CO rate) for Venmo users who skip onShippingChange
-                        // Will be updated to actual state tax if onShippingChange fires
-                        const defaultTaxRate = 0.029; 
-                        const tax = subtotal * defaultTaxRate;
+                        const tax = 0.00; // Tax will be added in onShippingChange once the state is known
                         const totalAmount = subtotal + shipping + tax;
                         
                         // Validate total
@@ -962,7 +959,8 @@ document.addEventListener('DOMContentLoaded', () => {
                     // CRITICAL: Reject non-US addresses
                     if (countryCode !== 'US') {
                         console.error('International shipping attempted:', countryCode);
-                        return actions.reject('We currently only ship to addresses within the United States. Please use a US shipping address.');
+                        alert('We currently only ship to addresses within the United States.');
+                        return actions.reject();
                     }
                     
                     // Calculate tax based on state
@@ -1004,65 +1002,85 @@ document.addEventListener('DOMContentLoaded', () => {
                     });
                 },
                 
-                // Finalize the transaction
-                onApprove: function(data, actions) {
-                    return actions.order.capture().then(function(details) {
+                // Finalize the transaction - SERVER-SIDE CAPTURE
+                onApprove: async function(data, actions) {
+                    console.log('Payment approved, capturing via server...');
+                    console.log('Order ID:', data.orderID);
+                    
+                    try {
+                        // Call Cloudflare Worker to capture the order server-side
+                        const response = await fetch('https://paypal-capture.misty-shadow-51a9.workers.dev/', {
+                            method: 'POST',
+                            headers: {
+                                'Content-Type': 'application/json',
+                            },
+                            body: JSON.stringify({ orderID: data.orderID })
+                        });
+                        
+                        const result = await response.json();
+                        
+                        console.log('Worker response:', result);
+                        
+                        if (!response.ok || !result.success) {
+                            throw new Error(result.error || 'Capture failed');
+                        }
+                        
+                        const details = result.capture;
+                        console.log('Capture details:', details);
+                        
                         // Log complete order details for your records
                         console.log('=== ORDER COMPLETED SUCCESSFULLY ===');
                         console.log('Order ID:', details.id);
-                        console.log('Transaction ID:', details.purchase_units[0].payments.captures[0].id);
-                        console.log('Payer Name:', details.payer.name.given_name + ' ' + details.payer.name.surname);
-                        console.log('Payer Email:', details.payer.email_address);
-                        console.log('Shipping Address:', JSON.stringify(details.purchase_units[0].shipping, null, 2));
+                        
+                        // Safely access nested properties
+                        const capture = details.purchase_units?.[0]?.payments?.captures?.[0];
+                        if (capture) {
+                            console.log('Transaction ID:', capture.id);
+                        }
+                        console.log('Payer Name:', details.payer?.name?.given_name + ' ' + details.payer?.name?.surname);
+                        console.log('Payer Email:', details.payer?.email_address);
+                        console.log('Shipping Address:', JSON.stringify(details.purchase_units?.[0]?.shipping, null, 2));
                         console.log('Items Purchased:', JSON.stringify(cartItems, null, 2));
-                        console.log('Subtotal:', details.purchase_units[0].amount.breakdown.item_total.value);
-                        console.log('Tax:', details.purchase_units[0].amount.breakdown.tax_total?.value || '0.00');
-                        console.log('Shipping:', details.purchase_units[0].amount.breakdown.shipping?.value || '0.00');
-                        console.log('Total Amount:', details.purchase_units[0].amount.value);
+                        
+                        // Capture response has amount in captures, not at purchase_unit level
+                        const captureAmount = details.purchase_units?.[0]?.payments?.captures?.[0];
+                        console.log('Total Amount Captured:', captureAmount?.amount?.value);
+                        console.log('PayPal Fee:', captureAmount?.seller_receivable_breakdown?.paypal_fee?.value);
+                        console.log('Net Amount (After Fees):', captureAmount?.seller_receivable_breakdown?.net_amount?.value);
                         console.log('Payment Status:', details.status);
+                        console.log('Seller Protection:', captureAmount?.seller_protection?.status);
                         console.log('Full Details:', JSON.stringify(details, null, 2));
                         console.log('====================================');
                         
-                        // CRITICAL: Verify tax was collected
-                        const taxCollected = parseFloat(details.purchase_units[0].amount.breakdown.tax_total?.value || 0);
-                        const totalAmount = parseFloat(details.purchase_units[0].amount.value);
-                        
-                        if (taxCollected === 0 && totalAmount > 0) {
-                            console.warn('⚠️ WARNING: No tax was collected on this order!');
+                        // Verify payment was captured successfully
+                        const totalAmount = parseFloat(captureAmount?.amount?.value || 0);
+                        if (totalAmount > 0) {
+                            console.log('✅ Payment successfully captured for $' + totalAmount);
                         }
-                        
-                        // IMPORTANT: In production, send this to your server
-                        // Example: fetch('/api/orders', { method: 'POST', body: JSON.stringify(details) })
                         
                         // Clear the cart after successful payment
                         clearCart();
                         
-                        // Show thank you modal after a short delay to catch any errors
+                        // Show thank you modal after a short delay
                         setTimeout(() => {
                             const orderId = details.id;
                             showThankYouModal(orderId);
                         }, 500);
                         
-                        // TODO: Add your post-purchase logic here:
-                        // - Send order to your server/database
-                        // - Update inventory
-                    }).catch(function(error) {
+                    } catch (error) {
                         console.error('🚨 CAPTURE FAILED!');
                         console.error('Error capturing order:', error);
-                        console.error('Error name:', error.name);
                         console.error('Error message:', error.message);
-                        console.error('Error stack:', error.stack);
-                        console.error('Full error object:', JSON.stringify(error, null, 2));
                         console.error('Order ID that failed:', data.orderID);
                         
                         // Show detailed error to user
                         let errorMsg = 'Payment could not be processed.\n\n';
                         errorMsg += 'Order ID: ' + data.orderID + '\n';
                         errorMsg += 'Error: ' + (error.message || error.toString()) + '\n\n';
-                        errorMsg += 'Please check your PayPal account or contact support.';
+                        errorMsg += 'Please contact support with the Order ID above.';
                         
-                        console.error(errorMsg);
-                    });
+                        alert(errorMsg);
+                    }
                 },
                 
                 // Handle user cancellation
