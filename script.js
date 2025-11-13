@@ -526,14 +526,19 @@ document.addEventListener('DOMContentLoaded', () => {
             // Update cart items list
             cartItemsList.innerHTML = '';
             
-            // Show/hide startup note based on cart contents
+            // Show/hide startup note and order note section based on cart contents
             const startupNote = document.querySelector('.startup-note');
             if (startupNote) {
                 startupNote.style.display = cartItems.length === 0 ? 'none' : 'block';
             }
             
+            const orderNoteSection = document.getElementById('orderNoteSection');
+            if (orderNoteSection) {
+                orderNoteSection.style.display = cartItems.length === 0 ? 'none' : 'block';
+            }
+            
             if (cartItems.length === 0) {
-                cartItemsList.innerHTML = '<li class="cart-empty">Add Pieces</li>';
+                cartItemsList.innerHTML = '<li class="cart-empty">Add Plates</li>';
                 
                 // Show 0 card count when cart is empty
                 const cardCountDisclaimer = document.getElementById('cardCountDisclaimer');
@@ -618,6 +623,12 @@ document.addEventListener('DOMContentLoaded', () => {
             cartItems = [];
             updateCartDisplay();
             renderPayPalButton(); // Re-render button to disable it
+            
+            // Clear order note field
+            const orderNote = document.getElementById('orderNote');
+            if (orderNote) {
+                orderNote.value = '';
+            }
         }
         
         // Random button functionality
@@ -630,7 +641,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     return; // Silently prevent adding if it would exceed limit
                 }
                 
-                // Add 3 completely random pieces
+                // Add 3 completely random plates
                 const models = ['MK I', 'MK II'];
                 const mk1Colors = ['Red', 'Gunmetal', 'Purple', 'Gold', 'Teal'];
                 const mk2Colors = ['Black'];
@@ -906,12 +917,21 @@ document.addEventListener('DOMContentLoaded', () => {
                             throw new Error('Invalid order total');
                         }
                         
+                        // Get customer note if provided
+                        const orderNote = document.getElementById('orderNote');
+                        const customerNote = orderNote ? orderNote.value.trim() : '';
+                        
+                        if (customerNote) {
+                            console.log('Customer Note:', customerNote);
+                        }
+                        
                         const orderPayload = {
                             intent: 'CAPTURE', // CRITICAL: Mark as immediate sale/capture, not authorization
                             purchase_units: [{
                                 description: 'Variable Wallet Order',
                                 reference_id: 'default',
                                 soft_descriptor: 'VARIABLE WALLET', // Shows on customer's card statement
+                                custom_id: customerNote ? customerNote.substring(0, 127) : undefined, // Include customer note (max 127 chars)
                                 amount: {
                                     currency_code: 'USD',
                                     value: totalAmount.toFixed(2),
@@ -1041,6 +1061,12 @@ document.addEventListener('DOMContentLoaded', () => {
                         console.log('Payer Email:', details.payer?.email_address);
                         console.log('Shipping Address:', JSON.stringify(details.purchase_units?.[0]?.shipping, null, 2));
                         console.log('Items Purchased:', JSON.stringify(cartItems, null, 2));
+                        
+                        // Log customer note if provided
+                        const customNote = details.purchase_units?.[0]?.custom_id;
+                        if (customNote) {
+                            console.log('Customer Note:', customNote);
+                        }
                         
                         // Capture response has amount in captures, not at purchase_unit level
                         const captureAmount = details.purchase_units?.[0]?.payments?.captures?.[0];

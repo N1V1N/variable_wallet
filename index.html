@@ -125,21 +125,21 @@
                         <h3>Aluminum</h3>
                         <p style="opacity: 0.33;">Corrosion resistance, minimal weight</p>
                         <span class="availability pulse-effect">Available Now</span>
-                        <span class="price-note" style="margin-top: -.33rem;">Priced at <strong>$33</strong>/piece<br><span style="opacity: 0.33; font-size: 0.85em; white-space: nowrap; display: block; margin-top: -0.25rem;">(plus tax)</span></span>
+                        <span class="price-note" style="margin-top: -.33rem;">Priced at <strong>$33</strong>/plate<br><span style="opacity: 0.33; font-size: 0.85em; white-space: nowrap; display: block; margin-top: -0.25rem;">(plus tax)</span></span>
                     </div>
                     <div class="material-card">
                         <div class="tier-badge premium">Premium</div>
                         <h3>Titanium</h3>
                         <p style="opacity: 0.33;">Aerospace-grade strength, incredibly lightweight</p>
                         <span class="availability" style="margin-top: 1.8rem;">Coming Soon</span>
-                        <span class="price-note" style="margin-top: -.33rem;">Estimated: ~<strong>$60</strong>/piece</span>
+                        <span class="price-note" style="margin-top: -.33rem;">Estimated: ~<strong>$60</strong>/plate</span>
                     </div>
                     <div class="material-card">
                         <div class="tier-badge holy">Insane</div>
                         <h3>Damascus Steel</h3>
                         <p style="opacity: 0.33;">Unique patterns, legendary strength</p>
                         <span class="availability" style="margin-top: 1.8rem;">Coming</span>
-                        <span class="price-note" style="margin-top: -.33rem;">Estimated: ~<strong>$70</strong>/piece</span>
+                        <span class="price-note" style="margin-top: -.33rem;">Estimated: ~<strong>$70</strong>/plate</span>
                     </div>
                 </div>
                 <p style="margin-top: 2rem; opacity: 0.8;">Future releases will include Titanium and Damascus Steel options</p>
@@ -214,7 +214,7 @@
                         <input type="email" id="email" name="email" autocomplete="email" required>
                     </div>
                     <div class="form-group">
-                        <label for="message">How many pieces? (Optional)</label>
+                        <label for="message">How many plates? (Optional)</label>
                         <textarea id="message" name="message" autocomplete="off"></textarea>
                     </div>
                     <input type="hidden" name="_captcha" value="false">
@@ -240,7 +240,7 @@
                         <div class="material-selection-box">
                             <div class="material-box-header">
                                 <h4><span style="opacity: 0.666;">6061-T6</span> Aluminum</h4>
-                                <span class="price-note"><strong>$33</strong>/piece <span style="opacity: 0.33; font-size: 0.85em; white-space: nowrap;">(plus tax)</span></span>
+                                <span class="price-note"><strong>$33</strong>/plate <span style="opacity: 0.33; font-size: 0.85em; white-space: nowrap;">(plus tax)</span></span>
                             </div>
                             <div class="product-options">
                                 <div class="product-selector-card">
@@ -264,14 +264,14 @@
                                     <button type="button" class="add-to-cart-btn" data-product="mk1">Add</button>
                                 </div>
                                 <div class="preset-buttons">
-                                    <button type="button" class="recommended-btn" id="random-btn">Random<br><span style="font-size: 0.75em; opacity: 0.7;">(3 Pieces)</span></button>
-                                    <button type="button" class="recommended-btn" id="mine-btn">Favorite<br><span style="font-size: 0.75em; opacity: 0.7;">(3 Pieces)</span></button>
+                                    <button type="button" class="recommended-btn" id="random-btn">Random<br><span style="font-size: 0.75em; opacity: 0.7;">(3 Plates)</span></button>
+                                    <button type="button" class="recommended-btn" id="mine-btn">Favorite<br><span style="font-size: 0.75em; opacity: 0.7;">(3 Plates)</span></button>
                                 </div>
                             </div>
                         </div>
                         
                         <!-- Future materials (Titanium, Damascus) will be added here as more .material-selection-box elements -->
-                        <!-- <button type="button" class="recommended-btn" id="max-btn">9 Cards<br><span style="font-size: 0.75em; opacity: 0.7;">(3 Pieces)</span></button>-->
+                        <!-- <button type="button" class="recommended-btn" id="max-btn">9 Cards<br><span style="font-size: 0.75em; opacity: 0.7;">(3 Plates)</span></button>-->
                         
                     </div>
                     
@@ -284,10 +284,13 @@
                             <div class="cart-total">
                                 <span class="price-label">Total: </span><span class="dollar-sign">$</span><span id="totalPrice">0</span>
                             </div>
+                            <div class="order-note-section" id="orderNoteSection" style="display: none; margin-top: 1rem;">
+                                <textarea id="orderNote" placeholder="Add a note" style="width: 100%; padding: 0.5rem; background: rgba(0, 0, 0, 0.3); border: 1px solid rgba(192, 192, 192, 0.3); color: #fff; font-family: 'Cinzel', serif; font-size: 0.85rem; border-radius: 3px; resize: vertical; min-height: 60px; text-align: center;"></textarea>
+                            </div>
                             <div id="paypal-button-container"></div>
                             <p style="text-align: center; font-size: 0.9rem; color: #888888; margin: 1rem 0 0.5rem 0; letter-spacing: 0.5px;">Free Shipping</p>
                             <div class="startup-note">
-                                <p>As a startup, we're committed to quality over speed and keeping you informed every step of the way. You'll receive a payment confirmation now, an email when your pieces get anodized (if they're not already in stock), and one more when your order ships! Questions? Email us anytime at <a href="mailto:variablewallet@gmail.com" style="color: #c0c0c0; text-decoration: underline;">variablewallet@gmail.com</a></p>
+                                <p>As a startup, we're committed to quality over speed and keeping you informed every step of the way. You'll receive a payment confirmation now, an email when your plates get anodized (if they're not already in stock), and one more when your order ships! Questions? Email us anytime at <a href="mailto:variablewallet@gmail.com" style="color: #c0c0c0; text-decoration: underline;">variablewallet@gmail.com</a></p>
                             </div>
                         </div>
                     </div>
@@ -320,7 +323,7 @@
         <div class="thank-you-content">
             <h2>Thank You!</h2>
             <p>Your payment has been successfully processed and your order is in!</p>
-            <p>You'll receive an email confirmation shortly, and we'll notify you again when your wallet pieces have shipped!</p>
+            <p>You'll receive an email confirmation shortly, and we'll notify you again when your wallet plates have shipped!</p>
             <p>If you have any questions at all, feel free to reach out anytime at <a href="mailto:variablewallet@gmail.com" style="color: #c0c0c0; text-decoration: underline;">variablewallet@gmail.com</a></p>
             <p class="order-id">Order ID: <span id="modalOrderId"></span></p>
             <button class="close-modal-btn" onclick="closeThankYouModal()">Continue Shopping</button>
