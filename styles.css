@@ -1122,7 +1122,7 @@ section {
     font-size: 0.95em; /* Increased from 0.8em for more prominence */
     text-transform: uppercase;
     letter-spacing: 3px; /* Tripled from 1px to 3px */
-    margin-top: -1rem;
+    margin-top: 2rem; /* Match spacing above boxes */
     text-align: center;
     opacity: 0.7;
 }
@@ -1764,12 +1764,11 @@ footer .wallet-text {
 /* Create Your Own! Section */
 .product-selector {
     display: grid;
-    grid-template-columns: repeat(auto-fit, 480px); /* Fixed at 480px - no growing */
+    grid-template-columns: repeat(2, minmax(480px, 1fr)); /* 2 columns, min 480px each, grow equally */
     gap: 2rem;
     width: 100%;
-    margin-top: 2rem;
-    margin-bottom: 2rem;
-    justify-content: center;
+    max-width: 1040px; /* 480px + 480px + 2rem gap + padding */
+    margin: 2rem auto;
 }
 
 .cart-section, .selection-section {
