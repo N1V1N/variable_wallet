@@ -189,9 +189,14 @@ main {
     padding-top: 2.5rem;
 }
 
-/* Add extra headroom above materials section */
+/* Add tuned headroom above materials section and slightly tighter gap under plate models */
+#models.content-section {
+	padding-top: 6rem; /* Larger gap above Wallet Plates for clearer separation */
+	padding-bottom: 2.25rem;
+}
+
 #materials.content-section {
-    padding-top: 9rem;
+	padding-top: 5rem;
 }
 
 .content-section .container {
@@ -549,11 +554,11 @@ main {
 
 /* Section-specific scroll margins */
 #materials {
-    scroll-margin-top: -44px; /* Adjusted for increased padding-top (9rem vs 4rem default) */
+    scroll-margin-top: 33px; /* Ensure Materials heading clears fixed header on nav click */
 }
 
 #process, #waitlist {
-    scroll-margin-top: 36px;
+    scroll-margin-top: 44px;
 }
 
 #hero-shots {
@@ -567,7 +572,7 @@ main {
 /* Mobile-specific scroll margins */
 @media (max-width: 768px) {
     #materials {
-        scroll-margin-top: -47px; /* Adjusted for increased padding-top */
+        scroll-margin-top: 33px; /* Tuned for smaller mobile navbar height */
     }
     
     #create-your-own {
@@ -919,7 +924,9 @@ section {
 .card-capacity {
     font-size: 1.1rem;
     opacity: 0.8;
-    margin-bottom: 0.75rem;
+    margin-bottom: 0.99rem;
+    margin-top: 1.2rem;
+    line-height: .9;
     position: relative;
     z-index: 1;
 }
@@ -927,8 +934,8 @@ section {
 .card-thickness {
     font-size: 1.1rem;
     opacity: 0.8;
-    margin-top: -.75rem;
-    margin-bottom: 0.75rem;
+    margin-top: -0.15rem;
+    margin-bottom: 0.55rem;
     position: relative;
     z-index: 1;
 }
@@ -937,8 +944,8 @@ section {
     font-size: 0.75rem;
     color: var(--text-color);
     opacity: 0.7;
-    margin-top: -0.99rem;
-    margin-bottom: 0.3rem;
+    margin-top: 0;
+    margin-bottom: -.7rem;
     position: relative;
     z-index: 1;
 }
@@ -1867,6 +1874,8 @@ footer .wallet-text {
     justify-content: center;
     opacity: 0.7;
     transition: var(--transition);
+    touch-action: manipulation;
+    -webkit-tap-highlight-color: transparent;
 }
 
 .remove-item-btn:hover {

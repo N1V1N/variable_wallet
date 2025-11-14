@@ -700,7 +700,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 // Current favorite: Purple
                 cartItems.push({
                     product: 'MK I',
-                    finish: 'Purple', // <-- Change this color whenever you want!
+                    finish: 'Gunmetal', // <-- Change this color whenever you want!
                     quantity: 1,
                     price: PRICE_PER_ITEM
                 });
@@ -817,11 +817,8 @@ document.addEventListener('DOMContentLoaded', () => {
             
             // Define the order of funding sources
             const fundingSources = [
-                paypal.FUNDING.VENMO,      // 1st - Mobile-friendly
-                // paypal.FUNDING.APPLEPAY,   // 2nd - DISABLED: Requires PayPal merchant Apple Pay approval
-                paypal.FUNDING.PAYPAL,     // 2nd - Traditional
-                // paypal.FUNDING.PAYLATER,   // 3rd - DISABLED: Available in PayPal checkout flow
-                paypal.FUNDING.CARD        // 3rd - Credit/Debit cards
+                paypal.FUNDING.PAYPAL,     // Traditional PayPal checkout
+                paypal.FUNDING.CARD        // Credit/Debit cards
             ];
             
             // Render buttons for each funding source in order
@@ -830,29 +827,12 @@ document.addEventListener('DOMContentLoaded', () => {
                 const isEligible = paypal.isFundingEligible(fundingSource);
                 console.log('Funding Source:', fundingSource, '| Eligible:', isEligible, '| Mobile:', isMobile);
                 
-                // Block Venmo on desktop devices (it's mobile-only)
-                if (fundingSource === paypal.FUNDING.VENMO && !isMobile) {
-                    console.log('⛔ Skipping Venmo on desktop device');
-                    return; // Skip only Venmo, continue to other funding sources
-                }
-                
-                // Force Venmo on mobile even if PayPal SDK says not eligible (Chrome iOS fix)
-                const forceRender = fundingSource === paypal.FUNDING.VENMO && isMobile;
-                
-                if (isEligible || forceRender) {
-                    if (forceRender && !isEligible) {
-                        console.log('🔧 Force rendering Venmo on mobile (Chrome iOS compatibility)');
-                    }
-                    
+                if (isEligible) {
                     // Configure button options based on funding source
                     const buttonConfig = {
                         fundingSource: fundingSource
                     };
-                    
-                    // Only use commit mode for non-Venmo buttons (Venmo needs native flow for app deep linking)
-                    if (fundingSource !== paypal.FUNDING.VENMO) {
-                        buttonConfig.commit = true; // Shows "Pay Now" for faster checkout
-                    }
+                    buttonConfig.commit = true; // Shows "Pay Now" for faster checkout
                     
                     paypal.Buttons({
                         ...buttonConfig,
