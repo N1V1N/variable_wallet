@@ -703,6 +703,7 @@ section {
 .availability {
     display: block;
     margin-top: 1.8rem; /* Reduced from 1rem to 0.5rem */
+    margin-bottom: 0.33rem;
     font-size: 0.9rem;
     text-transform: uppercase;
     letter-spacing: 1px;
@@ -711,28 +712,29 @@ section {
 .pulse-effect {
     display: block;
     margin-top: 1.8rem; /* Reduced from 1rem to 0.5rem */
+    margin-bottom: 0.33rem;
     font-size: .9rem;
     text-transform: uppercase;
     letter-spacing: 1px;
     text-decoration: none;
     color: var(--text-color);
-    animation: subtle-pulse 1.8s infinite ease-in-out;
+    animation: subtle-pulse 2.1s infinite ease-in-out; /* slightly slower, softer pulse */
     cursor: pointer;
 }
 
-/* Pulse effect animation - Maximum brightness with glow */
+/* Pulse effect animation - softened glow */
 @keyframes subtle-pulse {
     0% { 
         opacity: 1;
-        text-shadow: 0 0 5px rgba(192, 192, 192, 0.3);
+        text-shadow: 0 0 3px rgba(192, 192, 192, 0.18);
     }
     50% { 
         opacity: 1;
-        text-shadow: 0 0 15px rgba(192, 192, 192, 0.8), 0 0 25px rgba(192, 192, 192, 0.4);
+        text-shadow: 0 0 9px rgba(192, 192, 192, 0.45), 0 0 14px rgba(192, 192, 192, 0.22);
     }
     100% { 
         opacity: 1;
-        text-shadow: 0 0 5px rgba(192, 192, 192, 0.3);
+        text-shadow: 0 0 3px rgba(192, 192, 192, 0.18);
     }
 }
 
@@ -914,7 +916,7 @@ section {
     margin-bottom: 0.3rem;
     color: var(--text-color);
     font-weight: bold;
-    letter-spacing: 2px;
+    letter-spacing: 3px;
     text-transform: uppercase;
     text-shadow: var(--glow);
     position: relative;
@@ -925,10 +927,12 @@ section {
     font-size: 1.1rem;
     opacity: 0.8;
     margin-bottom: 0.99rem;
-    margin-top: 1.2rem;
+    margin-top: 0.7rem;
     line-height: .9;
     position: relative;
     z-index: 1;
+    padding-top: 1.23rem;
+    border-top: 1px solid rgba(192, 192, 192, 0.33);
 }
 
 .card-thickness {
