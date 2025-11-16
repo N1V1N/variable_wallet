@@ -385,7 +385,8 @@ document.addEventListener('DOMContentLoaded', () => {
                 { value: 'gunmetal', text: 'Gunmetal' },
                 { value: 'purple', text: 'Purple' },
                 { value: 'gold', text: 'Gold' },
-                { value: 'teal', text: 'Teal' }
+                { value: 'teal', text: 'Teal' },
+                { value: 'black', text: 'Black' }
             ],
             mk2: [
                 // { value: 'machined', text: 'Machined Finish' },
@@ -651,7 +652,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 
                 // Add 3 completely random plates
                 const models = ['MK I', 'MK II'];
-                const mk1Colors = ['Red', 'Gunmetal', 'Purple', 'Gold', 'Teal'];
+                const mk1Colors = ['Red', 'Gunmetal', 'Purple', 'Gold', 'Teal', 'Black'];
                 const mk2Colors = ['Black'];
                 
                 for (let i = 0; i < 3; i++) {
