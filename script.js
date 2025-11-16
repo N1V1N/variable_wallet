@@ -510,6 +510,14 @@ document.addEventListener('DOMContentLoaded', () => {
             
             cartItems.push(cartItem);
             updateCartDisplay();
+            
+            // Scroll to cart on mobile/stacked layout
+            const cartSection = document.querySelector('.cart-section');
+            if (cartSection) {
+                const yOffset = -93; // Align right under banner
+                const y = cartSection.getBoundingClientRect().top + window.pageYOffset + yOffset;
+                window.scrollTo({ top: y, behavior: 'smooth' });
+            }
         });
         
         // Update cart display
