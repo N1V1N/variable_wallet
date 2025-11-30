@@ -365,6 +365,24 @@ main {
     animation: subtle-bounce 2.6s ease infinite;
 }
 
+.hero-disclaimer {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    margin: 0;
+    padding: 0;
+    color: rgba(255, 255, 255, 0.42);
+    font-size: clamp(0.58rem, 1.6vw, 0.74rem);
+    letter-spacing: 0.28em;
+    text-transform: uppercase;
+    text-align: center;
+    pointer-events: none;
+    z-index: 3;
+    text-shadow: 0 0 6px rgba(0, 0, 0, 0.55);
+    white-space: nowrap;
+}
+
 .product-image {
     width: 100%;
     height: auto;
