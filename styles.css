@@ -990,6 +990,26 @@ section {
     z-index: 1;
 }
 
+.floating-mki2-wrapper {
+    margin-top: 0;
+    margin-bottom: 0.75rem;
+}
+
+.floating-mki2 {
+    max-width: 36px; /* ~3x smaller than 320px thumbnails */
+    height: auto;
+    display: block;
+    margin: 0 auto;
+    animation: subtle-bounce 2.6s ease infinite;
+    pointer-events: none;
+}
+
+.floating-mki2-bridge {
+    text-align: center;
+    margin: -0.75rem 0 0.25rem 0; /* pull it slightly toward Assemble without big layout change */
+    pointer-events: none;
+}
+
 .model-thumbnail-wrapper {
     margin: 0.5rem 9rem 0.75rem 9rem;
     display: flex;

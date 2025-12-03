@@ -382,13 +382,27 @@ document.addEventListener('DOMContentLoaded', () => {
                     let mk1AutoInterval = null;
                     let mk1UserInteracted = false;
 
+                    // Floating MK image that lives between sections
+                    const floatingMkImage = document.querySelector('.floating-mki2');
+
+                    // Keep the floating image in sync with the current MK I frame
+                    const updateMk1Images = () => {
+                        const newSrc = mk1Images[mk1Index];
+                        mk1Thumbnail.src = newSrc;
+                        if (floatingMkImage) {
+                            floatingMkImage.src = newSrc;
+                        }
+                    };
+
+                    // Ensure initial sync
+                    updateMk1Images();
+
                     window.advanceMk1 = () => {
                         console.log('MK I thumbnail clicked, index:', mk1Index);
                         if (mk1Images.length <= 1) return;
                         mk1Index = (mk1Index + 1) % mk1Images.length;
-                        const newSrc = mk1Images[mk1Index];
-                        console.log('Setting src to:', newSrc);
-                        mk1Thumbnail.src = newSrc;
+                        console.log('Setting MK I frame index to:', mk1Index);
+                        updateMk1Images();
                     };
                     
                     console.log('advanceMk1 function created:', typeof window.advanceMk1);
