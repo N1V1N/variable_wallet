@@ -985,7 +985,40 @@ section {
     -ms-user-select: none;
     user-select: none;
     -webkit-tap-highlight-color: transparent;
+    pointer-events: none !important;
+    position: relative;
+    z-index: 1;
+}
+
+.model-thumbnail-wrapper {
+    margin: 0.5rem 9rem 0.75rem 9rem;
+    display: flex;
+    justify-content: center;
     pointer-events: auto !important;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+    -webkit-tap-highlight-color: transparent;
+    height: auto;
+    position: relative;
+    animation: subtle-bounce 2.6s ease infinite;
+}
+
+.thumbnail-click-overlay {
+    position: absolute;
+    top: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    cursor: pointer;
+    z-index: 9999;
+    background: transparent;
+    width: 320px;
+    height: auto;
+}
+
+.model-thumbnail-wrapper.fast-bounce {
+    animation: subtle-bounce 3.3s ease infinite;
 }
 
 .color-swatches {

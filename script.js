@@ -382,7 +382,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     let mk1AutoInterval = null;
                     let mk1UserInteracted = false;
 
-                    const advanceMk1 = () => {
+                    window.advanceMk1 = () => {
                         console.log('MK I thumbnail clicked, index:', mk1Index);
                         if (mk1Images.length <= 1) return;
                         mk1Index = (mk1Index + 1) % mk1Images.length;
@@ -390,6 +390,8 @@ document.addEventListener('DOMContentLoaded', () => {
                         console.log('Setting src to:', newSrc);
                         mk1Thumbnail.src = newSrc;
                     };
+                    
+                    console.log('advanceMk1 function created:', typeof window.advanceMk1);
 
                     const stopMk1AutoCycle = () => {
                         if (mk1AutoInterval) {
@@ -442,7 +444,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     let mk2AutoInterval = null;
                     let mk2UserInteracted = false;
 
-                    const advanceMk2 = () => {
+                    window.advanceMk2 = () => {
                         console.log('MK II thumbnail clicked, index:', mk2Index);
                         if (mk2Images.length <= 1) return;
                         mk2Index = (mk2Index + 1) % mk2Images.length;
@@ -450,6 +452,8 @@ document.addEventListener('DOMContentLoaded', () => {
                         console.log('Setting src to:', newSrc);
                         mk2Thumbnail.src = newSrc;
                     };
+                    
+                    console.log('advanceMk2 function created:', typeof window.advanceMk2);
 
                     const stopMk2AutoCycle = () => {
                         if (mk2AutoInterval) {
@@ -758,7 +762,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     
                     // Create item text span
                     const itemText = document.createElement('span');
-                    itemText.textContent = `${item.product} - ${displayFinish} - AL - $${item.price}`;
+                    itemText.textContent = `${item.product} - AL - ${displayFinish} - $${item.price}`;
                     
                     // Create remove button
                     const removeBtn = document.createElement('button');
