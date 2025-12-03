@@ -299,21 +299,147 @@ document.addEventListener('DOMContentLoaded', () => {
             if (heroShotImage && imageZoomOverlay) {
                 const overlayImage = imageZoomOverlay.querySelector('img');
                 
-                // Click to zoom in
                 heroShotImage.addEventListener('click', () => {
                     overlayImage.src = heroShotImage.src;
                     imageZoomOverlay.classList.add('active');
-                    document.body.style.overflow = 'hidden'; // Prevent scrolling
+                    document.body.style.overflow = 'hidden';
                 });
                 
-                // Click overlay to zoom out/close
                 imageZoomOverlay.addEventListener('click', () => {
                     imageZoomOverlay.classList.remove('active');
-                    document.body.style.overflow = ''; // Restore scrolling
+                    document.body.style.overflow = '';
                 });
             }
 
-            // Handle waitlist form submission
+            const mk1Thumbnail = document.getElementById('mk1-thumbnail');
+            const mk2Thumbnail = document.getElementById('mk2-thumbnail');
+            const mk2Wrapper = mk2Thumbnail?.parentElement;
+
+            console.log('MK I thumbnail found:', !!mk1Thumbnail);
+            console.log('MK II thumbnail found:', !!mk2Thumbnail);
+            console.log('MK II wrapper found:', !!mk2Wrapper);
+
+            // Auto-detect MK I images (same logic as main slideshow)
+            const mk1Images = [];
+            const preloadMk1Images = async () => {
+                let foundImages = true;
+                let i = 1;
+                
+                while (foundImages && i <= 100) {
+                    const path = `images/mki_${i}.png`;
+                    foundImages = await checkImageExists(path);
+                    
+                    if (foundImages) {
+                        mk1Images.push(path);
+                        i++;
+                    } else {
+                        if (mk1Images.length > 0) {
+                            mk1Images.sort((a, b) => {
+                                const numA = parseInt(a.match(/\d+/)[0]);
+                                const numB = parseInt(b.match(/\d+/)[0]);
+                                return numA - numB;
+                            });
+                            break;
+                        }
+                    }
+                }
+            };
+            
+            // Auto-detect MK II images (same logic as main slideshow)
+            const mk2Images = [];
+            const preloadMk2Images = async () => {
+                let foundImages = true;
+                let i = 1;
+                
+                while (foundImages && i <= 100) {
+                    const path = `images/mkii_${i}.png`;
+                    foundImages = await checkImageExists(path);
+                    
+                    if (foundImages) {
+                        mk2Images.push(path);
+                        i++;
+                    } else {
+                        if (mk2Images.length > 0) {
+                            mk2Images.sort((a, b) => {
+                                const numA = parseInt(a.match(/\d+/)[0]);
+                                const numB = parseInt(b.match(/\d+/)[0]);
+                                return numA - numB;
+                            });
+                            break;
+                        }
+                    }
+                }
+            };
+            
+            // Load all images (same pattern as main slideshow)
+            preloadMk1Images().then(() => {
+                return preloadMk2Images();
+            }).then(() => {
+                // Setup MK I thumbnail after images are loaded
+                if (mk1Thumbnail && mk1Images.length > 0) {
+                    let mk1Index = 0;
+                    mk1Thumbnail.src = mk1Images[mk1Index];
+
+                    const advanceMk1 = () => {
+                        console.log('MK I thumbnail clicked, index:', mk1Index);
+                        if (mk1Images.length <= 1) return;
+                        mk1Index = (mk1Index + 1) % mk1Images.length;
+                        const newSrc = mk1Images[mk1Index];
+                        console.log('Setting src to:', newSrc);
+                        mk1Thumbnail.src = newSrc;
+                    };
+
+                    mk1Thumbnail.addEventListener('click', advanceMk1);
+                    const mk1Wrapper = mk1Thumbnail?.parentElement;
+                    if (mk1Wrapper) {
+                        mk1Wrapper.addEventListener('click', (e) => {
+                            console.log('MK I wrapper clicked');
+                            advanceMk1();
+                        });
+                    }
+                    // Fallback: parent card click
+                    const mk1Card = mk1Thumbnail?.closest('.model-info-card');
+                    if (mk1Card) {
+                        mk1Card.addEventListener('click', (e) => {
+                            if (e.target === mk1Thumbnail || mk1Wrapper?.contains(e.target)) return; // avoid double
+                            console.log('MK I card fallback clicked');
+                            advanceMk1();
+                        });
+                    }
+                }
+
+                // Setup MK II thumbnail after images are loaded
+                if (mk2Thumbnail && mk2Images.length > 0) {
+                    let mk2Index = 0;
+                    mk2Thumbnail.src = mk2Images[mk2Index];
+
+                    const advanceMk2 = () => {
+                        console.log('MK II thumbnail clicked, index:', mk2Index);
+                        if (mk2Images.length <= 1) return;
+                        mk2Index = (mk2Index + 1) % mk2Images.length;
+                        const newSrc = mk2Images[mk2Index];
+                        console.log('Setting src to:', newSrc);
+                        mk2Thumbnail.src = newSrc;
+                    };
+
+                    mk2Thumbnail.addEventListener('click', advanceMk2);
+                    if (mk2Wrapper) {
+                        mk2Wrapper.addEventListener('click', (e) => {
+                            console.log('MK II wrapper clicked');
+                            advanceMk2();
+                        });
+                    }
+                    // Fallback: parent card click
+                    const mk2Card = mk2Thumbnail?.closest('.model-info-card');
+                    if (mk2Card) {
+                        mk2Card.addEventListener('click', (e) => {
+                            if (e.target === mk2Thumbnail || mk2Wrapper?.contains(e.target)) return; // avoid double
+                            console.log('MK II card fallback clicked');
+                            advanceMk2();
+                        });
+                    }
+                }
+            });
             const waitlistForm = document.getElementById('waitlistForm');
             const formMessage = document.getElementById('formMessage');
 

@@ -911,6 +911,11 @@ section {
     width: fit-content;
     max-width: 250px;
     min-width: 220px;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+    -webkit-tap-highlight-color: transparent;
 }
 
 .model-info-card::before {
@@ -937,8 +942,61 @@ section {
     letter-spacing: 3px;
     text-transform: uppercase;
     text-shadow: var(--glow);
+    opacity: 0.33;
     position: relative;
     z-index: 1;
+}
+
+.model-thumbnail-wrapper {
+    margin: 0.5rem auto 0.75rem auto;
+    display: flex;
+    justify-content: center;
+    pointer-events: auto !important;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+    -webkit-tap-highlight-color: transparent;
+    width: 180px;
+    height: auto;
+}
+
+.model-thumbnail {
+    max-width: 180px;
+    height: auto;
+    display: block;
+    border-radius: 4px;
+    cursor: pointer;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+    -webkit-tap-highlight-color: transparent;
+    pointer-events: auto !important;
+}
+
+.color-swatches {
+    display: flex;
+    gap: 0.25rem;
+    justify-content: center;
+    flex-wrap: wrap;
+    pointer-events: none;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+}
+
+.color-swatch {
+    width: 12px;
+    height: 12px;
+    border-radius: 0;
+    border: 1px solid rgba(0, 0, 0, 0.5);
+    pointer-events: none;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
 }
 
 .card-capacity {
@@ -2151,6 +2209,22 @@ footer .wallet-text {
     letter-spacing: 2px;
     font-size: 1rem;
     text-align: center;
+}
+
+.product-model-info-card {
+    background: rgba(0, 0, 0, 0.7);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 8px;
+    padding: 2rem;
+    text-align: center;
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+    -webkit-tap-highlight-color: transparent;
 }
 
 /* Material Selection Box (Aluminum, Titanium, etc.) */
