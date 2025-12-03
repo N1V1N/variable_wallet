@@ -909,7 +909,7 @@ section {
     overflow: hidden;
     transition: var(--transition);
     width: fit-content;
-    max-width: 250px;
+    max-width: 400px;
     min-width: 220px;
     -webkit-user-select: none;
     -moz-user-select: none;
@@ -948,7 +948,7 @@ section {
 }
 
 .model-thumbnail-wrapper {
-    margin: 0.5rem auto 0.75rem auto;
+    margin: 0.5rem 9rem 0.75rem 9rem;
     display: flex;
     justify-content: center;
     pointer-events: auto !important;
@@ -957,12 +957,25 @@ section {
     -ms-user-select: none;
     user-select: none;
     -webkit-tap-highlight-color: transparent;
-    width: 180px;
     height: auto;
 }
 
+/* Margins for MKI/MKII plates: 9rem desktop, 3rem on anything smaller
+   and smaller image size on mobile only */
+@media (max-width: 900px) {
+    .models-grid .model-thumbnail-wrapper {
+        /* Let the wrapper width follow the image and center it */
+        margin: 0.5rem auto 0.75rem auto !important;
+    }
+
+    /* Mobile: make images a bit smaller than desktop (320px -> 220px) */
+    .models-grid .model-thumbnail {
+        max-width: 220px;
+    }
+}
+
 .model-thumbnail {
-    max-width: 180px;
+    max-width: 320px;
     height: auto;
     display: block;
     border-radius: 4px;
@@ -1055,6 +1068,17 @@ section {
     position: relative;
     z-index: 1;
     margin-right: auto;
+}
+
+/* On desktop, show color and materials boxes side-by-side within each card */
+@media (min-width: 900px) {
+    .model-info-card .color-box {
+        display: inline-block;
+        margin-left: 0.25rem;
+        margin-right: 0.25rem;
+        vertical-align: top;
+        height: 6rem; /* increased height to allow more space at bottom */
+    }
 }
 
 /* Waiting List Form Styles */
