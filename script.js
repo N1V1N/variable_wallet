@@ -619,6 +619,12 @@ document.addEventListener('DOMContentLoaded', () => {
                 
                 // Update finish options
                 updateFinishOptions();
+                
+                // Auto-open color dropdown after a short delay
+                setTimeout(() => {
+                    finishDropdown.classList.add('active');
+                    finishOptions.classList.add('show');
+                }, 100);
             });
         });
         
