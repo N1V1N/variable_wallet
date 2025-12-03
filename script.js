@@ -379,6 +379,8 @@ document.addEventListener('DOMContentLoaded', () => {
                 if (mk1Thumbnail && mk1Images.length > 0) {
                     let mk1Index = 0;
                     mk1Thumbnail.src = mk1Images[mk1Index];
+                    let mk1AutoInterval = null;
+                    let mk1UserInteracted = false;
 
                     const advanceMk1 = () => {
                         console.log('MK I thumbnail clicked, index:', mk1Index);
@@ -389,20 +391,45 @@ document.addEventListener('DOMContentLoaded', () => {
                         mk1Thumbnail.src = newSrc;
                     };
 
-                    mk1Thumbnail.addEventListener('click', advanceMk1);
+                    const stopMk1AutoCycle = () => {
+                        if (mk1AutoInterval) {
+                            clearInterval(mk1AutoInterval);
+                            mk1AutoInterval = null;
+                            mk1UserInteracted = true;
+                            console.log('MK I auto-cycle stopped due to user interaction');
+                        }
+                    };
+
+                    const startMk1AutoCycle = () => {
+                        if (mk1Images.length > 1 && !mk1UserInteracted) {
+                            mk1AutoInterval = setInterval(advanceMk1, 3000);
+                            console.log('MK I auto-cycle started (3 second interval)');
+                        }
+                    };
+
+                    // Start auto-cycle if multiple images
+                    startMk1AutoCycle();
+
+                    // Stop auto-cycle on user interaction
+                    mk1Thumbnail.addEventListener('click', () => {
+                        stopMk1AutoCycle();
+                        advanceMk1();
+                    });
+                    
                     const mk1Wrapper = mk1Thumbnail?.parentElement;
                     if (mk1Wrapper) {
-                        mk1Wrapper.addEventListener('click', (e) => {
-                            console.log('MK I wrapper clicked');
+                        mk1Wrapper.addEventListener('click', () => {
+                            stopMk1AutoCycle();
                             advanceMk1();
                         });
                     }
+                    
                     // Fallback: parent card click
                     const mk1Card = mk1Thumbnail?.closest('.model-info-card');
                     if (mk1Card) {
                         mk1Card.addEventListener('click', (e) => {
-                            if (e.target === mk1Thumbnail || mk1Wrapper?.contains(e.target)) return; // avoid double
-                            console.log('MK I card fallback clicked');
+                            if (e.target === mk1Thumbnail || mk1Wrapper?.contains(e.target)) return;
+                            stopMk1AutoCycle();
                             advanceMk1();
                         });
                     }
@@ -412,6 +439,8 @@ document.addEventListener('DOMContentLoaded', () => {
                 if (mk2Thumbnail && mk2Images.length > 0) {
                     let mk2Index = 0;
                     mk2Thumbnail.src = mk2Images[mk2Index];
+                    let mk2AutoInterval = null;
+                    let mk2UserInteracted = false;
 
                     const advanceMk2 = () => {
                         console.log('MK II thumbnail clicked, index:', mk2Index);
@@ -422,19 +451,44 @@ document.addEventListener('DOMContentLoaded', () => {
                         mk2Thumbnail.src = newSrc;
                     };
 
-                    mk2Thumbnail.addEventListener('click', advanceMk2);
+                    const stopMk2AutoCycle = () => {
+                        if (mk2AutoInterval) {
+                            clearInterval(mk2AutoInterval);
+                            mk2AutoInterval = null;
+                            mk2UserInteracted = true;
+                            console.log('MK II auto-cycle stopped due to user interaction');
+                        }
+                    };
+
+                    const startMk2AutoCycle = () => {
+                        if (mk2Images.length > 1 && !mk2UserInteracted) {
+                            mk2AutoInterval = setInterval(advanceMk2, 3000);
+                            console.log('MK II auto-cycle started (3 second interval)');
+                        }
+                    };
+
+                    // Start auto-cycle if multiple images
+                    startMk2AutoCycle();
+
+                    // Stop auto-cycle on user interaction
+                    mk2Thumbnail.addEventListener('click', () => {
+                        stopMk2AutoCycle();
+                        advanceMk2();
+                    });
+                    
                     if (mk2Wrapper) {
-                        mk2Wrapper.addEventListener('click', (e) => {
-                            console.log('MK II wrapper clicked');
+                        mk2Wrapper.addEventListener('click', () => {
+                            stopMk2AutoCycle();
                             advanceMk2();
                         });
                     }
+                    
                     // Fallback: parent card click
                     const mk2Card = mk2Thumbnail?.closest('.model-info-card');
                     if (mk2Card) {
                         mk2Card.addEventListener('click', (e) => {
-                            if (e.target === mk2Thumbnail || mk2Wrapper?.contains(e.target)) return; // avoid double
-                            console.log('MK II card fallback clicked');
+                            if (e.target === mk2Thumbnail || mk2Wrapper?.contains(e.target)) return;
+                            stopMk2AutoCycle();
                             advanceMk2();
                         });
                     }
@@ -704,7 +758,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     
                     // Create item text span
                     const itemText = document.createElement('span');
-                    itemText.textContent = `${item.product} - ${displayFinish} - $${item.price}`;
+                    itemText.textContent = `${item.product} - ${displayFinish} - AL - $${item.price}`;
                     
                     // Create remove button
                     const removeBtn = document.createElement('button');
