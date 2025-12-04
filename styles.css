@@ -191,7 +191,7 @@ main {
 
 /* Add tuned headroom above materials section and slightly tighter gap under plate models */
 #models.content-section {
-	padding-top: 6rem; /* Larger gap above Wallet Plates for clearer separation */
+	padding-top: 1.67rem; /* Reduced from 6rem to shrink gap above Plates */
 	padding-bottom: 2.25rem;
 }
 
@@ -993,6 +993,7 @@ section {
 .floating-mki2-wrapper {
     margin-top: 0;
     margin-bottom: 0.75rem;
+    animation: subtle-bounce 2.6s ease infinite;
 }
 
 .floating-mki2 {
@@ -1000,8 +1001,8 @@ section {
     height: auto;
     display: block;
     margin: 0 auto;
-    animation: subtle-bounce 2.6s ease infinite;
     pointer-events: none;
+    transform: rotate(-90deg);
 }
 
 .floating-mki2-bridge {
