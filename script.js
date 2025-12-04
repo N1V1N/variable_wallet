@@ -94,6 +94,7 @@ document.addEventListener('DOMContentLoaded', () => {
     // Flags to track when small images should stop following the main MK I / MK II cards
     let mkPairMkIIndependent = false;
     let mkPairMkIIIndependent = false;
+    let mkPairMkIIExtraIndependent = false; // new medium MKII in Assemble section
     let floatingMkIndependent = false;   // tiny MK II floater
     let floatingMk1Independent = false;  // tiny MK I floater
     preloadAllImages().then(result => {
@@ -494,11 +495,16 @@ document.addEventListener('DOMContentLoaded', () => {
                     let mk2AutoInterval = null;
                     let mk2UserInteracted = false;
 
-                    // Ensure MK II pair (above 6061-T6) and tiny floater start in sync
+                    // Ensure MK II pair (above 6061-T6), new Assemble MKII, and tiny floater start in sync
                     const mkPairMkII = document.querySelector('.mk-pair-mkii');
+                    const mkPairMkIIExtra = document.querySelector('.mk-pair-mkii-extra');
                     const floatingMkImage = document.querySelector('.floating-mki2');
                     if (mkPairMkII && !mkPairMkIIIndependent) {
                         mkPairMkII.src = mk2Images[mk2Index];
+                    }
+                    if (mkPairMkIIExtra && !mkPairMkIIExtraIndependent) {
+                        const extraIndex = mk2Images.length > 0 ? (mk2Index + 1) % mk2Images.length : mk2Index;
+                        mkPairMkIIExtra.src = mk2Images[extraIndex];
                     }
                     if (floatingMkImage && !floatingMkIndependent) {
                         floatingMkImage.src = mk2Images[mk2Index];
@@ -513,6 +519,10 @@ document.addEventListener('DOMContentLoaded', () => {
                         mk2Thumbnail.src = newSrc;
                         if (mkPairMkII && !mkPairMkIIIndependent) {
                             mkPairMkII.src = newSrc;
+                        }
+                        if (mkPairMkIIExtra && !mkPairMkIIExtraIndependent) {
+                            const extraIndex = mk2Images.length > 0 ? (mk2Index + 1) % mk2Images.length : mk2Index;
+                            mkPairMkIIExtra.src = mk2Images[extraIndex];
                         }
                         if (floatingMkImage && !floatingMkIndependent) {
                             floatingMkImage.src = newSrc;
@@ -540,7 +550,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     // Start auto-cycle if multiple images
                     startMk2AutoCycle();
 
-                    // Allow MK II small pair image to break off and cycle independently
+                    // Allow MK II small pair image (right) to break off and cycle independently
                     if (mkPairMkII) {
                         let mkPairMkIIIndex = mk2Index;
                         mkPairMkII.addEventListener('click', (e) => {
@@ -549,6 +559,18 @@ document.addEventListener('DOMContentLoaded', () => {
                             if (mk2Images.length <= 1) return;
                             mkPairMkIIIndex = (mkPairMkIIIndex + 1) % mk2Images.length;
                             mkPairMkII.src = mk2Images[mkPairMkIIIndex];
+                        });
+                    }
+
+                    // Allow new Assemble MK II (left of medium MK I) to break off and cycle independently
+                    if (mkPairMkIIExtra) {
+                        let mkPairMkIIExtraIndex = mk2Index;
+                        mkPairMkIIExtra.addEventListener('click', (e) => {
+                            e.stopPropagation();
+                            mkPairMkIIExtraIndependent = true;
+                            if (mk2Images.length <= 1) return;
+                            mkPairMkIIExtraIndex = (mkPairMkIIExtraIndex + 1) % mk2Images.length;
+                            mkPairMkIIExtra.src = mk2Images[mkPairMkIIExtraIndex];
                         });
                     }
 
