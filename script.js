@@ -90,6 +90,12 @@ document.addEventListener('DOMContentLoaded', () => {
     
     // Start preloading all images immediately and store references
     let preloadedImages = [];
+
+    // Flags to track when small images should stop following the main MK I / MK II cards
+    let mkPairMkIIndependent = false;
+    let mkPairMkIIIndependent = false;
+    let floatingMkIndependent = false;   // tiny MK II floater
+    let floatingMk1Independent = false;  // tiny MK I floater
     preloadAllImages().then(result => {
         preloadedImages = result;
         
@@ -382,20 +388,50 @@ document.addEventListener('DOMContentLoaded', () => {
                     let mk1AutoInterval = null;
                     let mk1UserInteracted = false;
 
-                    // Floating MK image that lives between sections
-                    const floatingMkImage = document.querySelector('.floating-mki2');
+                    // MK I / MK II pair above 6061-T6 Aluminum
+                    const mkPairMkI = document.querySelector('.mk-pair-mki');
+                    const mkPairMkII = document.querySelector('.mk-pair-mkii');
+                    // Tiny MK I floater between sections
+                    const floatingMk1Image = document.querySelector('.floating-mki1-hidden');
 
-                    // Keep the floating image in sync with the current MK I frame
+                    // Keep MK I-related small images in sync with the current MK I frame
                     const updateMk1Images = () => {
                         const newSrc = mk1Images[mk1Index];
                         mk1Thumbnail.src = newSrc;
-                        if (floatingMkImage) {
-                            floatingMkImage.src = newSrc;
+                        if (mkPairMkI && !mkPairMkIIndependent) {
+                            mkPairMkI.src = newSrc;
+                        }
+                        if (floatingMk1Image && !floatingMk1Independent) {
+                            floatingMk1Image.src = newSrc;
                         }
                     };
 
                     // Ensure initial sync
                     updateMk1Images();
+
+                    // Allow MK I small pair image to break off and cycle independently
+                    if (mkPairMkI) {
+                        let mkPairMkIIndex = mk1Index;
+                        mkPairMkI.addEventListener('click', (e) => {
+                            e.stopPropagation();
+                            mkPairMkIIndependent = true;
+                            if (mk1Images.length <= 1) return;
+                            mkPairMkIIndex = (mkPairMkIIndex + 1) % mk1Images.length;
+                            mkPairMkI.src = mk1Images[mkPairMkIIndex];
+                        });
+                    }
+
+                    // Allow tiny MK I floater to break off and cycle independently
+                    if (floatingMk1Image) {
+                        let floatingMk1Index = mk1Index;
+                        floatingMk1Image.addEventListener('click', (e) => {
+                            e.stopPropagation();
+                            floatingMk1Independent = true;
+                            if (mk1Images.length <= 1) return;
+                            floatingMk1Index = (floatingMk1Index + 1) % mk1Images.length;
+                            floatingMk1Image.src = mk1Images[floatingMk1Index];
+                        });
+                    }
 
                     window.advanceMk1 = () => {
                         console.log('MK I thumbnail clicked, index:', mk1Index);
@@ -458,6 +494,16 @@ document.addEventListener('DOMContentLoaded', () => {
                     let mk2AutoInterval = null;
                     let mk2UserInteracted = false;
 
+                    // Ensure MK II pair (above 6061-T6) and tiny floater start in sync
+                    const mkPairMkII = document.querySelector('.mk-pair-mkii');
+                    const floatingMkImage = document.querySelector('.floating-mki2');
+                    if (mkPairMkII && !mkPairMkIIIndependent) {
+                        mkPairMkII.src = mk2Images[mk2Index];
+                    }
+                    if (floatingMkImage && !floatingMkIndependent) {
+                        floatingMkImage.src = mk2Images[mk2Index];
+                    }
+
                     window.advanceMk2 = () => {
                         console.log('MK II thumbnail clicked, index:', mk2Index);
                         if (mk2Images.length <= 1) return;
@@ -465,6 +511,12 @@ document.addEventListener('DOMContentLoaded', () => {
                         const newSrc = mk2Images[mk2Index];
                         console.log('Setting src to:', newSrc);
                         mk2Thumbnail.src = newSrc;
+                        if (mkPairMkII && !mkPairMkIIIndependent) {
+                            mkPairMkII.src = newSrc;
+                        }
+                        if (floatingMkImage && !floatingMkIndependent) {
+                            floatingMkImage.src = newSrc;
+                        }
                     };
                     
                     console.log('advanceMk2 function created:', typeof window.advanceMk2);
@@ -487,6 +539,30 @@ document.addEventListener('DOMContentLoaded', () => {
 
                     // Start auto-cycle if multiple images
                     startMk2AutoCycle();
+
+                    // Allow MK II small pair image to break off and cycle independently
+                    if (mkPairMkII) {
+                        let mkPairMkIIIndex = mk2Index;
+                        mkPairMkII.addEventListener('click', (e) => {
+                            e.stopPropagation();
+                            mkPairMkIIIndependent = true;
+                            if (mk2Images.length <= 1) return;
+                            mkPairMkIIIndex = (mkPairMkIIIndex + 1) % mk2Images.length;
+                            mkPairMkII.src = mk2Images[mkPairMkIIIndex];
+                        });
+                    }
+
+                    // Allow tiny floating MK II to break off and cycle independently
+                    if (floatingMkImage) {
+                        let floatingMkIndex = mk2Index;
+                        floatingMkImage.addEventListener('click', (e) => {
+                            e.stopPropagation();
+                            floatingMkIndependent = true;
+                            if (mk2Images.length <= 1) return;
+                            floatingMkIndex = (floatingMkIndex + 1) % mk2Images.length;
+                            floatingMkImage.src = mk2Images[floatingMkIndex];
+                        });
+                    }
 
                     // Stop auto-cycle on user interaction
                     mk2Thumbnail.addEventListener('click', () => {

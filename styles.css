@@ -195,6 +195,13 @@ main {
 	padding-bottom: 2.25rem;
 }
 
+/* Mobile-only tweak: slightly reduce space above Plates */
+@media (max-width: 768px) {
+    #models.content-section {
+        padding-top: 1.1rem;
+    }
+}
+
 #materials.content-section {
 	padding-top: 5rem;
 }
@@ -960,22 +967,22 @@ section {
     height: auto;
 }
 
-/* Margins for MKI/MKII plates: 9rem desktop, 3rem on anything smaller
-   and smaller image size on mobile only */
+/* Margins for MKI/MKII plates: 9rem desktop, 3rem on anything smaller */
 @media (max-width: 900px) {
     .models-grid .model-thumbnail-wrapper {
         /* Let the wrapper width follow the image and center it */
         margin: 0.5rem auto 0.75rem auto !important;
     }
 
-    /* Mobile: make images a bit smaller than desktop (320px -> 220px) */
+    /* Mobile: allow thumbnails to fill the wider mobile cards */
     .models-grid .model-thumbnail {
-        max-width: 220px;
+        width: 100%;          /* Fill the card width on small screens */
+        max-width: 300px;     /* Match the visual scale we tuned for mobile */
     }
 }
 
 .model-thumbnail {
-    max-width: 320px;
+    max-width: 320px;        /* Original desktop size */
     height: auto;
     display: block;
     border-radius: 4px;
@@ -1001,7 +1008,33 @@ section {
     height: auto;
     display: block;
     margin: 0 auto;
-    pointer-events: none;
+    pointer-events: auto;
+    cursor: pointer;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+    -webkit-user-drag: none;
+    -webkit-tap-highlight-color: transparent;
+    outline: none;
+    transform: rotate(-90deg);
+}
+
+/* Tiny MK I floater uses same visuals as tiny MK II (ready to swap) */
+.floating-mki1-hidden {
+    max-width: 36px;
+    height: auto;
+    display: block;
+    margin: 0 auto;
+    pointer-events: auto;
+    cursor: pointer;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+    -webkit-user-drag: none;
+    -webkit-tap-highlight-color: transparent;
+    outline: none;
     transform: rotate(-90deg);
 }
 
@@ -1009,6 +1042,30 @@ section {
     text-align: center;
     margin: -0.75rem 0 0.25rem 0; /* pull it slightly toward Assemble without big layout change */
     pointer-events: none;
+}
+
+.mk-pair-bridge {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 0.5rem;
+    margin: 0.4rem 0 1.44rem 0; /* more room before 6061-T6 Aluminum */
+    position: relative;        /* allow z-index to lift above highlight overlay */
+    z-index: 2;                /* above selection-section::before (default 0/1) */
+    pointer-events: none;      /* don't block hover/click on the box itself */
+}
+
+.mk-pair-image {
+    max-width: 72px;
+    height: auto;
+    display: block;
+    opacity: 1;
+    pointer-events: auto;       /* override parent .mk-pair-bridge pointer-events:none */
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+    -webkit-user-drag: none;
 }
 
 .model-thumbnail-wrapper {
@@ -1124,8 +1181,8 @@ section {
     margin-right: auto;
 }
 
-/* On desktop, show color and materials boxes side-by-side within each card */
-@media (min-width: 900px) {
+/* Keep color/material boxes side-by-side down to ~323px viewport width */
+@media (min-width: 323px) {
     .model-info-card .color-box {
         display: inline-block;
         margin-left: 0.25rem;
@@ -1754,6 +1811,35 @@ footer .wallet-text {
     
     .nav-right {
         right: 0;
+    }
+}
+
+/* Mobile: let the Plates section boxes align like the buy boxes */
+@media (max-width: 768px) {
+    /* Make the Plates container full-width, similar to hero-shots */
+    #models .container {
+        width: 100vw;
+        max-width: 100vw;
+        margin-left: calc(-50vw + 50%);
+        margin-right: 0;
+        padding: 0 16px; /* side padding similar to Assemble / Cart boxes */
+    }
+
+    /* Stop re-centering/boxing the grid */
+    #models .models-grid {
+        max-width: none;
+        width: 100%;
+        margin: 0;
+        padding: 0;
+        justify-content: center;
+    }
+
+    /* Cards sized similarly to Plate Selection / Your Wallet */
+    #models .model-info-card {
+        width: 100%;
+        max-width: 360px;
+        margin-left: auto;
+        margin-right: auto;
     }
 }
 
