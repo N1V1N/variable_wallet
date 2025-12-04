@@ -957,7 +957,7 @@ section {
     letter-spacing: 3px;
     text-transform: uppercase;
     text-shadow: var(--glow);
-    opacity: 0.33;
+    opacity: 0.88; /* darken text (less transparent) so MKI/MKII labels read stronger */
     position: relative;
     z-index: 1;
 }
@@ -965,6 +965,15 @@ section {
 /* Jet-black, slightly dropped shadow behind MKI/MKII titles in the Plates section */
 #models .model-info-card h3 {
     text-shadow: 0 3px 6px rgba(0, 0, 0, 0.88);
+}
+
+/* Make MKI and MKII titles bob in sync with their plates in the Plates section */
+#models .model-info-card:nth-child(1) h3 {
+    animation: subtle-bounce 2.6s ease infinite;
+}
+
+#models .model-info-card:nth-child(2) h3 {
+    animation: subtle-bounce 3.3s ease infinite;
 }
 
 .model-thumbnail-wrapper {
