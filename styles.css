@@ -906,6 +906,14 @@ section {
     justify-content: center;
 }
 
+/* When MKI/MKII boxes wrap to multiple rows on mobile, tighten the vertical gap between rows */
+@media (max-width: 768px) {
+    .models-grid {
+        row-gap: 1.1rem;   /* smaller space between wrapped rows */
+        column-gap: 2rem;  /* keep horizontal spacing the same */
+    }
+}
+
 .model-info-card {
     text-align: center;
     padding: 1.25rem 1.5rem;
@@ -977,7 +985,7 @@ section {
     /* Mobile: allow thumbnails to fill the wider mobile cards */
     .models-grid .model-thumbnail {
         width: 100%;          /* Fill the card width on small screens */
-        max-width: 300px;     /* Match the visual scale we tuned for mobile */
+        max-width: 240px;     /* Smaller mobile size for MK I / MK II */
     }
 }
 
@@ -1040,7 +1048,7 @@ section {
 
 .floating-mki2-bridge {
     text-align: center;
-    margin: -0.75rem 0 0.25rem 0; /* pull it slightly toward Assemble without big layout change */
+    margin: 2rem 0 0.25rem 0; /* add noticeable gap above tiny MK I floater */
     pointer-events: none;
 }
 
@@ -2156,6 +2164,15 @@ footer .wallet-text {
 #create-your-own .cart-total .dollar-sign,
 #create-your-own .cart-total #totalPrice {
     color: #ffffff !important;
+}
+
+/* Tighten spacing between the $ and the total value */
+#create-your-own .cart-total .dollar-sign {
+    margin-right: -.33rem;
+}
+
+#create-your-own .cart-total #totalPrice {
+    margin-left: 0;
 }
 
 #create-your-own .cart-empty {
