@@ -962,6 +962,11 @@ section {
     z-index: 1;
 }
 
+/* Jet-black, slightly dropped shadow behind MKI/MKII titles in the Plates section */
+#models .model-info-card h3 {
+    text-shadow: 0 3px 6px rgba(0, 0, 0, 0.88);
+}
+
 .model-thumbnail-wrapper {
     margin: 0.5rem 9rem 0.75rem 9rem;
     display: flex;
@@ -2158,6 +2163,12 @@ footer .wallet-text {
 #create-your-own .cart-section h3,
 #create-your-own .cart-total .price-label {
     color: #888888 !important;
+}
+
+/* Jet-black, slightly dropped shadow behind 'Plate Selection' and 'Your Wallet' headings */
+#create-your-own .selection-section h3,
+#create-your-own .cart-section h3 {
+    text-shadow: 0 3px 6px rgba(0, 0, 0, 0.88);
 }
 
 /* Price stays bright */
