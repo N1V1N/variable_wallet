@@ -814,9 +814,9 @@ document.addEventListener('DOMContentLoaded', () => {
             cartItems.push(cartItem);
             updateCartDisplay();
             
-            // Scroll to cart on mobile/stacked layout
+            // Scroll to cart only on smaller screens; keep desktop static
             const cartSection = document.querySelector('.cart-section');
-            if (cartSection) {
+            if (cartSection && window.innerWidth <= 1000) {
                 const yOffset = -93; // Align right under banner
                 const y = cartSection.getBoundingClientRect().top + window.pageYOffset + yOffset;
                 window.scrollTo({ top: y, behavior: 'smooth' });
@@ -977,9 +977,9 @@ document.addEventListener('DOMContentLoaded', () => {
                 
                 updateCartDisplay();
                 
-                // Scroll to cart on mobile/stacked layout
+                // Scroll to cart only on smaller screens; keep desktop static
                 const cartSection = document.querySelector('.cart-section');
-                if (cartSection) {
+                if (cartSection && window.innerWidth <= 900) {
                     const yOffset = -93; // Align right under banner
                     const y = cartSection.getBoundingClientRect().top + window.pageYOffset + yOffset;
                     window.scrollTo({ top: y, behavior: 'smooth' });
@@ -1018,9 +1018,9 @@ document.addEventListener('DOMContentLoaded', () => {
                 
                 updateCartDisplay();
                 
-                // Scroll to cart on mobile/stacked layout
+                // Scroll to cart only on smaller screens; keep desktop static
                 const cartSection = document.querySelector('.cart-section');
-                if (cartSection) {
+                if (cartSection && window.innerWidth <= 900) {
                     const yOffset = -93; // Align right under banner
                     const y = cartSection.getBoundingClientRect().top + window.pageYOffset + yOffset;
                     window.scrollTo({ top: y, behavior: 'smooth' });

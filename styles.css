@@ -2712,8 +2712,8 @@ footer .wallet-text {
     border-color: #ff6b6b;
 }
 
-/* Mobile layout only */
-@media (max-width: 768px) {
+/* Stacked layout for narrower screens: wrap Plate Selection / Your Wallet */
+@media (max-width: 1000px) {
     .product-selector {
         grid-template-columns: 1fr !important; /* Force single column on mobile */
         gap: 1rem;
