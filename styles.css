@@ -222,7 +222,7 @@ main {
 }
 
 #models h2 {
-    margin-bottom: 1.33rem;
+    margin-bottom: 0.75rem;
 }
 
 .hero {
@@ -2669,8 +2669,8 @@ footer .wallet-text {
 }
 
 .recommended-btn {
-    flex: 0 0 calc(50% - 0.375rem);
-    max-width: calc(50% - 0.375rem);
+    flex: 0 0 100%;
+    max-width: 100%;
     background: rgba(192, 192, 192, 0.15);
     border: 1px solid rgba(192, 192, 192, 0.4);
     color: #c0c0c0;

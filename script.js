@@ -992,51 +992,6 @@ document.addEventListener('DOMContentLoaded', () => {
             }
         }
         
-        // Random button functionality
-        const randomBtn = document.getElementById('random-btn');
-        if (randomBtn) {
-            randomBtn.addEventListener('click', function() {
-                // Check 9-piece maximum limit
-                const currentTotal = cartItems.reduce((sum, item) => sum + item.quantity, 0);
-                if (currentTotal + 3 > 9) {
-                    return; // Silently prevent adding if it would exceed limit
-                }
-                
-                // Add 3 completely random plates
-                const models = ['MK I', 'MK II'];
-                const mk1Colors = ['Red', 'Gunmetal', 'Purple', 'Gold', 'Teal', 'Black'];
-                const mk2Colors = ['Black'];
-                
-                for (let i = 0; i < 3; i++) {
-                    const randomModel = models[Math.floor(Math.random() * models.length)];
-                    let randomColor;
-                    
-                    if (randomModel === 'MK I') {
-                        randomColor = mk1Colors[Math.floor(Math.random() * mk1Colors.length)];
-                    } else {
-                        randomColor = mk2Colors[0]; // MK II only has Black
-                    }
-                    
-                    cartItems.push({
-                        product: randomModel,
-                        finish: randomColor,
-                        quantity: 1,
-                        price: PRICE_PER_ITEM
-                    });
-                }
-                
-                updateCartDisplay();
-                
-                // Scroll to cart only on smaller screens; keep desktop static
-                const cartSection = document.querySelector('.cart-section');
-                if (cartSection && window.innerWidth <= 900) {
-                    const yOffset = -93; // Align right under banner
-                    const y = cartSection.getBoundingClientRect().top + window.pageYOffset + yOffset;
-                    window.scrollTo({ top: y, behavior: 'smooth' });
-                }
-            });
-        }
-        
         // Mine button functionality (Luke's personal loadout)
         const mineBtn = document.getElementById('mine-btn');
         if (mineBtn) {
