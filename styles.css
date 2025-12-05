@@ -661,7 +661,8 @@ section {
     transition: var(--transition);
 }
 
-.material-card:hover::before {
+/* Only the active material card (Aluminum) responds to hover */
+.material-card.active:hover::before {
     opacity: 0.2;
 }
 

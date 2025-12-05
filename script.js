@@ -107,11 +107,21 @@ document.addEventListener('DOMContentLoaded', () => {
             
             // Control how the hero starts:
             // - Set USE_RANDOM_HERO_START = true to start on a random image.
-            // - Set to false (default) to always start on variable_wallet_1.
+            // - Set to false (default) to always start on variable_wallet_3 when available.
             const USE_RANDOM_HERO_START = false;
 
             const randomIndex = Math.floor(Math.random() * imagePaths.length);
-            let currentImageIndex = USE_RANDOM_HERO_START ? randomIndex : 0;
+
+            // Find index for variable_wallet_3 if it exists, otherwise fall back to first image
+            const defaultStartIndex = (() => {
+                const idx = imagePaths.findIndex(path => {
+                    const match = path.match(/variable_wallet_(\d+)\.png$/);
+                    return match && parseInt(match[1], 10) === 3;
+                });
+                return idx >= 0 ? idx : 0;
+            })();
+
+            let currentImageIndex = USE_RANDOM_HERO_START ? randomIndex : defaultStartIndex;
             let isUpdating = false;
             let heroUserInteracted = false;
             let heroAutoInterval = null;
