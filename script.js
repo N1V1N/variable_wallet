@@ -105,10 +105,16 @@ document.addEventListener('DOMContentLoaded', () => {
         if (heroImage) {
             const img = heroImage.querySelector('.product-image');
             
-            // Select a random image from all available images
+            // Control how the hero starts:
+            // - Set USE_RANDOM_HERO_START = true to start on a random image.
+            // - Set to false (default) to always start on variable_wallet_1.
+            const USE_RANDOM_HERO_START = false;
+
             const randomIndex = Math.floor(Math.random() * imagePaths.length);
-            let currentImageIndex = randomIndex;
+            let currentImageIndex = USE_RANDOM_HERO_START ? randomIndex : 0;
             let isUpdating = false;
+            let heroUserInteracted = false;
+            let heroAutoInterval = null;
             
             // Show the initial image
             if (img && imagePaths.length > 0) {
@@ -144,6 +150,25 @@ document.addEventListener('DOMContentLoaded', () => {
                 const newIndex = currentImageIndex < imagePaths.length - 1 ? currentImageIndex + 1 : 0;
                 updateImage(newIndex);
             };
+
+            // Auto-cycle hero images every 6 seconds until the user interacts
+            const startHeroAutoCycle = () => {
+                if (imagePaths.length > 1 && !heroUserInteracted && !heroAutoInterval) {
+                    heroAutoInterval = setInterval(() => {
+                        if (!heroUserInteracted) {
+                            goToNext();
+                        }
+                    }, 4000);
+                }
+            };
+
+            const stopHeroAutoCycle = () => {
+                heroUserInteracted = true;
+                if (heroAutoInterval) {
+                    clearInterval(heroAutoInterval);
+                    heroAutoInterval = null;
+                }
+            };
             
             // Function to update image
             const updateImage = (newIndex) => {
@@ -164,6 +189,7 @@ document.addEventListener('DOMContentLoaded', () => {
             
             // Handle clicks on the hero image
             heroImage.addEventListener('click', function(event) {
+                stopHeroAutoCycle();
                 // Get click position
                 const rect = heroImage.getBoundingClientRect();
                 const clickX = event.clientX - rect.left;
@@ -184,6 +210,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 let touchStartTime = 0;
                 
                 heroImage.addEventListener('touchstart', function(event) {
+                    stopHeroAutoCycle();
                     touchStartX = event.touches[0].clientX;
                     touchStartTime = new Date().getTime();
                 }, { passive: true });
@@ -226,6 +253,16 @@ document.addEventListener('DOMContentLoaded', () => {
             // Get navigation elements
             const navLeft = heroImage.querySelector('.nav-left');
             const navRight = heroImage.querySelector('.nav-right');
+
+            // Stop auto-cycle when explicit navigation arrows are used
+            if (navLeft && navRight) {
+                navLeft.addEventListener('click', () => {
+                    stopHeroAutoCycle();
+                });
+                navRight.addEventListener('click', () => {
+                    stopHeroAutoCycle();
+                });
+            }
             
             // Pause animation when scrolling away from the hero section and resume when scrolling back
             const observer = new IntersectionObserver((entries) => {
@@ -245,6 +282,9 @@ document.addEventListener('DOMContentLoaded', () => {
             
             // Start observing the hero image
             observer.observe(heroImage);
+
+            // Kick off hero auto-cycle
+            startHeroAutoCycle();
 
             // Mobile Navigation Toggle
             const navToggle = document.querySelector('.nav-toggle');
