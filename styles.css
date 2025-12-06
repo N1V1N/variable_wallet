@@ -153,6 +153,11 @@ h2 .wallet-text {
     white-space: nowrap;
 }
 
+/* Dim the HD&M menu link specifically */
+.nav-menu a[href="https://hdmplaques.com"] {
+    opacity: 0.33;
+}
+
 .nav-menu a:hover {
     color: var(--accent-color);
 }
@@ -343,12 +348,12 @@ main {
         border-top: 2px solid rgba(255, 255, 255, 0.5);
         border-left: 2px solid rgba(255, 255, 255, 0.5);
         transform: translateY(-50%);
-        opacity: 0;
+        opacity: 0.27; /* Always visible by default */
         transition: opacity .3s ease;
     }
     
     .nav-left:hover::before, .nav-right:hover::after {
-        opacity: 0.27; /* Reduced by 66% from 0.8 */
+        opacity: 0.4; /* Slightly brighter on hover */
     }
     
     .nav-left::before {

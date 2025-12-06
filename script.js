@@ -714,6 +714,61 @@ document.addEventListener('DOMContentLoaded', () => {
     // Global cart items array - accessible to all functions
     let cartItems = [];
     let isRemovingItem = false; // Flag to prevent double-click on remove buttons
+
+    // Daily order limit (easy to change/disable)
+    const DAILY_ORDER_LIMIT_ENABLED = true;
+    const DAILY_ORDER_LIMIT = 1000;
+    const DAILY_ORDER_STORAGE_KEY = 'vw_daily_order_count';
+
+    const getTodayKey = () => {
+        const d = new Date();
+        const year = d.getFullYear();
+        const month = String(d.getMonth() + 1).padStart(2, '0');
+        const day = String(d.getDate()).padStart(2, '0');
+        return `${year}-${month}-${day}`;
+    };
+
+    const getStoredDailyOrders = () => {
+        if (typeof localStorage === 'undefined') return { date: getTodayKey(), count: 0 };
+        try {
+            const raw = localStorage.getItem(DAILY_ORDER_STORAGE_KEY);
+            if (!raw) return { date: getTodayKey(), count: 0 };
+            const parsed = JSON.parse(raw);
+            if (!parsed || typeof parsed !== 'object') return { date: getTodayKey(), count: 0 };
+            if (parsed.date !== getTodayKey()) return { date: getTodayKey(), count: 0 };
+            const count = Number(parsed.count) || 0;
+            return { date: parsed.date, count };
+        } catch (e) {
+            console.error('Error reading daily order count from storage:', e);
+            return { date: getTodayKey(), count: 0 };
+        }
+    };
+
+    const saveDailyOrders = (data) => {
+        if (typeof localStorage === 'undefined') return;
+        try {
+            localStorage.setItem(DAILY_ORDER_STORAGE_KEY, JSON.stringify(data));
+        } catch (e) {
+            console.error('Error saving daily order count to storage:', e);
+        }
+    };
+
+    const isDailyOrderLimitReached = () => {
+        if (!DAILY_ORDER_LIMIT_ENABLED) return false;
+        const { count } = getStoredDailyOrders();
+        return count >= DAILY_ORDER_LIMIT;
+    };
+
+    const incrementDailyOrderCount = () => {
+        if (!DAILY_ORDER_LIMIT_ENABLED) return;
+        const todayKey = getTodayKey();
+        const current = getStoredDailyOrders();
+        const next = {
+            date: todayKey,
+            count: current.date === todayKey ? current.count + 1 : 1
+        };
+        saveDailyOrders(next);
+    };
     
     if (addToCartBtn) {
         const PRICE_PER_ITEM = 33;
@@ -1169,6 +1224,13 @@ document.addEventListener('DOMContentLoaded', () => {
                     if (!cartItems || cartItems.length === 0) {
                         return actions.reject();
                     }
+
+                    // Enforce simple front-end daily order cap
+                    if (isDailyOrderLimitReached()) {
+                        alert('Daily order limit reached. Please try again tomorrow.');
+                        return actions.reject();
+                    }
+
                     return actions.resolve();
                 },
                 
@@ -1380,7 +1442,8 @@ document.addEventListener('DOMContentLoaded', () => {
                             console.log('✅ Payment successfully captured for $' + totalAmount);
                         }
                         
-                        // Clear the cart after successful payment
+                        // Increment daily order count, then clear the cart after successful payment
+                        incrementDailyOrderCount();
                         clearCart();
                         
                         // Show thank you modal after a short delay
