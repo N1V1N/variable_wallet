@@ -596,6 +596,10 @@ main {
     scroll-margin-top: 55px; /* Even lower position on screen */
 }
 
+#models {
+    scroll-margin-top: 88px; /* Pull Plates section slightly higher when navigated to */
+}
+
 #create-your-own {
     scroll-margin-top: 69px; /* Increased to compensate for reduced padding-top */
 }
@@ -604,6 +608,10 @@ main {
 @media (max-width: 768px) {
     #materials {
         scroll-margin-top: 33px; /* Tuned for smaller mobile navbar height */
+    }
+    
+    #models {
+        scroll-margin-top: 81px; /* Mobile: bring Plates a bit higher on screen */
     }
     
     #create-your-own {
