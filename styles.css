@@ -799,6 +799,12 @@ section {
     margin: 0 auto;
 }
 
+@media (min-width: 769px) {
+    #process .process-highlights p {
+        font-size: 1.24rem;
+    }
+}
+
 .specs {
     display: flex;
     justify-content: center;
