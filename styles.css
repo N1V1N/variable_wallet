@@ -985,6 +985,7 @@ section {
 
 /* Jet-black, slightly dropped shadow behind MKI/MKII titles in the Plates section */
 #models .model-info-card h3 {
+    opacity: 0.322;
     text-shadow: 0 3px 6px rgba(0, 0, 0, 0.88);
 }
 
@@ -1494,6 +1495,116 @@ footer {
     text-shadow: var(--glow);
 }
 
+.contact-social-links {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 1.95rem;
+    margin-top: 1.05rem;
+    margin-bottom: 1.05rem;
+}
+
+.contact-social-links .pixel-social-link {
+    display: inline-flex;
+    justify-content: center;
+    align-items: center;
+    width: 3.15rem;
+    height: 3.15rem;
+    color: rgba(192, 192, 192, 0.52);
+    text-shadow: none;
+    transition: color 0.25s ease, transform 0.25s ease;
+}
+
+.contact-social-links .pixel-social-link:hover {
+    color: rgba(192, 192, 192, 0.82);
+    text-shadow: none;
+    transform: translateY(-1px);
+}
+
+.contact-social-links .pixel-social-link:focus-visible {
+    outline: 1px solid rgba(192, 192, 192, 0.45);
+    outline-offset: 3px;
+}
+
+.contact-social-links .pixel-icon {
+    --px: 1px;
+    --step: 2px;
+    display: block;
+    width: calc(var(--step) * 7);
+    height: calc(var(--step) * 7);
+    position: relative;
+    transform: scale(3);
+    transform-origin: center;
+}
+
+.contact-social-links .pixel-icon::before {
+    content: "";
+    display: block;
+    width: var(--px);
+    height: var(--px);
+    background: currentColor;
+}
+
+.contact-social-links .pixel-icon-instagram::before {
+    box-shadow:
+        0 0 currentColor,
+        calc(var(--step) * 1) 0 currentColor,
+        calc(var(--step) * 2) 0 currentColor,
+        calc(var(--step) * 3) 0 currentColor,
+        calc(var(--step) * 4) 0 currentColor,
+        calc(var(--step) * 5) 0 currentColor,
+        calc(var(--step) * 6) 0 currentColor,
+        0 calc(var(--step) * 1) currentColor,
+        calc(var(--step) * 6) calc(var(--step) * 1) currentColor,
+        0 calc(var(--step) * 2) currentColor,
+        calc(var(--step) * 2) calc(var(--step) * 2) currentColor,
+        calc(var(--step) * 3) calc(var(--step) * 2) currentColor,
+        calc(var(--step) * 4) calc(var(--step) * 2) currentColor,
+        calc(var(--step) * 6) calc(var(--step) * 2) currentColor,
+        0 calc(var(--step) * 3) currentColor,
+        calc(var(--step) * 2) calc(var(--step) * 3) currentColor,
+        calc(var(--step) * 4) calc(var(--step) * 3) currentColor,
+        calc(var(--step) * 6) calc(var(--step) * 3) currentColor,
+        0 calc(var(--step) * 4) currentColor,
+        calc(var(--step) * 2) calc(var(--step) * 4) currentColor,
+        calc(var(--step) * 3) calc(var(--step) * 4) currentColor,
+        calc(var(--step) * 4) calc(var(--step) * 4) currentColor,
+        calc(var(--step) * 6) calc(var(--step) * 4) currentColor,
+        0 calc(var(--step) * 5) currentColor,
+        calc(var(--step) * 6) calc(var(--step) * 5) currentColor,
+        0 calc(var(--step) * 6) currentColor,
+        calc(var(--step) * 1) calc(var(--step) * 6) currentColor,
+        calc(var(--step) * 2) calc(var(--step) * 6) currentColor,
+        calc(var(--step) * 3) calc(var(--step) * 6) currentColor,
+        calc(var(--step) * 4) calc(var(--step) * 6) currentColor,
+        calc(var(--step) * 5) calc(var(--step) * 6) currentColor,
+        calc(var(--step) * 6) calc(var(--step) * 6) currentColor,
+        calc(var(--step) * 5) calc(var(--step) * 1) currentColor;
+}
+
+.contact-social-links .pixel-icon-x::before {
+    box-shadow:
+        0 0 currentColor,
+        calc(var(--step) * 1) 0 currentColor,
+        calc(var(--step) * 6) 0 currentColor,
+        calc(var(--step) * 1) calc(var(--step) * 1) currentColor,
+        calc(var(--step) * 2) calc(var(--step) * 1) currentColor,
+        calc(var(--step) * 5) calc(var(--step) * 1) currentColor,
+        calc(var(--step) * 2) calc(var(--step) * 2) currentColor,
+        calc(var(--step) * 3) calc(var(--step) * 2) currentColor,
+        calc(var(--step) * 4) calc(var(--step) * 2) currentColor,
+        calc(var(--step) * 3) calc(var(--step) * 3) currentColor,
+        calc(var(--step) * 2) calc(var(--step) * 4) currentColor,
+        calc(var(--step) * 3) calc(var(--step) * 4) currentColor,
+        calc(var(--step) * 4) calc(var(--step) * 4) currentColor,
+        calc(var(--step) * 1) calc(var(--step) * 5) currentColor,
+        calc(var(--step) * 4) calc(var(--step) * 5) currentColor,
+        calc(var(--step) * 5) calc(var(--step) * 5) currentColor,
+        0 calc(var(--step) * 6) currentColor,
+        calc(var(--step) * 5) calc(var(--step) * 6) currentColor,
+        calc(var(--step) * 6) calc(var(--step) * 6) currentColor;
+}
+
 /* Add specific styling for the footer wallet text */
 footer .wallet-text {
     font-size: 0.618em; /* Golden ratio (1/1.618) for "Wallet" text in footer */
@@ -1960,12 +2071,12 @@ footer .wallet-text {
     }
     
     .mobile-reorder .stackable-note {
-        order: 1; /* Move below the slideshow */
-        margin-top: -0.66rem; /* Add negative margin to move text up */
+        order: 0; /* Keep slogan above the slideshow */
+        margin-top: 0.6rem;
     }
     
     .mobile-reorder .hero-image {
-        order: 0; /* Keep the slideshow at the top */
+        order: 1; /* Move slideshow below the slogan */
         margin-bottom: 0; /* Remove bottom margin of slideshow */
     }
 }
@@ -2000,12 +2111,12 @@ footer .wallet-text {
     }
     
     .mobile-reorder .stackable-note {
-        order: 1;
-        margin-top: -0.66rem; /* Add negative margin to move text up */
+        order: 0;
+        margin-top: 0.6rem;
     }
     
     .mobile-reorder .hero-image {
-        order: 0;
+        order: 1;
         margin-bottom: 0;
     }
 }

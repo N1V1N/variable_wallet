@@ -783,14 +783,16 @@ document.addEventListener('DOMContentLoaded', () => {
             mk1: [
                 // { value: 'machined', text: 'Machined Finish' },
                 { value: 'red', text: 'Red' },
-                { value: 'gunmetal', text: 'Gunmetal' },
                 { value: 'purple', text: 'Purple' },
+                { value: 'blue', text: 'Blue' },
                 { value: 'gold', text: 'Gold' },
-                { value: 'teal', text: 'Teal' },
+                { value: 'gunmetal', text: 'Gunmetal' },
                 { value: 'black', text: 'Black' }
             ],
             mk2: [
                 // { value: 'machined', text: 'Machined Finish' },
+                { value: 'red', text: 'Red' },
+                { value: 'blue', text: 'Blue' },
                 { value: 'black', text: 'Black' }
             ]
         };
