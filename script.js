@@ -1008,7 +1008,7 @@ document.addEventListener('DOMContentLoaded', () => {
             }
             
             if (cartItems.length === 0) {
-                cartItemsList.innerHTML = '<li class="cart-empty">Add Plates</li>';
+                cartItemsList.innerHTML = '<li class="cart-empty">Add Plate(s)</li>';
                 
                 // Show 0 card count when cart is empty
                 const cardCountDisclaimer = document.getElementById('cardCountDisclaimer');
