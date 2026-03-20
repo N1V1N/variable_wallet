@@ -142,7 +142,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 }
                 
                 // Add subtle bounce animation to the hero image
-                heroImage.classList.add('subtle-bounce-animation');
+                img.classList.add('subtle-bounce-animation');
             }
             
             // Simple function to go to previous image
@@ -279,10 +279,14 @@ document.addEventListener('DOMContentLoaded', () => {
                 entries.forEach(entry => {
                     if (entry.isIntersecting) {
                         // Element is in view - enable animation
-                        heroImage.classList.add('subtle-bounce-animation');
+                        if (img) {
+                            img.classList.add('subtle-bounce-animation');
+                        }
                     } else {
                         // Element is out of view - disable animation to save resources
-                        heroImage.classList.remove('subtle-bounce-animation');
+                        if (img) {
+                            img.classList.remove('subtle-bounce-animation');
+                        }
                     }
                     // Always keep pointer events enabled for immediate response when user returns to view
                     navLeft.style.pointerEvents = 'auto';
@@ -370,7 +374,46 @@ document.addEventListener('DOMContentLoaded', () => {
 
             const mk1Thumbnail = document.getElementById('mk1-thumbnail');
             const mk2Thumbnail = document.getElementById('mk2-thumbnail');
+            const mk1Wrapper = mk1Thumbnail?.parentElement;
             const mk2Wrapper = mk2Thumbnail?.parentElement;
+            const PLATES_BOUNCE_HOLD_MS = 3000;
+
+            const setupPlateBounceToggle = (wrapper) => {
+                if (!wrapper) return;
+
+                let holdTimer = null;
+
+                const toggleBounce = () => {
+                    wrapper.classList.toggle('bounce-enabled');
+                };
+
+                const clearHoldTimer = () => {
+                    if (holdTimer) {
+                        clearTimeout(holdTimer);
+                        holdTimer = null;
+                    }
+                };
+
+                wrapper.addEventListener('contextmenu', (event) => {
+                    event.preventDefault();
+                    toggleBounce();
+                });
+
+                wrapper.addEventListener('touchstart', () => {
+                    clearHoldTimer();
+                    holdTimer = setTimeout(() => {
+                        toggleBounce();
+                        holdTimer = null;
+                    }, PLATES_BOUNCE_HOLD_MS);
+                }, { passive: true });
+
+                wrapper.addEventListener('touchend', clearHoldTimer, { passive: true });
+                wrapper.addEventListener('touchmove', clearHoldTimer, { passive: true });
+                wrapper.addEventListener('touchcancel', clearHoldTimer, { passive: true });
+            };
+
+            setupPlateBounceToggle(mk1Wrapper);
+            setupPlateBounceToggle(mk2Wrapper);
 
             console.log('MK I thumbnail found:', !!mk1Thumbnail);
             console.log('MK II thumbnail found:', !!mk2Thumbnail);
@@ -518,8 +561,7 @@ document.addEventListener('DOMContentLoaded', () => {
                         stopMk1AutoCycle();
                         advanceMk1();
                     });
-                    
-                    const mk1Wrapper = mk1Thumbnail?.parentElement;
+
                     if (mk1Wrapper) {
                         mk1Wrapper.addEventListener('click', () => {
                             stopMk1AutoCycle();
@@ -783,16 +825,19 @@ document.addEventListener('DOMContentLoaded', () => {
             mk1: [
                 // { value: 'machined', text: 'Machined Finish' },
                 { value: 'red', text: 'Red' },
-                { value: 'purple', text: 'Purple' },
                 { value: 'blue', text: 'Blue' },
+                { value: 'purple', text: 'Purple' },
                 { value: 'gold', text: 'Gold' },
-                { value: 'gunmetal', text: 'Gunmetal' },
+                { value: 'gunmetal', text: 'Gunmetal', disabled: true },
                 { value: 'black', text: 'Black' }
             ],
             mk2: [
                 // { value: 'machined', text: 'Machined Finish' },
                 { value: 'red', text: 'Red' },
                 { value: 'blue', text: 'Blue' },
+                { value: 'purple', text: 'Purple', disabled: true },
+                { value: 'gold', text: 'Gold', disabled: true },
+                { value: 'gunmetal', text: 'Gunmetal', disabled: true },
                 { value: 'black', text: 'Black' }
             ]
         };
@@ -856,6 +901,10 @@ document.addEventListener('DOMContentLoaded', () => {
                 option.className = 'dropdown-option';
                 option.dataset.value = finish.value;
                 option.textContent = finish.text;
+                if (finish.disabled) {
+                    option.classList.add('disabled-option');
+                    option.dataset.disabled = 'true';
+                }
                 finishOptions.appendChild(option);
             });
             
@@ -869,6 +918,9 @@ document.addEventListener('DOMContentLoaded', () => {
             // Add click handlers to new finish options
             document.querySelectorAll('#finish-options .dropdown-option').forEach(option => {
                 option.addEventListener('click', function() {
+                    if (this.dataset.disabled === 'true') {
+                        return;
+                    }
                     selectedFinish = this.dataset.value;
                     finishSelected.textContent = this.textContent;
                     finishSelected.classList.remove('unselected');
@@ -1069,11 +1121,10 @@ document.addEventListener('DOMContentLoaded', () => {
                     });
                 }
                 
-                // Add 1 MK I in Luke's current favorite color (change this line to update!)
-                // Current favorite: Purple
+                // Add 1 Red MK I to complete the Standard Combo
                 cartItems.push({
                     product: 'MK I',
-                    finish: 'Gunmetal', // <-- Change this color whenever you want!
+                    finish: 'Red',
                     quantity: 1,
                     price: PRICE_PER_ITEM
                 });
